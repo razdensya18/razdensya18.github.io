@@ -49,6 +49,20 @@
     { n: "18", file: "18-дни-из-графика.html", name: "Дни приёма из графика", what: "Свободные дни считаются сами по графику 2×2" }
   ];
 
+  // Варианты оформления главной страницы (папка оформление/)
+  R.designs = [
+    { n: "01", file: "01-шёлк.html", name: "Шёлк", what: "Классика бренда: шёлк, лайн-арт и тонкое золото" },
+    { n: "02", file: "02-ночь.html", name: "Ночь", what: "Шоколад и золото, лицо рисуется линией при открытии" },
+    { n: "03", file: "03-журнал.html", name: "Журнал", what: "Обложка глянца: рубрики вместо кнопок" },
+    { n: "04", file: "04-линия.html", name: "Одна линия", what: "Золотая линия ведёт от лица через все разделы" },
+    { n: "05", file: "05-арка.html", name: "Арка", what: "Арочные окна, нюд и розовое золото" },
+    { n: "06", file: "06-бенто.html", name: "Бенто", what: "Плитки-виджеты, как экран телефона" },
+    { n: "07", file: "07-аура.html", name: "Аура", what: "Мягкие светящиеся пятна и матовое стекло" },
+    { n: "08", file: "08-сторис.html", name: "Сторис", what: "Каждый раздел на весь экран, листается вниз" },
+    { n: "09", file: "09-приглашение.html", name: "Приглашение", what: "Конверт с сургучной печатью открывается при входе" },
+    { n: "10", file: "10-тиснение.html", name: "Тиснение", what: "Плотная бумага, монограмма и выпуклые кнопки" }
+  ];
+
   // ---------- иконки ----------
   var P = {
     vk: '<path d="M3.2 7h3.1c.4 2.6 1.8 5 3.5 5.6V7h2.9v3.4c1.6-.2 3.2-1.9 3.8-3.4h2.9c-.5 2.2-2.1 3.9-3.3 4.6 1.2.6 3.1 2 3.8 4.4h-3.2c-.6-1.6-2-2.9-4-3.1V16h-.4C7.2 16 3.7 13 3.2 7z"/>',
@@ -179,7 +193,7 @@
   // а галерею возвращаем туда, где её оставили
   function keepScroll() {
     try { history.scrollRestoration = "manual" } catch (e) {}
-    var isVariant = !!document.body.dataset.variant, key = "razden:scroll-gallery", target = 0, touched = false;
+    var isVariant = !!(document.body.dataset.variant || document.body.dataset.design), key = "razden:scroll:" + location.pathname, target = 0, touched = false;
     if (!isVariant) { try { target = +sessionStorage.getItem(key) || 0 } catch (e) {} }
     ["touchstart", "wheel", "keydown", "mousedown"].forEach(function (ev) { window.addEventListener(ev, function () { touched = true }, { once: true, passive: true }) });
     function go() { if (!touched) window.scrollTo(0, target) }
@@ -200,23 +214,24 @@
     document.querySelectorAll("[data-icon]").forEach(function (el) { if (!el.querySelector("svg")) el.insertAdjacentHTML("afterbegin", R.icon(el.dataset.icon)) });
 
     // Панель просмотра: назад к галерее, листание вариантов, сердечко
-    var n = document.body.dataset.variant;
+    var isDesign = !!document.body.dataset.design, n = document.body.dataset.design || document.body.dataset.variant;
     if (!n) return;
-    var i = R.variants.findIndex(function (v) { return v.n === n });
-    var prev = R.variants[(i + R.variants.length - 1) % R.variants.length];
-    var next = R.variants[(i + 1) % R.variants.length];
-    var fav = R.get("fav", []);
+    var LIST = isDesign ? R.designs : R.variants, FAV = isDesign ? "fav-design" : "fav", WORD = isDesign ? "Оформление " : "Вариант ";
+    var i = LIST.findIndex(function (v) { return v.n === n });
+    var prev = LIST[(i + LIST.length - 1) % LIST.length];
+    var next = LIST[(i + 1) % LIST.length];
+    var fav = R.get(FAV, []);
     var bar = document.createElement("nav"); bar.className = "pv-bar"; bar.setAttribute("aria-label", "Просмотр вариантов");
     bar.innerHTML =
-      '<a href="../index.html" aria-label="Все варианты">' + R.icon("grid") + "Все</a>" +
+      '<a href="' + (isDesign ? "index.html" : "../index.html") + '" aria-label="Все варианты">' + R.icon("grid") + "Все</a>" +
       '<a href="' + prev.file + '" aria-label="Предыдущий вариант">' + R.icon("left") + "</a>" +
-      '<span class="pv-title"><small>Вариант ' + n + " из " + R.variants.length + "</small>" + R.esc(R.variants[i].name) + "</span>" +
+      '<span class="pv-title"><small>' + WORD + n + " из " + LIST.length + "</small>" + R.esc(LIST[i].name) + "</span>" +
       '<a href="' + next.file + '" aria-label="Следующий вариант">' + R.icon("right") + "</a>" +
       '<button type="button" class="pv-fav" aria-pressed="' + (fav.indexOf(n) > -1) + '" aria-label="Нравится">' + R.icon("heart") + "</button>";
     bar.querySelector(".pv-fav").addEventListener("click", function () {
-      var f = R.get("fav", []), k = f.indexOf(n);
+      var f = R.get(FAV, []), k = f.indexOf(n);
       if (k > -1) f.splice(k, 1); else f.push(n);
-      R.set("fav", f);
+      R.set(FAV, f);
       this.setAttribute("aria-pressed", k === -1);
       R.toast(k === -1 ? "Добавлено в понравившиеся" : "Убрано из понравившихся");
     });

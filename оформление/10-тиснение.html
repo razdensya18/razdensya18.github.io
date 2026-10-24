@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Тиснение · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+/* Тиснение: плотный хлопковый картон. Монограмма выдавлена прессом, кнопки — выпуклые и продавливаются под пальцем, запись — золотая фольга */
+:root { --card: #ece4d6; --hi: #fffaf2; --lo: #c9bca5; --ink: #3b3024; --soft: #7a6c5a;
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .18  0 0 0 .08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>") }
+html, body { background: var(--card) var(--grain) }
+body { color: var(--ink) }
+.wrap { max-width: 440px; margin: 0 auto; padding: 28px max(22px, env(safe-area-inset-left, 0px)) 40px; text-align: center }
+.seal { position: relative; width: 190px; height: 190px; margin: 0 auto; border-radius: 50%; display: grid; place-items: center;
+  box-shadow: inset 6px 6px 14px var(--lo), inset -6px -6px 14px var(--hi) }
+.seal::before { content: ""; position: absolute; inset: 12px; border-radius: 50%; border: 1.5px solid transparent; background: linear-gradient(140deg, #e9c56f, #8f6c22, #e9c56f, #b8862a) border-box; -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude }
+.seal span { font: 400 128px/1 var(--f-display); color: var(--card); text-shadow: -2px -2px 2px var(--hi), 2px 2px 3px var(--lo), 4px 5px 10px rgba(80,60,30,.12); transform: translateY(6px) }
+.name { margin: 22px 0 0; font: 400 clamp(46px, 13.5vw, 58px)/1 var(--f-display); color: #d6c9b3; text-shadow: 1px 1px 0 var(--hi), -1px -1px 0 #b4a68d }
+.slogan { margin: 12px 0 0; font-size: 11px; font-weight: 800; letter-spacing: .24em; text-transform: uppercase; color: var(--soft) }
+.intro { margin: 14px auto 0; font-size: 14px; line-height: 1.6; color: var(--soft); max-width: 31ch }
+.foil { position: relative; overflow: hidden; display: block; margin: 26px 0 0; padding: 18px; border-radius: 14px; text-decoration: none;
+  background: linear-gradient(115deg, #b8862a 0%, #f0d08a 30%, #c5921e 50%, #f3dc9c 70%, #a8791c 100%); background-size: 200% 100%;
+  color: #4a3810; font-weight: 800; font-size: 15.5px; letter-spacing: .04em; text-shadow: 0 1px 0 rgba(255,240,200,.6);
+  box-shadow: 0 1px 0 rgba(255,250,235,.8) inset, 0 -2px 0 rgba(90,60,10,.25) inset, 6px 8px 16px rgba(120,90,40,.25); transition: background-position .8s }
+.foil:hover, .foil:focus-visible { background-position: 100% 0 }
+.tiles { margin: 22px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; text-align: left }
+.tile { display: grid; gap: 10px; padding: 16px 14px; border-radius: 20px; text-decoration: none; color: var(--ink); background: var(--card) var(--grain);
+  box-shadow: 7px 7px 16px var(--lo), -7px -7px 16px var(--hi); transition: box-shadow .15s, transform .15s }
+.tile:active { box-shadow: inset 5px 5px 12px var(--lo), inset -5px -5px 12px var(--hi); transform: scale(.99) }
+.tile .ic { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: var(--gold-t); box-shadow: inset 3px 3px 7px var(--lo), inset -3px -3px 7px var(--hi) }
+.tile .ic svg { width: 20px; height: 20px; fill: currentColor }
+.tile b { font: 400 21px/1.05 var(--f-display) }
+.tile .d { font-size: 12px; color: var(--soft); line-height: 1.35 }
+.links { display: flex; justify-content: center; gap: 18px; margin: 28px 0 0 }
+.links a { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; color: var(--soft); box-shadow: 5px 5px 12px var(--lo), -5px -5px 12px var(--hi) }
+.links a:active { box-shadow: inset 4px 4px 9px var(--lo), inset -4px -4px 9px var(--hi) }
+.links svg { width: 22px; height: 22px; fill: currentColor }
+.sign { margin: 24px 0 0; font: 400 17px/1.3 var(--f-display); color: #cbbfa9; text-shadow: 1px 1px 0 var(--hi), -1px -1px 0 #b1a38a }
+</style>
+</head>
+<body data-design="10">
+<main class="wrap">
+  <div class="seal" aria-hidden="true"><span>R</span></div>
+  <div class="name">Razden’sya</div>
+  <p class="slogan">Коррекция растяжек и шрамов · Ижевск</p>
+  <p class="intro">Аппарат и сыворотка StriaLess. Перед каждой процедурой — консультация и честный разговор о результате.</p>
+  <a class="foil" href="../варианты/02-запись.html">Записаться на консультацию</a>
+  <div class="tiles">
+    <a class="tile" href="../варианты/01-калькулятор.html"><span class="ic" data-icon="list"></span><b>Сколько стоит курс</b><span class="d">Отметьте зоны — посчитаем</span></a>
+    <a class="tile" href="../варианты/04-тест.html"><span class="ic" data-icon="help"></span><b>Какие у меня растяжки</b><span class="d">Тест из пяти вопросов</span></a>
+    <a class="tile" href="../варианты/17-камера.html"><span class="ic" data-icon="camera"></span><b>До и после</b><span class="d">Сравните свои фото</span></a>
+    <a class="tile" href="../варианты/07-дневник-ухода.html"><span class="ic" data-icon="drop"></span><b>Уход после процедуры</b><span class="d">Дневник по дням</span></a>
+  </div>
+  <nav class="links" aria-label="Контакты">
+    <a href="https://vk.me/razdensya18" target="_blank" rel="noopener" aria-label="ВКонтакте" data-icon="vk"></a>
+    <a href="https://t.me/razdensya18" target="_blank" rel="noopener" aria-label="Telegram" data-icon="tg"></a>
+    <a href="https://instagram.com/razdensya18" target="_blank" rel="noopener" aria-label="Instagram" data-icon="ig"></a>
+  </nav>
+  <p class="sign">Марина Гайнуллина</p>
+</main>
+<script src="../общее/бренд.js"></script>
+</body>
+</html>

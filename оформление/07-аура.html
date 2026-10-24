@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Аура · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+/* Аура: тёплое свечение кожи. За матовым стеклом медленно дышат пятна персика, шампани и золота */
+:root { --base: #f8efe6; --ink: #3a2c20; --soft: #6f5d4c; --glass: rgba(255,255,255,.42); --edge: rgba(255,255,255,.75) }
+html, body { background: var(--base) }
+body { color: var(--ink) }
+.aura { position: fixed; inset: 0; overflow: hidden; z-index: 0; pointer-events: none }
+.aura i { position: absolute; border-radius: 50%; filter: blur(60px); opacity: .85; animation: drift 22s ease-in-out infinite alternate }
+.aura i:nth-child(1) { width: 70vmax; height: 70vmax; left: -25vmax; top: -20vmax; background: #f3c6a6 }
+.aura i:nth-child(2) { width: 60vmax; height: 60vmax; right: -25vmax; top: 15vh; background: #ecd9a4; animation-duration: 28s; animation-delay: -6s }
+.aura i:nth-child(3) { width: 55vmax; height: 55vmax; left: -15vmax; bottom: -25vmax; background: #f2d2cf; animation-duration: 25s; animation-delay: -12s }
+.aura i:nth-child(4) { width: 35vmax; height: 35vmax; right: 0; bottom: 5vh; background: #e2b45a; opacity: .45; animation-duration: 31s }
+@keyframes drift { 50% { transform: translate(6vmax, 4vmax) scale(1.08) } 100% { transform: translate(-4vmax, 7vmax) scale(.95) } }
+.wrap { position: relative; z-index: 1; max-width: 440px; margin: 0 auto; padding: 30px max(20px, env(safe-area-inset-left, 0px)) 36px; text-align: center }
+.halo { width: 132px; height: 132px; margin: 0 auto; border-radius: 50%; background: var(--glass) url("../ресурсы/лайн-арт-лицо.png") 46% 30% / 118% auto no-repeat; border: 1px solid var(--edge); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 20px 50px -24px rgba(160,110,60,.55), inset 0 1px 0 rgba(255,255,255,.8) }
+.logo-text { display: block; margin-top: 18px; font-size: clamp(44px, 13vw, 60px) }
+.slogan { margin: 8px auto 0; font: 400 14px/1.35 var(--f-display); color: #6e5520; max-width: 26ch }
+.intro { margin: 14px auto 0; font-size: 14px; line-height: 1.6; color: var(--soft); max-width: 31ch }
+.stack { margin: 24px 0 0; display: grid; gap: 10px; text-align: left }
+.g { display: grid; grid-template-columns: 42px 1fr 20px; gap: 12px; align-items: center; padding: 13px 14px; border-radius: 20px; text-decoration: none; color: var(--ink); background: var(--glass); border: 1px solid var(--edge); -webkit-backdrop-filter: blur(18px) saturate(1.2); backdrop-filter: blur(18px) saturate(1.2); box-shadow: 0 12px 30px -22px rgba(120,80,40,.6), inset 0 1px 0 rgba(255,255,255,.8); transition: transform .15s, background .2s }
+.g:active { transform: scale(.985) }
+.g .ic { width: 42px; height: 42px; border-radius: 14px; background: rgba(255,255,255,.65); display: grid; place-items: center; color: var(--gold-t) }
+.g .ic svg { width: 20px; height: 20px; fill: currentColor }
+.g b { display: block; font-size: 15px; font-weight: 700 }
+.g .d { display: block; font-size: 12.5px; color: var(--soft); margin-top: 2px }
+.g > svg { width: 18px; height: 18px; fill: var(--soft) }
+.g.main { background: linear-gradient(180deg, rgba(143,108,34,.92), rgba(74,56,16,.92)); color: #fff8ea; border-color: rgba(255,230,180,.6) }
+.g.main .ic { background: rgba(255,248,234,.2); color: #fff3d4 }
+.g.main .d { color: #f1e2bf } .g.main > svg { fill: #f1e2bf }
+.links { display: flex; justify-content: center; gap: 12px; margin-top: 24px }
+.links a { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: var(--glass); border: 1px solid var(--edge); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px) }
+.links svg { width: 22px; height: 22px; fill: currentColor }
+.sign { margin: 20px 0 0; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--soft) }
+@media (prefers-reduced-motion: reduce) { .aura i { animation: none } }
+</style>
+</head>
+<body data-design="07">
+<div class="aura" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<main class="wrap">
+  <div class="halo" role="img" aria-label="Лайн-арт лица"></div>
+  <span class="logo-text">Razden’sya</span>
+  <p class="slogan">Коррекция растяжек и шрамов · Эстетика лица и тела</p>
+  <p class="intro">Ижевск, по записи. Аппарат и сыворотка StriaLess, консультация перед каждой процедурой.</p>
+  <div class="stack">
+    <a class="g main" href="../варианты/02-запись.html"><span class="ic" data-icon="cal"></span><span><b>Записаться на консультацию</b><span class="d">Зона, день и время за минуту</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="g" href="../варианты/01-калькулятор.html"><span class="ic" data-icon="list"></span><span><b>Сколько стоит курс</b><span class="d">Отметьте зоны — посчитаем</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="g" href="../варианты/04-тест.html"><span class="ic" data-icon="help"></span><span><b>Какие у меня растяжки</b><span class="d">Тест из пяти вопросов</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="g" href="../варианты/17-камера.html"><span class="ic" data-icon="camera"></span><span><b>До и после</b><span class="d">Сравните свои фото ползунком</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="g" href="../варианты/07-дневник-ухода.html"><span class="ic" data-icon="drop"></span><span><b>Уход после процедуры</b><span class="d">Что делать день за днём</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+  </div>
+  <nav class="links" aria-label="Контакты">
+    <a href="https://vk.me/razdensya18" target="_blank" rel="noopener" aria-label="ВКонтакте" data-icon="vk"></a>
+    <a href="https://t.me/razdensya18" target="_blank" rel="noopener" aria-label="Telegram" data-icon="tg"></a>
+    <a href="https://instagram.com/razdensya18" target="_blank" rel="noopener" aria-label="Instagram" data-icon="ig"></a>
+  </nav>
+  <p class="sign">Марина Гайнуллина · @razdensya18</p>
+</main>
+<script src="../общее/бренд.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#120e0a">
+<title>Ночь · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+/* Ночь: горький шоколад и золото. Лицо прорисовывается золотой линией при открытии, логотип переливается фольгой */
+@property --p { syntax: "<percentage>"; inherits: false; initial-value: 110% }
+:root { --night: #120e0a; --cocoa: #1f1811; --cream: #f3e9d6; --dim: #a99a80; --gold-l: #e9c56f }
+html { background: var(--night) }
+body { background: radial-gradient(120% 70% at 30% 0%, #2a2016 0%, var(--night) 60%) fixed, var(--night); color: var(--cream) }
+.wrap { max-width: 460px; margin: 0 auto; padding: 18px max(22px, env(safe-area-inset-left, 0px)) 34px }
+.face { position: relative; height: 330px; margin: 0 -22px }
+.face img { position: absolute; left: 50%; top: 0; height: 100%; transform: translateX(-56%); filter: drop-shadow(0 0 10px rgba(233,197,111,.45));
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(var(--p) - 12%), transparent var(--p)); mask-image: linear-gradient(180deg, #000 calc(var(--p) - 12%), transparent var(--p));
+  animation: draw 2.6s cubic-bezier(.4, 0, .2, 1) .2s both }
+@keyframes draw { from { --p: 0% } to { --p: 112% } }
+.face::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 90px; background: linear-gradient(transparent, var(--night)) }
+.logo { margin-top: -30px; position: relative; text-align: center; font: 400 clamp(48px, 14.2vw, 64px)/1 var(--f-display);
+  background: linear-gradient(100deg, #8f6c22 0%, #e9c56f 25%, #fff1c9 35%, #c5921e 50%, #8f6c22 70%, #e9c56f 90%); background-size: 250% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent; animation: foil 7s linear infinite }
+@keyframes foil { to { background-position: -250% 0 } }
+.slogan { text-align: center; margin: 10px 0 0; font: 400 14px/1.4 var(--f-display); color: var(--gold-l); opacity: .85 }
+.intro { text-align: center; margin: 18px auto 24px; font-size: 14.5px; line-height: 1.6; color: var(--dim); max-width: 32ch }
+.cta { display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; padding: 17px; border-radius: 16px; background: linear-gradient(180deg, #e9c56f, #b8862a); color: #1a140d; font-weight: 800; font-size: 15.5px; box-shadow: 0 0 0 1px rgba(255,241,201,.4) inset, 0 18px 40px -16px rgba(233,197,111,.55) }
+.cta svg { width: 18px; height: 18px; fill: currentColor }
+.rows { margin: 18px 0 0; display: grid; gap: 10px }
+.row { display: grid; grid-template-columns: 46px 1fr 18px; gap: 14px; align-items: center; padding: 14px 14px; border-radius: 18px; text-decoration: none; color: var(--cream);
+  background: linear-gradient(var(--cocoa), var(--cocoa)) padding-box, linear-gradient(135deg, rgba(233,197,111,.6), rgba(233,197,111,.08) 45%, rgba(233,197,111,.35)) border-box; border: 1px solid transparent; transition: transform .15s }
+.row:active { transform: scale(.985) }
+.row .ic { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(233,197,111,.5); display: grid; place-items: center; color: var(--gold-l) }
+.row .ic svg { width: 20px; height: 20px; fill: currentColor }
+.row b { display: block; font-size: 15px; font-weight: 700 }
+.row .d { display: block; margin-top: 3px; font-size: 12.5px; color: var(--dim) }
+.row > svg { width: 18px; height: 18px; fill: var(--gold-l); opacity: .7 }
+.links { display: flex; justify-content: center; gap: 16px; margin: 28px 0 0 }
+.links a { width: 52px; height: 52px; border-radius: 50%; border: 1px solid rgba(233,197,111,.45); display: grid; place-items: center; color: var(--gold-l) }
+.links svg { width: 22px; height: 22px; fill: currentColor }
+.sign { text-align: center; margin: 24px 0 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #7d705c }
+@media (prefers-reduced-motion: reduce) { .face img { animation: none; -webkit-mask-image: none; mask-image: none } .logo { animation: none } }
+</style>
+</head>
+<body data-design="02">
+<main class="wrap">
+  <div class="face" aria-hidden="true"><img src="../ресурсы/лайн-арт-лицо.png" alt=""></div>
+  <div class="logo">Razden’sya</div>
+  <p class="slogan">Коррекция растяжек и шрамов · Эстетика лица и тела</p>
+  <p class="intro">Ижевск, приём по записи. Аппарат и сыворотка StriaLess, консультация перед каждой процедурой.</p>
+  <a class="cta" href="../варианты/02-запись.html" data-icon="cal">Записаться на консультацию</a>
+  <div class="rows">
+    <a class="row" href="../варианты/01-калькулятор.html"><span class="ic" data-icon="list"></span><span><b>Сколько стоит курс</b><span class="d">Отметьте зоны — посчитаем сумму</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="row" href="../варианты/04-тест.html"><span class="ic" data-icon="help"></span><span><b>Какие у меня растяжки</b><span class="d">Тест из пяти вопросов</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="row" href="../варианты/17-камера.html"><span class="ic" data-icon="camera"></span><span><b>До и после</b><span class="d">Сравните свои фото ползунком</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="row" href="../варианты/07-дневник-ухода.html"><span class="ic" data-icon="drop"></span><span><b>Уход после процедуры</b><span class="d">Что делать день за днём</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+  </div>
+  <nav class="links" aria-label="Контакты">
+    <a href="https://vk.me/razdensya18" target="_blank" rel="noopener" aria-label="ВКонтакте" data-icon="vk"></a>
+    <a href="https://t.me/razdensya18" target="_blank" rel="noopener" aria-label="Telegram" data-icon="tg"></a>
+    <a href="https://instagram.com/razdensya18" target="_blank" rel="noopener" aria-label="Instagram" data-icon="ig"></a>
+  </nav>
+  <p class="sign">Марина Гайнуллина · @razdensya18</p>
+</main>
+<script src="../общее/бренд.js"></script>
+</body>
+</html>

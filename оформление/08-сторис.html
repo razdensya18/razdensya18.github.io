@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Сторис · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+/* Сторис: каждый раздел — отдельный экран во весь телефон, листаются вниз с доводкой, справа точки прогресса */
+:root { --choc: #221a13; --ivory: #f8f2e8; --nude: #ead9cb; --ink: #2e261b; --cream: #f5ecda; --bar: 0px }
+html { scroll-snap-type: y mandatory; scroll-padding-top: var(--bar); background: var(--choc) }
+body { background: var(--choc); padding-top: 0 }
+body.pv { padding-top: 52px }
+.s { position: relative; min-height: calc(100svh - var(--bar)); scroll-snap-align: start; display: flex; flex-direction: column; justify-content: flex-end; padding: 28px max(24px, env(safe-area-inset-left, 0px)) calc(34px + env(safe-area-inset-bottom, 0px)); overflow: hidden }
+.s > * { position: relative; max-width: 440px; width: 100%; margin-left: auto; margin-right: auto }
+.k { font-size: 11px; font-weight: 900; letter-spacing: .22em; text-transform: uppercase; margin-bottom: 10px }
+.h { margin: 0; font: 400 clamp(52px, 15vw, 72px)/.95 var(--f-display) }
+.p { margin: 14px 0 22px; font-size: 15px; line-height: 1.55; max-width: 30ch }
+.b { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; text-decoration: none; padding: 16px 22px; border-radius: 999px; font-weight: 800; font-size: 15px }
+.b svg { width: 18px; height: 18px; fill: currentColor }
+/* 1. обложка */
+.cover { background: #f1eadf }
+.cover::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 108vw; max-height: 72%; background: url("../ресурсы/шапка-лицо.jpg") 4% 0 / 175% auto no-repeat; -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent) }
+
+.cover .logo-text { font-size: clamp(48px, 14vw, 64px); z-index: 1 }
+.cover .sl { z-index: 1; margin-top: 10px; font: 400 15px/1.35 var(--f-display); color: #6e5520 }
+.cover .hint { z-index: 1; margin-top: 26px; display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #6e5520 }
+.cover .hint i { width: 22px; height: 34px; border: 1.5px solid #6e5520; border-radius: 12px; position: relative }
+.cover .hint i::after { content: ""; position: absolute; left: 50%; top: 6px; width: 4px; height: 7px; margin-left: -2px; border-radius: 2px; background: #6e5520; animation: wheel 1.8s ease-in-out infinite }
+@keyframes wheel { 60% { transform: translateY(10px); opacity: 0 } 100% { opacity: 0 } }
+/* 2. запись */
+.book { background: var(--choc); color: var(--cream) }
+.book .k { color: #dcb35a }
+.book .p { color: #cdbfa5 }
+.book .b { background: linear-gradient(180deg, #e9c56f, #b8862a); color: #1a140d }
+.book .ghost { position: absolute; right: -60px; top: 30px; height: 70%; opacity: .5; max-width: none; width: auto }
+/* 3. цена */
+.price { background: var(--ivory); color: var(--ink) }
+.price .k { color: var(--gold-t) }
+.ladder { margin: 18px 0 10px; display: grid; gap: 4px }
+.ladder div { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(46,38,27,.12); padding: 6px 0 }
+.ladder b { font: 800 40px/1 var(--f-body); letter-spacing: -.02em; font-variant-numeric: tabular-nums }
+.ladder span { font-size: 13px; color: #6f6250; text-align: right; max-width: 48% }
+.price .b { background: var(--ink); color: #fbf5ea; margin-top: 12px }
+/* 4. тест */
+.test { background: linear-gradient(165deg, #d9ae52, #8f6c22); color: #fffaf0 }
+.test .dots { display: flex; gap: 10px; margin: 20px 0 6px }
+.test .dots i { width: 56px; height: 56px; border-radius: 50%; box-shadow: 0 0 0 3px rgba(255,250,240,.6) }
+.test .b { background: #fffaf0; color: #6e5520 }
+/* 5. до и после */
+.ba { background: #000; color: #fff }
+.ba .split { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; max-width: none }
+.ba .split span { background-size: cover; background-position: center }
+.ba .split::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: #fff }
+.ba .lbl { position: absolute; top: 18px; display: flex; justify-content: space-between; left: 18px; right: 18px; max-width: none; width: auto }
+.ba .lbl span { background: rgba(0,0,0,.6); font-size: 12px; font-weight: 800; padding: 6px 11px; border-radius: 9px }
+.ba::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(20,15,10,.85)) }
+.ba .h, .ba .p, .ba .b, .ba .k { z-index: 1 }
+.ba .k { color: #f0d08a }
+.ba .b { background: #fff; color: var(--ink) }
+/* 6. уход */
+.care { background: var(--nude); color: var(--ink) }
+.care .k { color: #8c5a45 }
+.tl { list-style: none; margin: 18px 0 18px; padding: 0; display: grid; gap: 12px }
+.tl li { display: grid; grid-template-columns: 74px 1fr; gap: 12px; align-items: baseline }
+.tl b { font: 400 28px/1 var(--f-display); color: #8c5a45 }
+.tl span { font-size: 14px; color: #5b4a3d }
+.care .b { background: var(--ink); color: #fbf5ea }
+/* 7. контакты */
+.end { background: var(--choc); color: var(--cream); justify-content: center; text-align: center }
+.end .logo-text { font-size: clamp(48px, 14vw, 64px); background: linear-gradient(180deg, #f0d08a, #c5921e) ; -webkit-background-clip: text; background-clip: text }
+.end .p { margin-left: auto; margin-right: auto; color: #cdbfa5 }
+.end .row { display: grid; gap: 10px }
+.end .row a { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; border-radius: 16px; border: 1px solid rgba(220,179,90,.5); color: var(--cream); text-decoration: none; font-weight: 800 }
+.end .row svg { width: 20px; height: 20px; fill: #f0d08a }
+.end small { display: block; margin-top: 22px; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: #8d7f69 }
+/* точки прогресса */
+.prog { position: fixed; z-index: 20; right: max(10px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%); display: grid; gap: 8px }
+.prog a { width: 8px; height: 8px; border-radius: 50%; background: rgba(140,120,90,.5); display: block; transition: height .25s, background .25s }
+.prog a.on { height: 24px; border-radius: 4px; background: #c5921e }
+@media (prefers-reduced-motion: reduce) { .cover .hint i::after { animation: none } html { scroll-behavior: auto } }
+</style>
+</head>
+<body data-design="08">
+<section class="s cover" id="s1"><span class="logo-text">Razden’sya</span><span class="sl">Коррекция растяжек и шрамов · Эстетика лица и тела · Ижевск</span><span class="hint"><i></i>листайте вниз</span></section>
+<section class="s book" id="s2"><img class="ghost" src="../ресурсы/лайн-арт-лицо.png" alt=""><span class="k">онлайн-запись</span><h2 class="h">Запись за минуту</h2><p class="p">Выберите зону, день и время. Марина подтвердит запись в сообщениях.</p><a class="b" href="../варианты/02-запись.html" data-icon="cal">Записаться</a></section>
+<section class="s price" id="s3"><span class="k">калькулятор</span><h2 class="h">Сколько стоит курс</h2>
+  <div class="ladder"><div><b>5 000</b><span>живот, бока, бёдра</span></div><div><b>4 000</b><span>поясница, руки, внутр. бёдра, икры</span></div><div><b>от 2 000</b><span>шрам, шов, рубец</span></div></div>
+  <a class="b" href="../варианты/01-калькулятор.html" data-icon="list">Посчитать мой курс</a></section>
+<section class="s test" id="s4"><span class="k">тест · 1 минута</span><h2 class="h">Какие у меня растяжки?</h2><div class="dots" aria-hidden="true"><i style="background:#d98a8a"></i><i style="background:#9a7aa8"></i><i style="background:#efeae2"></i><i style="background:#e2c3a6"></i></div><p class="p">Пять вопросов — и честный ориентир, сколько процедур обычно нужно.</p><a class="b" href="../варианты/04-тест.html" data-icon="help">Пройти тест</a></section>
+<section class="s ba" id="s5"><div class="split" aria-hidden="true"><span style="background-image:url(../ресурсы/пример-было-2.jpg)"></span><span style="background-image:url(../ресурсы/пример-стало-2.jpg)"></span></div><div class="lbl"><span>до</span><span>после</span></div><span class="k">результат</span><h2 class="h">До и после</h2><p class="p">Загрузите фото с приёма и сделайте своё через месяц — сравните ползунком.</p><a class="b" href="../варианты/17-камера.html" data-icon="camera">Сравнить свои фото</a></section>
+<section class="s care" id="s6"><span class="k">после процедуры</span><h2 class="h">Уход день за днём</h2>
+  <ol class="tl"><li><b>1–5</b><span>Хлоргексидин утром и вечером</span></li><li><b>1–4</b><span>Не мочить зону</span></li><li><b>14</b><span>Без бани, загара и скрабов</span></li><li><b>30</b><span>Можно на следующую процедуру</span></li></ol>
+  <a class="b" href="../варианты/07-дневник-ухода.html" data-icon="drop">Открыть дневник ухода</a></section>
+<section class="s end" id="s7"><span class="logo-text">Razden’sya</span><p class="p">Остались вопросы? Напишите Марине.</p>
+  <div class="row"><a href="https://vk.me/razdensya18" target="_blank" rel="noopener" data-icon="vk">ВКонтакте</a><a href="https://t.me/razdensya18" target="_blank" rel="noopener" data-icon="tg">Telegram</a><a href="https://instagram.com/razdensya18" target="_blank" rel="noopener" data-icon="ig">Instagram</a></div>
+  <small>Марина Гайнуллина · @razdensya18</small></section>
+<nav class="prog" id="prog" aria-label="Разделы"></nav>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  // панель просмотра вариантов занимает 52px сверху: экраны и доводка учитывают её
+  if (document.body.dataset.design) document.documentElement.style.setProperty("--bar", "52px");
+  var ss = [].slice.call(document.querySelectorAll(".s")), prog = document.getElementById("prog");
+  prog.innerHTML = ss.map(function (s, i) { return '<a href="#' + s.id + '" aria-label="Экран ' + (i + 1) + '"></a>' }).join("");
+  var dots = [].slice.call(prog.children);
+  var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { var i = ss.indexOf(e.target); dots.forEach(function (d, k) { d.classList.toggle("on", k === i) }) } }) }, { threshold: .55 });
+  ss.forEach(function (s) { io.observe(s) });
+})();
+</script>
+</body>
+</html>
