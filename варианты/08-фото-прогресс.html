@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Фото-прогресс · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.top { padding: 22px 0 4px; display: grid; gap: 4px }
+.top .logo-text { font-size: 34px }
+h1 { margin: 8px 0 6px; font: 400 36px/1 var(--f-display) }
+.lead { margin: 0 0 10px; font-size: 13.5px; color: var(--text) }
+.safe { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; font-weight: 700; color: var(--ok); background: rgba(76,106,80,.1); padding: 6px 10px; border-radius: 999px; margin-bottom: 14px }
+.safe svg { width: 14px; height: 14px; fill: currentColor }
+.zones { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px 12px; padding: 0 16px }
+.zones::-webkit-scrollbar { display: none }
+.zones .chip { flex: none }
+.cmp { position: relative; aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; background: var(--cream-2); user-select: none; touch-action: pan-y }
+.cmp img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none }
+.cmp .after { clip-path: inset(0 0 0 var(--x, 50%)) }
+.cmp .handle { position: absolute; top: 0; bottom: 0; left: var(--x, 50%); width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 6px rgba(0,0,0,.35) }
+.cmp .handle::after { content: "‹ ›"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; background: #fff; color: var(--brown); display: grid; place-items: center; font-weight: 800; font-size: 16px; box-shadow: 0 4px 12px rgba(0,0,0,.25) }
+.cmp .tag { position: absolute; top: 10px; padding: 5px 9px; border-radius: 9px; background: rgba(31,26,20,.75); color: #fff; font-size: 11.5px; font-weight: 700 }
+.cmp .tag.l { left: 10px } .cmp .tag.r { right: 10px }
+.cmp input[type=range] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0 }
+.cmp-info { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--muted); margin: 8px 2px 0 }
+.cmp-info b { color: var(--ink) }
+.example { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(255,252,246,.92); color: var(--gold-t); font-size: 11.5px; font-weight: 800; padding: 6px 10px; border-radius: 9px; white-space: nowrap }
+.strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 14px }
+.th { position: relative; aspect-ratio: 4 / 5; border-radius: 12px; overflow: hidden; border: 2px solid transparent; padding: 0; cursor: pointer; background: var(--cream-2) }
+.th img { width: 100%; height: 100%; object-fit: cover }
+.th span { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(transparent, rgba(0,0,0,.6)); color: #fff; font-size: 10.5px; font-weight: 700; padding: 10px 4px 4px }
+.th.a { border-color: var(--gold) } .th.b { border-color: var(--brown) }
+.th .x { position: absolute; top: 3px; right: 3px; width: 22px; height: 22px; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; display: grid; place-items: center; font-size: 13px; line-height: 1 }
+.add { aspect-ratio: 4 / 5; border-radius: 12px; border: 1.5px dashed rgba(133,96,15,.55); display: grid; place-content: center; justify-items: center; gap: 4px; color: var(--gold-t); font-size: 11px; font-weight: 800; cursor: pointer; background: rgba(255,252,246,.6) }
+.add svg { width: 24px; height: 24px; fill: currentColor }
+.pick-hint { font-size: 12px; color: var(--muted); margin: 8px 0 0 }
+.tips h2 { margin: 0 0 8px; font: 400 26px/1.05 var(--f-display) }
+.tips ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 13.5px; color: var(--text) }
+.btns { display: grid; gap: 8px; margin-top: 14px }
+</style>
+</head>
+<body data-variant="08">
+<main class="col">
+  <header class="top"><span class="logo-text">Razden’sya</span></header>
+  <h1>Фото-прогресс</h1>
+  <p class="lead">Изменения идут постепенно, и без фото их легко не заметить. Снимайте зону раз в месяц и сравнивайте.</p>
+  <span class="safe"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1.5v11h-13V10zm2.5 0h5V7a2.5 2.5 0 0 0-5 0z"/></svg>Фото хранятся только в этом телефоне</span>
+
+  <div class="zones" id="zones"></div>
+
+  <section class="card">
+    <div class="cmp" id="cmp">
+      <img class="before" id="imgA" alt="Было">
+      <img class="after" id="imgB" alt="Стало">
+      <span class="handle"></span>
+      <span class="tag l" id="tagA"></span><span class="tag r" id="tagB"></span>
+      <span class="example" id="ex">Пример: так работает сравнение</span>
+      <input type="range" min="0" max="100" value="50" id="slider" aria-label="Сдвиньте, чтобы сравнить">
+    </div>
+    <div class="cmp-info" id="info"></div>
+    <div class="strip" id="strip"></div>
+    <div class="field" style="margin-top:12px;grid-template-columns:1fr auto;align-items:center"><label for="pdate">Дата нового снимка</label><input class="input" type="date" id="pdate" style="width:auto;min-height:40px"></div>
+    <p class="pick-hint">Пока своих снимков нет, здесь примеры. Добавьте фото зоны, и сравнение переключится на ваши снимки: нажмите на два, первый — золотая рамка, второй — коричневая.</p>
+    <input type="file" accept="image/*" capture="environment" id="file" hidden>
+  </section>
+
+  <section class="card tips" style="margin-top:14px">
+    <h2>Как снимать, чтобы было видно разницу</h2>
+    <ol>
+      <li>Дневной свет у окна, без вспышки.</li>
+      <li>Тот же ракурс и расстояние, что и в прошлый раз.</li>
+      <li>Без фильтров и обработки.</li>
+      <li>Первый снимок — до первой процедуры, дальше раз в месяц.</li>
+    </ol>
+    <div class="btns"><button type="button" class="btn btn-gold" id="ask">Обсудить прогресс с Мариной</button></div>
+  </section>
+
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) };
+  var zone = R.get("photo-zone", "zhivot"), photos = [], sel = [], db = null, urls = {};
+  var memory = []; // если хранилище браузера недоступно, снимки живут до закрытия страницы
+  var EXAMPLES = [1, 2, 3].map(function (k) { return ["../ресурсы/пример-было-" + k + ".jpg", "../ресурсы/пример-стало-" + k + ".jpg"] }), demoK = 0;
+
+  function open() {
+    return new Promise(function (res) {
+      try {
+        var rq = indexedDB.open("razden-photos", 1);
+        rq.onupgradeneeded = function () { rq.result.createObjectStore("p", { keyPath: "id" }) };
+        rq.onsuccess = function () { db = rq.result; res() };
+        rq.onerror = function () { res() };
+      } catch (e) { res() }
+    });
+  }
+  function all() {
+    return new Promise(function (res) {
+      if (!db) return res(memory.slice());
+      try { var rq = db.transaction("p").objectStore("p").getAll(); rq.onsuccess = function () { res(rq.result) }; rq.onerror = function () { res([]) } } catch (e) { res(memory.slice()) }
+    });
+  }
+  function put(p) { if (!db) { memory.push(p); return Promise.resolve() } return new Promise(function (res) { var tx = db.transaction("p", "readwrite"); tx.objectStore("p").put(p); tx.oncomplete = res; tx.onerror = res }) }
+  function del(id) { if (!db) { memory = memory.filter(function (p) { return p.id !== id }); return Promise.resolve() } return new Promise(function (res) { var tx = db.transaction("p", "readwrite"); tx.objectStore("p").delete(id); tx.oncomplete = res; tx.onerror = res }) }
+  function url(p) { return urls[p.id] || (urls[p.id] = URL.createObjectURL(p.blob)) }
+
+  $("zones").innerHTML = R.zones.map(function (z) { return '<button type="button" class="chip" data-z="' + z.id + '">' + z.name + "</button>" }).join("");
+
+  function setX(v) { $("cmp").style.setProperty("--x", v + "%") }
+  function render() {
+    document.querySelectorAll("#zones .chip").forEach(function (c) { c.classList.toggle("on", c.dataset.z === zone) });
+    var list = photos.filter(function (p) { return p.zone === zone }).sort(function (a, b) { return a.date.localeCompare(b.date) });
+    if (sel.length < 2 || !sel.every(function (id) { return list.some(function (p) { return p.id === id }) })) sel = list.length >= 2 ? [list[0].id, list[list.length - 1].id] : [];
+    var A = list.filter(function (p) { return p.id === sel[0] })[0], B = list.filter(function (p) { return p.id === sel[1] })[0];
+    if (A && B) {
+      $("imgA").src = url(A); $("imgB").src = url(B); $("imgA").style.filter = $("imgB").style.filter = "";
+      $("tagA").textContent = R.date(R.parse(A.date), { day: "numeric", month: "short" }); $("tagB").textContent = R.date(R.parse(B.date), { day: "numeric", month: "short" });
+      var days = Math.round((R.parse(B.date) - R.parse(A.date)) / 864e5);
+      $("info").innerHTML = "<span>Между снимками</span><b>" + days + " " + R.plural(days, "день", "дня", "дней") + "</b>";
+      $("ex").hidden = true;
+    } else {
+      // пример на реальных фото «было — стало», пока своих снимков нет
+      var ex = EXAMPLES[demoK];
+      $("imgA").src = ex[0]; $("imgB").src = ex[1]; $("imgA").style.filter = $("imgB").style.filter = "";
+      $("tagA").textContent = "было"; $("tagB").textContent = "стало"; $("ex").hidden = false;
+      $("ex").textContent = "Пример " + (demoK + 1) + " из " + EXAMPLES.length + ": потяните ползунок";
+      $("info").innerHTML = list.length === 1 ? "<span>Добавьте ещё один снимок этой зоны</span><b>1 из 2</b>" : "<span>Снимков этой зоны пока нет</span><b>0</b>";
+    }
+    var demoThumbs = list.length ? "" : EXAMPLES.map(function (ex, k) { return '<button type="button" class="th' + (k === demoK ? " a" : "") + '" data-ex="' + k + '"><img src="' + ex[0] + '" alt=""><span>пример ' + (k + 1) + "</span></button>" }).join("");
+    $("strip").innerHTML = demoThumbs + list.map(function (p) {
+      var k = sel.indexOf(p.id);
+      return '<button type="button" class="th' + (k === 0 ? " a" : k === 1 ? " b" : "") + '" data-id="' + p.id + '"><img src="' + url(p) + '" alt=""><span>' + R.date(R.parse(p.date), { day: "numeric", month: "short" }) + '</span><span class="x" data-del="' + p.id + '" aria-label="Удалить">×</span></button>';
+    }).join("") + '<button type="button" class="add" id="add">' + R.icon("camera") + "Добавить</button>";
+    $("add").onclick = function () { $("file").click() };
+  }
+
+  $("zones").addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (b) { zone = b.dataset.z; R.set("photo-zone", zone); sel = []; render() } });
+  $("slider").addEventListener("input", function () { setX(this.value) });
+  $("strip").addEventListener("click", function (e) {
+    var x = e.target.closest("[data-del]");
+    if (x) { e.stopPropagation(); if (x.dataset.armed) { del(x.dataset.del).then(load) } else { x.dataset.armed = "1"; x.textContent = "✓"; R.toast("Нажмите ещё раз, чтобы удалить снимок") } return }
+    var exb = e.target.closest("[data-ex]"); if (exb) { demoK = +exb.dataset.ex; setX(50); $("slider").value = 50; render(); return }
+    var t = e.target.closest(".th"); if (!t) return;
+    var id = t.dataset.id, k = sel.indexOf(id);
+    if (k > -1) return;
+    sel = [sel[1] || sel[0], id].filter(Boolean).slice(-2);
+    sel.sort(function (a, b) { var pa = photos.filter(function (p) { return p.id === a })[0], pb = photos.filter(function (p) { return p.id === b })[0]; return pa.date.localeCompare(pb.date) });
+    render();
+  });
+  $("file").addEventListener("change", function () {
+    var f = this.files[0]; if (!f) return;
+    var p = { id: String(Date.now()), zone: zone, date: $("pdate").value || R.ymd(R.today()), blob: f };
+    put(p).then(load).then(function () { R.toast("Снимок сохранён в телефоне") });
+    this.value = "";
+  });
+  $("ask").addEventListener("click", function () { R.send("Здравствуйте, Марина! Веду фото-прогресс зоны «" + R.zone(zone).name.toLowerCase() + "». Хочу показать снимки и обсудить результат.") });
+
+  function load() { return all().then(function (l) { photos = l; render() }) }
+  $("pdate").value = R.ymd(R.today()); $("pdate").max = R.ymd(R.today());
+  open().then(load);
+  setX(50);
+})();
+</script>
+</body>
+</html>

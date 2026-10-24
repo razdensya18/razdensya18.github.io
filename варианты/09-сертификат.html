@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Подарочный сертификат · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.top { text-align: center; padding: 22px 0 0 }
+.top .logo-text { font-size: 32px }
+h1 { margin: 8px 0 4px; font: 400 36px/1 var(--f-display); text-align: center }
+.lead { margin: 0 0 14px; text-align: center; font-size: 13.5px; color: var(--text) }
+.preview { position: sticky; top: calc(58px + env(safe-area-inset-top, 0px)); z-index: 4; padding: 6px 0 10px; background: linear-gradient(var(--cream) 85%, rgba(244,238,228,0)) }
+.preview canvas, .preview img { width: 100%; height: auto; border-radius: 16px; box-shadow: 0 20px 40px -22px rgba(74,56,16,.7); display: block }
+.form { display: grid; gap: 14px }
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--cream-2); border-radius: 14px; padding: 4px; gap: 4px }
+.seg button { border: 0; border-radius: 11px; padding: 10px; font-weight: 800; font-size: 14px; background: none; color: var(--muted); cursor: pointer }
+.seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 3px rgba(74,56,16,.2) }
+.row { display: flex; flex-wrap: wrap; gap: 7px }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
+.designs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px }
+.ds { border: 2px solid transparent; border-radius: 14px; padding: 0; overflow: hidden; cursor: pointer; aspect-ratio: 8 / 5; position: relative; background-size: cover; background-position: center }
+.ds span { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(255,252,246,.88); font-size: 11.5px; font-weight: 800; padding: 4px; color: var(--ink) }
+.ds[aria-pressed="true"] { border-color: var(--brown) }
+.d-silk { background-image: url("../ресурсы/фон-шёлк.jpg") }
+.d-face { background-image: url("../ресурсы/шапка-лицо.jpg"); background-position: 0 0 }
+.d-night { background: linear-gradient(135deg, #2a2219, #12100c) }
+textarea.input { min-height: 64px; resize: none }
+.cnt { font-size: 11px; color: var(--muted); text-align: right }
+.btns { display: grid; gap: 8px; margin-top: 4px }
+.fine { font-size: 12px; color: var(--muted); text-align: center; margin: 12px 6px 0 }
+</style>
+</head>
+<body data-variant="09">
+<main class="col">
+  <header class="top"><span class="logo-text">Razden’sya</span></header>
+  <h1>Подарочный сертификат</h1>
+  <p class="lead">Соберите сертификат за минуту: он сразу появится ниже, а Марина оформит его после оплаты.</p>
+
+  <div class="preview"><canvas id="cv" width="1200" height="750" aria-label="Предпросмотр сертификата"></canvas><img id="shot" alt="Подарочный сертификат" hidden></div>
+
+  <section class="card form">
+    <div class="seg" role="group" aria-label="Тип сертификата"><button type="button" data-k="sum" aria-pressed="true">На сумму</button><button type="button" data-k="zone" aria-pressed="false">На зону</button></div>
+    <div class="row" id="sums"></div>
+    <div class="row" id="zones" hidden></div>
+    <div class="two">
+      <div class="field"><label for="to">Кому</label><input class="input" id="to" maxlength="22" value="Анне"></div>
+      <div class="field"><label for="from">От кого</label><input class="input" id="from" maxlength="22" value="от Кати"></div>
+    </div>
+    <div class="field"><label for="wish">Пожелание</label><textarea class="input" id="wish" maxlength="90">С любовью и заботой о тебе</textarea><span class="cnt" id="cnt"></span></div>
+    <div class="field"><label>Оформление</label>
+      <div class="designs" id="designs">
+        <button type="button" class="ds d-face" data-d="face" aria-pressed="true"><span>Лайн-арт</span></button>
+        <button type="button" class="ds d-silk" data-d="silk" aria-pressed="false"><span>Шёлк</span></button>
+        <button type="button" class="ds d-night" data-d="night" aria-pressed="false"><span>Ночь</span></button>
+      </div>
+    </div>
+    <div class="btns">
+      <button type="button" class="btn btn-gold" id="order" data-icon="gift">Заказать у Марины</button>
+      <button type="button" class="btn btn-line" id="save" data-icon="image">Сохранить картинку</button>
+    </div>
+  </section>
+  <p class="fine">Сертификат действует 6 месяцев после оплаты. Номер присваивает Марина.</p>
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) };
+  var st = { kind: "sum", sum: 5000, zone: "zhivot", design: "face" }, cv = $("cv"), cx = cv.getContext("2d");
+  var SUMS = [2000, 4000, 5000, 10000];
+  $("sums").innerHTML = SUMS.map(function (s) { return '<button type="button" class="chip" data-s="' + s + '">' + R.rub(s) + "</button>" }).join("");
+  $("zones").innerHTML = R.zones.filter(function (z) { return !z.from }).map(function (z) { return '<button type="button" class="chip" data-z="' + z.id + '">' + z.name + "</button>" }).join("");
+  var imgs = {};
+  function img(src) { return imgs[src] || (imgs[src] = new Promise(function (res) { var i = new Image(); i.onload = function () { res(i) }; i.onerror = function () { res(null) }; i.src = src })) }
+
+  function cover(i, w, h, ox, oy) { var s = Math.max(w / i.width, h / i.height); cx.drawImage(i, ox || 0, oy || 0, w / s, h / s, 0, 0, w, h) }
+  function draw() {
+    var W = 1200, H = 750, dark = st.design === "night";
+    var bgSrc = st.design === "face" ? "../ресурсы/шапка-лицо.jpg" : "../ресурсы/фон-шёлк.jpg";
+    Promise.all([img(bgSrc), document.fonts.load('80px "AngelicaC"'), document.fonts.load('800 60px "Mulish"'), document.fonts.load('italic 400 30px "Mulish"')]).then(function (r) {
+      var bg = r[0];
+      cx.clearRect(0, 0, W, H);
+      if (dark) { var g = cx.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#2a2219"); g.addColorStop(1, "#110f0b"); cx.fillStyle = g; cx.fillRect(0, 0, W, H) }
+      else if (bg) { if (st.design === "face") cover(bg, W, H, 0, 0); else cover(bg, W, H, 0, 300); cx.fillStyle = "rgba(250,245,236,.35)"; cx.fillRect(0, 0, W, H) }
+      var gold = cx.createLinearGradient(0, 0, 0, H); gold.addColorStop(0, "#8f6c22"); gold.addColorStop(.5, "#c5921e"); gold.addColorStop(1, "#8f6c22");
+      cx.strokeStyle = dark ? "#c5921e" : gold; cx.lineWidth = 3; cx.strokeRect(34, 34, W - 68, H - 68);
+      cx.lineWidth = 1; cx.strokeRect(48, 48, W - 96, H - 96);
+      var tx = st.design === "face" ? 760 : W / 2; cx.textAlign = "center";
+      var ink = dark ? "#f6ecd8" : "#2e261b", soft = dark ? "#d4c4a4" : "#6e5520";
+      var lg = cx.createLinearGradient(0, 120, 0, 200); lg.addColorStop(0, "#4a3810"); lg.addColorStop(.45, "#8f6c22"); lg.addColorStop(1, "#c8962c");
+      if (dark) { lg = cx.createLinearGradient(0, 120, 0, 200); lg.addColorStop(0, "#f0d08a"); lg.addColorStop(1, "#c5921e") }
+      cx.fillStyle = lg; cx.font = '86px "AngelicaC", Georgia, serif'; cx.fillText("Razden’sya", tx, 190);
+      cx.fillStyle = soft; cx.font = '30px "AngelicaC", Georgia, serif'; cx.fillText("подарочный сертификат", tx, 250);
+      var big = st.kind === "sum" ? R.rub(st.sum) : R.zone(st.zone).name.toLowerCase();
+      cx.fillStyle = ink; cx.font = (st.kind === "sum" ? "800 104px" : "800 70px") + ' "Mulish", sans-serif';
+      if (st.kind === "zone") { cx.font = '400 42px "Mulish", sans-serif'; cx.fillStyle = soft; cx.fillText("процедура: коррекция растяжек", tx, 330); cx.fillStyle = ink; cx.font = '800 72px "Mulish", sans-serif'; cx.fillText(big, tx, 415) }
+      else cx.fillText(big, tx, 395);
+      cx.fillStyle = ink; cx.font = '700 40px "Mulish", sans-serif'; cx.fillText("для " + ($("to").value.trim() || "…"), tx, 490);
+      cx.fillStyle = soft; cx.font = 'italic 400 29px "Mulish", sans-serif';
+      wrap($("wish").value.trim(), tx, 545, st.design === "face" ? 680 : 900, 38);
+      cx.font = '600 26px "Mulish", sans-serif'; cx.fillText($("from").value.trim(), tx, 640);
+      cx.fillStyle = soft; cx.font = '600 20px "Mulish", sans-serif'; cx.textAlign = "left"; cx.fillText("@razdensya18 · Ижевск", 76, H - 74);
+      cx.textAlign = "right"; cx.fillText("№ ____ · действует 6 месяцев", W - 76, H - 74);
+      // картинка вместо холста: её можно сохранить долгим нажатием на телефоне
+      try { $("shot").src = cv.toDataURL("image/jpeg", .9); $("shot").hidden = false; cv.hidden = true } catch (e) { $("shot").hidden = true; cv.hidden = false }
+    });
+  }
+  function wrap(text, x, y, max, lh) {
+    var words = text.split(/\s+/), line = "", lines = [];
+    words.forEach(function (w) { var t = line ? line + " " + w : w; if (cx.measureText(t).width > max && line) { lines.push(line); line = w } else line = t });
+    if (line) lines.push(line);
+    lines.slice(0, 2).forEach(function (l, k) { cx.fillText(l, x, y + k * lh) });
+  }
+
+  function sync() {
+    document.querySelectorAll(".seg button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.k === st.kind) });
+    $("sums").hidden = st.kind !== "sum"; $("zones").hidden = st.kind !== "zone";
+    document.querySelectorAll("#sums .chip").forEach(function (c) { c.classList.toggle("on", +c.dataset.s === st.sum) });
+    document.querySelectorAll("#zones .chip").forEach(function (c) { c.classList.toggle("on", c.dataset.z === st.zone) });
+    document.querySelectorAll(".ds").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.d === st.design) });
+    $("cnt").textContent = $("wish").value.length + " / 90";
+    draw();
+  }
+  document.querySelector(".seg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) { st.kind = b.dataset.k; sync() } });
+  $("sums").addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (b) { st.sum = +b.dataset.s; sync() } });
+  $("zones").addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (b) { st.zone = b.dataset.z; sync() } });
+  $("designs").addEventListener("click", function (e) { var b = e.target.closest(".ds"); if (b) { st.design = b.dataset.d; sync() } });
+  ["to", "from", "wish"].forEach(function (id) { $(id).addEventListener("input", sync) });
+
+  $("order").addEventListener("click", function () {
+    var what = st.kind === "sum" ? "на сумму " + R.rub(st.sum) : "на зону «" + R.zone(st.zone).name.toLowerCase() + "» (" + R.rub(R.zone(st.zone).price) + ")";
+    var names = { face: "лайн-арт", silk: "шёлк", night: "ночь" };
+    R.send("Здравствуйте, Марина! Хочу подарочный сертификат " + what + ".\nДля: " + ($("to").value.trim() || "—") + "\nПодпись: " + ($("from").value.trim() || "—") + "\nПожелание: " + ($("wish").value.trim() || "—") + "\nОформление: " + names[st.design] + ".\nКак оплатить?", { title: "Заказ сертификата" });
+  });
+  $("save").addEventListener("click", function () {
+    try {
+      cv.toBlob(function (b) {
+        if (!b) { R.toast("Не получилось сохранить: откройте страницу в браузере"); return }
+        var u = URL.createObjectURL(b), a = document.createElement("a"); a.href = u; a.download = "sertifikat-razdensya.png"; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(u) }, 4000);
+        R.toast("Сохраняю картинку. Если не скачалась, нажмите на сертификат и удерживайте");
+      });
+    } catch (e) { R.toast("Нажмите на сертификат и удерживайте, чтобы сохранить") }
+  });
+  sync();
+})();
+</script>
+</body>
+</html>

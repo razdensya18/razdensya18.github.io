@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Можно ли мне? · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.top { text-align: center; padding: 22px 0 4px }
+.top .logo-text { font-size: 30px }
+h1 { margin: 10px 0 6px; font: 400 36px/1.02 var(--f-display); text-align: center }
+.lead { margin: 0 0 14px; text-align: center; font-size: 13.5px; color: var(--text) }
+.lock { display: flex; gap: 8px; align-items: center; justify-content: center; font-size: 12px; color: var(--ok); font-weight: 700; margin-bottom: 14px }
+.lock svg { width: 14px; height: 14px; fill: currentColor }
+.verdict { position: sticky; top: calc(58px + env(safe-area-inset-top, 0px)); z-index: 5; border-radius: 18px; padding: 13px 14px; display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; color: #fff; box-shadow: 0 14px 30px -18px rgba(0,0,0,.5); transition: background .2s; margin-bottom: 14px }
+.verdict .ic { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.2); display: grid; place-items: center }
+.verdict .ic svg { width: 18px; height: 18px; fill: #fff }
+.verdict b { display: block; font-size: 14.5px }
+.verdict span { font-size: 12.5px; opacity: .9 }
+.verdict.ok { background: var(--ok) } .verdict.warn { background: var(--warn) } .verdict.stop { background: var(--stop) }
+.grp { margin-bottom: 12px }
+.grp h2 { margin: 0 0 4px; font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-t) }
+.grp > p { margin: 0 0 10px; font-size: 12.5px; color: var(--muted) }
+.tg { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); font-size: 14px; cursor: pointer }
+.tg:first-of-type { border-top: 0 }
+.tg input { appearance: none; flex: none; width: 46px; height: 28px; border-radius: 999px; background: var(--cream-2); position: relative; cursor: pointer; transition: background .15s; margin: 0 }
+.tg input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .15s }
+.tg input:checked { background: var(--brown) }
+.tg input:checked::after { transform: translateX(18px) }
+.prep h2 { margin: 0 0 4px; font: 400 28px/1.05 var(--f-display) }
+.when { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; margin: 10px 0 12px }
+.count { background: var(--cream); border-radius: 14px; padding: 10px 12px; text-align: center; min-width: 96px }
+.count b { display: block; font-size: 24px; line-height: 1; font-variant-numeric: tabular-nums }
+.count span { font-size: 11px; color: var(--muted) }
+.cl h3 { margin: 12px 0 6px; font-size: 13px; font-weight: 800 }
+.ck { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 7px 0; font-size: 14px; cursor: pointer; line-height: 1.35 }
+.ck input { appearance: none; width: 24px; height: 24px; border-radius: 8px; border: 1.5px solid rgba(74,56,16,.35); background: var(--paper); margin: 0; cursor: pointer; display: grid; place-items: center }
+.ck input:checked { background: var(--brown); border-color: var(--brown) }
+.ck input:checked::after { content: "✓"; color: #fff; font-weight: 800; font-size: 14px }
+.ck input:checked + span { color: var(--muted); text-decoration: line-through }
+.progress { height: 6px; border-radius: 3px; background: var(--cream-2); overflow: hidden; margin-top: 8px }
+.progress i { display: block; height: 100%; background: var(--g-btn); transition: width .2s }
+.btns { display: grid; gap: 8px; margin-top: 14px }
+</style>
+</head>
+<body data-variant="05">
+<main class="col">
+  <header class="top"><span class="logo-text">Razden’sya</span></header>
+  <h1>Можно ли мне на процедуру?</h1>
+  <p class="lead">Отметьте, что из этого у вас есть сейчас. Проверка займёт минуту.</p>
+  <p class="lock"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3h1.5v11h-13V10zm2.5 0h5V7a2.5 2.5 0 0 0-5 0z"/></svg>Ответы остаются в вашем телефоне и никуда не отправляются</p>
+
+  <div class="verdict ok" id="verdict" aria-live="polite"><span class="ic"></span><div><b></b><span class="sub"></span></div></div>
+
+  <section class="card grp" id="g1"><h2>Процедура не проводится</h2><p>Если что-то из этого есть, процедура вам не подходит.</p></section>
+  <section class="card grp" id="g2"><h2>Нужно подождать</h2><p>Временные состояния: запись переносим, пока не пройдёт.</p></section>
+  <section class="card grp" id="g3"><h2>Обсудить с Мариной</h2><p>Не запрет, но скажите об этом до процедуры.</p></section>
+
+  <section class="card prep">
+    <span class="eyebrow">подготовка</span>
+    <h2>Уже записаны?</h2>
+    <div class="when">
+      <div class="field"><label for="date">Дата процедуры</label><input class="input" type="date" id="date"></div>
+      <div class="count" id="count"><b>—</b><span>дней</span></div>
+    </div>
+    <div class="cl" id="cl"></div>
+    <div class="progress" aria-hidden="true"><i id="bar" style="width:0"></i></div>
+    <div class="btns">
+      <button type="button" class="btn btn-line" id="ics" data-icon="bell">Напомнить накануне</button>
+    </div>
+  </section>
+
+  <div class="btns">
+    <button type="button" class="btn btn-gold" id="cta"></button>
+  </div>
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) };
+  var G = {
+    g1: ["Беременность", "Кормление грудью, меньше 6 месяцев после родов", "Сахарный диабет I типа", "Гемофилия или тромбофлебит", "ВИЧ, гепатиты", "Почечная или печёночная недостаточность", "Склонность к келоидным рубцам", "Псориаз", "Эпилепсия", "Бронхиальная астма", "Лучевая или химиотерапия сейчас"],
+    g2: ["Простуда, ОРВИ, температура", "Герпес в активной фазе", "Гнойнички или воспаление в зоне процедуры"],
+    g3: ["Аллергия на косметику", "Родинки или образования в зоне", "Рубец моложе полугода"]
+  };
+  var on = R.get("check", {});
+  Object.keys(G).forEach(function (g) {
+    $(g).insertAdjacentHTML("beforeend", G[g].map(function (t, k) {
+      var id = g + "-" + k;
+      return '<label class="tg" for="' + id + '"><span>' + t + '</span><input type="checkbox" id="' + id + '"' + (on[id] ? " checked" : "") + "></label>";
+    }).join(""));
+  });
+
+  var PREP = [["За день до процедуры", ["Не использовать скрабы, кислоты и спиртовые средства в зоне", "Не пить алкоголь"]],
+              ["В день процедуры", ["Кожа в зоне чистая и сухая", "Без масел, крема, дезодоранта и парфюма в зоне", "Надеть свободную одежду", "Кофе лучше не пить"]]];
+  var done = R.get("prep", {});
+  $("cl").innerHTML = PREP.map(function (blk, b) {
+    return "<h3>" + blk[0] + "</h3>" + blk[1].map(function (t, k) { var id = "p" + b + k; return '<label class="ck" for="' + id + '"><input type="checkbox" id="' + id + '"' + (done[id] ? " checked" : "") + "><span>" + t + "</span></label>" }).join("");
+  }).join("");
+  $("date").value = R.get("prep-date", R.ymd(R.addDays(R.today(), 3)));
+
+  function count(g) { return G[g].filter(function (_, k) { return on[g + "-" + k] }).length }
+  function render() {
+    var a = count("g1"), b = count("g2"), c = count("g3"), v = $("verdict"), cls, title, sub, icon, cta;
+    if (a) { cls = "stop"; icon = "x"; title = "Процедура вам сейчас не подходит"; sub = "По отмеченному процедуру не проводят. Если сомневаетесь, спросите Марину."; cta = "Задать вопрос Марине" }
+    else if (b) { cls = "stop"; icon = "clock"; title = "Запись лучше перенести"; sub = "Дождитесь, пока состояние пройдёт, и выберите новую дату."; cta = "Перенести запись" }
+    else if (c) { cls = "warn"; icon = "help"; title = "Обсудите с Мариной до записи"; sub = "Это не запрет, но Марине важно знать об этом заранее."; cta = "Написать Марине" }
+    else { cls = "ok"; icon = "check"; title = "Противопоказаний не отмечено"; sub = "Можно записываться. Марина ещё раз пройдёт по списку на консультации."; cta = "Записаться на консультацию" }
+    v.className = "verdict " + cls; v.querySelector(".ic").innerHTML = R.icon(icon); v.querySelector("b").textContent = title; v.querySelector(".sub").textContent = sub;
+    $("cta").textContent = cta; $("cta").dataset.k = cls + (a ? "1" : b ? "2" : c ? "3" : "0");
+    var d = $("date").value ? R.parse($("date").value) : null, n = d ? Math.round((d - R.today()) / 864e5) : null;
+    $("count").innerHTML = n == null ? "<b>—</b><span>дата не выбрана</span>" : n < 0 ? "<b>✓</b><span>уже прошла</span>" : n === 0 ? "<b>сегодня</b><span>удачи!</span>" : "<b>" + n + "</b><span>" + R.plural(n, "день", "дня", "дней") + " до процедуры</span>";
+    var boxes = document.querySelectorAll("#cl input"), ok = [].filter.call(boxes, function (x) { return x.checked }).length;
+    $("bar").style.width = Math.round(ok / boxes.length * 100) + "%";
+  }
+
+  document.querySelectorAll(".grp input").forEach(function (x) { x.addEventListener("change", function () { on[x.id] = x.checked; R.set("check", on); render() }) });
+  document.querySelectorAll("#cl input").forEach(function (x) { x.addEventListener("change", function () { done[x.id] = x.checked; R.set("prep", done); render() }) });
+  $("date").addEventListener("change", function () { R.set("prep-date", this.value); render() });
+  $("ics").addEventListener("click", function () {
+    if (!$("date").value) { R.toast("Сначала выберите дату"); return }
+    var d = R.addDays(R.parse($("date").value), -1); d.setHours(19, 0);
+    R.saveFile("podgotovka-razdensya.ics", R.ics([{ title: "Завтра процедура Razden’sya: подготовка", start: d, minutes: 15, desc: "Без скрабов, кислот и спиртовых средств в зоне. Без алкоголя. Завтра: чистая сухая кожа, свободная одежда.", alarm: 0 }]));
+    R.toast("Открываю файл для календаря");
+  });
+  $("cta").addEventListener("click", function () {
+    var k = this.dataset.k;
+    var text = k === "ok0" ? "Здравствуйте, Марина! По списку противопоказаний на сайте у меня ничего нет. Хочу записаться на консультацию."
+      : k.slice(-1) === "2" ? "Здравствуйте, Марина! Нужно перенести запись: временное противопоказание. Подскажите, когда можно?"
+      : "Здравствуйте, Марина! Хочу уточнить про противопоказания перед записью.";
+    R.send(text);
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Дни приёма из графика · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0 4px }
+.top .logo-text { font-size: 30px }
+.sync { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; padding: 6px 10px; border-radius: 999px; background: rgba(76,106,80,.12); color: var(--ok) }
+.sync::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor }
+.sync.demo { background: rgba(197,146,30,.14); color: var(--gold-t) }
+h1 { margin: 8px 0 4px; font: 400 38px/1 var(--f-display) }
+.lead { margin: 0 0 14px; font-size: 14px; color: var(--text) }
+.rhythm { display: grid; gap: 10px }
+.rhythm .line { display: flex; justify-content: space-between; align-items: baseline; gap: 10px }
+.rhythm b { font-size: 16px }
+.rhythm span { font-size: 12.5px; color: var(--muted) }
+.track { display: flex; gap: 4px }
+.track i { flex: 1; height: 12px; border-radius: 4px; background: var(--cream-2); position: relative }
+.track i.rec { background: linear-gradient(180deg, #c5921e, #85600f) }
+.track i.now { outline: 2px solid var(--ink); outline-offset: 2px }
+.legend { display: flex; gap: 14px; font-size: 11.5px; color: var(--muted) }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px }
+.strip { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; margin: 14px -16px 0; padding: 4px 16px 8px }
+.strip::-webkit-scrollbar { display: none }
+.d { flex: 0 0 62px; scroll-snap-align: start; border: 0; border-radius: 18px; padding: 10px 4px; display: grid; justify-items: center; gap: 2px; cursor: pointer; background: rgba(255,255,255,.5); color: #a99b82 }
+.d small { font-size: 11px; font-weight: 700; text-transform: uppercase }
+.d b { font-size: 22px; line-height: 1.1; font-variant-numeric: tabular-nums }
+.d span { font-size: 10px; font-weight: 800; letter-spacing: .04em }
+.d.work { background: repeating-linear-gradient(135deg, rgba(74,56,16,.05) 0 5px, transparent 5px 10px), rgba(255,255,255,.45); cursor: default }
+.d.rec { background: var(--paper); color: var(--ink); box-shadow: inset 0 0 0 1.5px rgba(197,146,30,.6) }
+.d.rec span { color: var(--gold-t) }
+.d.sel { background: var(--brown); color: #fff8ea; box-shadow: none }
+.d.sel span { color: #f0d08a }
+.pick { margin-top: 6px; display: grid; gap: 10px }
+.pick h2 { margin: 0; font-size: 16px; font-weight: 800 }
+.pick .times { display: flex; flex-wrap: wrap; gap: 8px }
+.pick p { margin: 0; font-size: 13px; color: var(--muted) }
+.how { margin-top: 14px; display: grid; gap: 8px }
+.how .eyebrow { display: block }
+.how div { display: grid; grid-template-columns: 26px 1fr; gap: 8px; font-size: 13px; color: var(--text) }
+.how svg { width: 18px; height: 18px; fill: var(--gold-t); margin-top: 1px }
+</style>
+</head>
+<body data-variant="18">
+<main class="col">
+  <header class="top"><span class="logo-text">Razden’sya</span><span class="sync demo" id="sync">пример графика</span></header>
+  <h1>Дни приёма</h1>
+  <p class="lead">Свободные дни считаются сами по графику Марины. Выберите день и время.</p>
+
+  <section class="card rhythm">
+    <div class="line"><b id="today"></b><span id="next"></span></div>
+    <div class="track" id="track" aria-hidden="true"></div>
+    <div class="legend"><span><i style="background:#c5921e"></i>приём</span><span><i style="background:#ece3d3"></i>смена, приёма нет</span></div>
+  </section>
+
+  <div class="strip" id="strip" role="listbox" aria-label="Дни"></div>
+
+  <section class="card pick" id="pick" aria-live="polite"></section>
+
+  <section class="card how">
+    <span class="eyebrow">для Марины: как это работает</span>
+    <div><span data-icon="cal"></span><span>График 2×2 ведётся в «Ритме смен», как сейчас.</span></div>
+    <div><span data-icon="spark"></span><span>Страница берёт только даты смен, без фото и чужих графиков, и считает выходные днями приёма.</span></div>
+    <div><span data-icon="check"></span><span>Поменяла смену в календаре — дни приёма здесь обновились сами.</span></div>
+  </section>
+
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) };
+  // База «Ритма смен» и имя в графике — впишем при сборке. Пока адрес пустой, показывается пример
+  var RHYTHM = { url: "", person: "Марина" };
+  var RECEIVE_ON = "off"; // приём в выходные дни графика; "work" — в рабочие
+  var TIMES = ["10:00", "12:30", "15:00", "17:30"];
+  var P = { startDate: R.ymd(R.addDays(R.today(), -1)), work: 2, off: 2 }, live = false, sel = null;
+
+  function info(d) {
+    var cyc = P.work + P.off, diff = Math.round((d - R.parse(P.startDate)) / 864e5), pos = ((diff % cyc) + cyc) % cyc, working = pos < P.work;
+    return { pos: pos, cyc: cyc, working: working, rec: RECEIVE_ON === "off" ? !working : working };
+  }
+  // запрашиваем по полям, чтобы не тянуть фото и чужие данные
+  function loadLive() {
+    if (!RHYTHM.url) return Promise.reject();
+    var base = RHYTHM.url + "/rooms/main/people";
+    var j = function (u) { return fetch(u).then(function (r) { if (!r.ok) throw 0; return r.json() }) };
+    return j(base + ".json?shallow=true").then(function (idx) {
+      var keys = Object.keys(idx || {});
+      return Promise.all(keys.map(function (k) { return j(base + "/" + k + "/name.json") })).then(function (names) {
+        var k = keys[names.indexOf(RHYTHM.person)]; if (k == null) throw 0;
+        return Promise.all(["startDate", "work", "off"].map(function (f) { return j(base + "/" + k + "/" + f + ".json") }));
+      });
+    }).then(function (v) { P = { startDate: v[0], work: +v[1], off: +v[2] }; live = true });
+  }
+
+  function render() {
+    var t = R.today(), it = info(t);
+    $("sync").className = "sync" + (live ? "" : " demo"); $("sync").textContent = live ? "по графику 2×2" : "пример графика";
+    $("today").textContent = it.rec ? "Сегодня день приёма" : "Сегодня у Марины смена";
+    var nx = null; for (var i = 1; i < 30 && !nx; i++) { var d = R.addDays(t, i); if (info(d).rec) nx = d }
+    $("next").textContent = nx ? "ближайший приём: " + R.date(nx, { weekday: "short", day: "numeric", month: "short" }) : "";
+    var h = ""; for (i = 0; i < it.cyc; i++) { var rec = RECEIVE_ON === "off" ? i >= P.work : i < P.work; h += "<i class=\"" + (rec ? "rec" : "") + (i === it.pos ? " now" : "") + "\"></i>" }
+    $("track").innerHTML = h;
+    h = "";
+    for (i = 0; i < 21; i++) {
+      var day = R.addDays(t, i), f = info(day), k = R.ymd(day), can = f.rec && i > 0;
+      h += '<button type="button" role="option" class="d ' + (f.rec ? "rec" : "work") + (i === 0 ? " today" : "") + (sel === k ? " sel" : "") + '" ' + (can ? 'data-d="' + k + '"' : "disabled") + ' aria-selected="' + (sel === k) + '"><small>' + (i === 0 ? "сег" : day.toLocaleDateString("ru-RU", { weekday: "short" })) + "</small><b>" + day.getDate() + "</b><span>" + (f.rec ? (i === 0 ? "сегодня" : "приём") : "смена") + "</span></button>";
+    }
+    $("strip").innerHTML = h;
+    if (!sel) { $("pick").innerHTML = "<h2>Выберите день приёма</h2><p>Золотые дни — свободные. Полосатые — у Марины смена.</p>"; return }
+    var sd = R.parse(sel);
+    $("pick").innerHTML = "<h2>" + R.date(sd, { weekday: "long", day: "numeric", month: "long" }) + '</h2><div class="times">' + TIMES.map(function (tm) { return '<button type="button" class="chip" data-t="' + tm + '">' + tm + "</button>" }).join("") + "</div><p>Нажмите на время, и заявка уйдёт Марине готовым текстом.</p>";
+  }
+
+  $("strip").addEventListener("click", function (e) { var b = e.target.closest("[data-d]"); if (b) { sel = b.dataset.d; render() } });
+  $("pick").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-t]"); if (!b) return;
+    R.send("Здравствуйте, Марина! Хочу записаться: " + R.date(R.parse(sel), { weekday: "long", day: "numeric", month: "long" }) + ", " + b.dataset.t + ".\nЗона: ", { title: "Запись к Марине" });
+  });
+  render();
+  loadLive().then(render).catch(function () {});
+})();
+</script>
+</body>
+</html>

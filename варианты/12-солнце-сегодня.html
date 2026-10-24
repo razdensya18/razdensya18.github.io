@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Солнце сегодня · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0 4px }
+.top .logo-text { font-size: 30px }
+.city { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 800; color: var(--gold-t); background: rgba(197,146,30,.13); padding: 6px 10px; border-radius: 999px }
+.city svg { width: 14px; height: 14px; fill: currentColor }
+h1 { margin: 8px 0 12px; font: 400 40px/1 var(--f-display) }
+.dial { position: relative; text-align: center; padding-top: 6px }
+.dial svg { width: 100%; max-width: 300px; height: auto; display: block; margin: 0 auto }
+.dial .val { display: grid; justify-items: center; margin-top: 2px }
+.dial .val b { font: 400 64px/1 var(--f-display) }
+.dial .val span { font-size: 13px; font-weight: 800; letter-spacing: .06em }
+.now { display: flex; justify-content: center; gap: 18px; margin-top: 8px; font-size: 13px; color: var(--text) }
+.now b { color: var(--ink) }
+.status { margin-top: 14px }
+.status p { margin: 0 0 8px; font-size: 12.5px; font-weight: 700; color: var(--text) }
+.status .row { display: flex; flex-wrap: wrap; gap: 6px }
+.status .chip { font-size: 12.5px; padding: 8px 11px }
+.advice { margin-top: 14px; border-radius: 20px; padding: 16px; display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; color: #fff }
+.advice .ic { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.18); display: grid; place-items: center }
+.advice .ic svg { width: 22px; height: 22px; fill: #fff }
+.advice b { display: block; font-size: 15px; margin-bottom: 4px }
+.advice p { margin: 0; font-size: 13.5px; line-height: 1.45; opacity: .95 }
+.hours h2 { margin: 0 0 10px; font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-t); display: flex; justify-content: space-between }
+.hours h2 span { letter-spacing: 0; text-transform: none; color: var(--muted) }
+.bars { display: grid; grid-template-columns: repeat(15, 1fr); gap: 3px; align-items: end; height: 120px }
+.bars div { display: grid; align-items: end; height: 100%; position: relative }
+.bars i { display: block; border-radius: 5px 5px 2px 2px; min-height: 3px }
+.bars div.cur i { outline: 2px solid var(--ink); outline-offset: 1px }
+.bars small { position: absolute; left: 50%; transform: translateX(-50%); font-size: 9.5px; font-weight: 800; color: var(--ink); white-space: nowrap }
+.hlab { display: grid; grid-template-columns: repeat(15, 1fr); gap: 3px; margin-top: 4px; font-size: 9.5px; color: var(--muted); text-align: center; font-variant-numeric: tabular-nums }
+.tom { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13.5px }
+.tom b { font-size: 16px }
+.src { font-size: 11.5px; color: var(--muted); text-align: center; margin: 12px 0 0 }
+.myth { margin-top: 14px; display: grid; gap: 6px }
+.myth h2 { margin: 0; font: 400 26px/1.05 var(--f-display) }
+.myth p { margin: 0; font-size: 13.5px; color: var(--text) }
+</style>
+</head>
+<body data-variant="12">
+<main class="col">
+  <header class="top"><span class="logo-text">Razden’sya</span><span class="city"><svg viewBox="0 0 24 24"><path d="M12 2.5a7 7 0 0 0-7 7c0 5 7 12 7 12s7-7 7-12a7 7 0 0 0-7-7zm0 9.6a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2z"/></svg>Ижевск</span></header>
+  <h1>Солнце сегодня</h1>
+
+  <section class="card">
+    <div class="dial" id="dial"></div>
+    <div class="now" id="now"></div>
+    <div class="status">
+      <p>Процедура была</p>
+      <div class="row" id="stat">
+        <button type="button" class="chip" data-s="none">Не было</button>
+        <button type="button" class="chip" data-s="2w">Меньше 2 недель</button>
+        <button type="button" class="chip" data-s="4w">2–4 недели</button>
+        <button type="button" class="chip" data-s="old">Больше месяца</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="advice" id="advice" aria-live="polite"></section>
+
+  <section class="card hours" style="margin-top:14px">
+    <h2>По часам<span id="day"></span></h2>
+    <div class="bars" id="bars"></div>
+    <div class="hlab" id="hlab"></div>
+    <div class="tom" id="tom"></div>
+    <p class="src" id="src"></p>
+  </section>
+
+  <section class="card myth">
+    <h2>Загар растяжки не скроет</h2>
+    <p>В белых растяжках почти нет пигмента, поэтому они не загорают и на загорелой коже выделяются сильнее. А на коже после процедуры солнце может оставить пигментные пятна.</p>
+  </section>
+
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) };
+  var LAT = 56.8526, LON = 53.2045, TZ = 4; // Ижевск, UTC+4
+  var LEVELS = [[0, 2.5, "Низкий", "#4c8a50"], [2.5, 5.5, "Умеренный", "#b8901a"], [5.5, 7.5, "Высокий", "#d9822b"], [7.5, 10.5, "Очень высокий", "#c0392b"], [10.5, 99, "Экстремальный", "#7d3c98"]];
+  function level(u) { return LEVELS.filter(function (l) { return u >= l[0] && u < l[1] })[0] || LEVELS[0] }
+  var status = R.get("sun-status", "2w");
+
+  // УФ-индекс при ясном небе по высоте солнца (запасной расчёт, если прогноз недоступен)
+  function clearSky(date, hour) {
+    var start = new Date(date.getFullYear(), 0, 0), N = Math.floor((date - start) / 864e5), rad = Math.PI / 180;
+    var decl = 23.44 * Math.sin(2 * Math.PI * (284 + N) / 365), B = 2 * Math.PI * (N - 81) / 364;
+    var eot = 9.87 * Math.sin(2 * B) - 7.53 * Math.cos(B) - 1.5 * Math.sin(B);
+    var solar = hour + (4 * LON - 60 * TZ + eot) / 60, H = 15 * (solar - 12);
+    var s = Math.sin(LAT * rad) * Math.sin(decl * rad) + Math.cos(LAT * rad) * Math.cos(decl * rad) * Math.cos(H * rad);
+    return s > 0 ? Math.round(12.5 * 0.857 * Math.pow(s, 2.42) * 10) / 10 : 0;
+  }
+  function modelData() {
+    var t = R.today(), tm = R.addDays(t, 1), hours = [], tmax = 0;
+    for (var h = 0; h < 24; h++) { hours.push(clearSky(t, h + .5)); tmax = Math.max(tmax, clearSky(tm, h + .5)) }
+    return { hours: hours, tomorrow: tmax, live: false };
+  }
+  function liveData() {
+    var ctl = new AbortController(); setTimeout(function () { ctl.abort() }, 4000);
+    return fetch("https://api.open-meteo.com/v1/forecast?latitude=" + LAT + "&longitude=" + LON + "&hourly=uv_index&daily=uv_index_max&timezone=Europe%2FSamara&forecast_days=2", { signal: ctl.signal })
+      .then(function (r) { if (!r.ok) throw 0; return r.json() })
+      .then(function (j) { return { hours: j.hourly.uv_index.slice(0, 24).map(function (v) { return v || 0 }), tomorrow: j.daily.uv_index_max[1] || 0, live: true } });
+  }
+
+  var data = modelData();
+  function arc(a0, a1, r) {
+    function pt(a) { return [150 + r * Math.cos(Math.PI - a * Math.PI), 150 - r * Math.sin(Math.PI - a * Math.PI)] }
+    var p0 = pt(a0), p1 = pt(a1);
+    return "M" + p0[0].toFixed(1) + " " + p0[1].toFixed(1) + " A" + r + " " + r + " 0 0 1 " + p1[0].toFixed(1) + " " + p1[1].toFixed(1);
+  }
+  function render() {
+    var nowH = new Date().getHours(), cur = data.hours[nowH], max = Math.max.apply(null, data.hours), maxH = data.hours.indexOf(max), show = cur > 0 ? cur : max, lv = level(show);
+    var segs = [[0, 3], [3, 6], [6, 8], [8, 11], [11, 12]].map(function (s, k) { return '<path d="' + arc(s[0] / 12 + .004, s[1] / 12 - .004, 120) + '" stroke="' + LEVELS[k][3] + '" stroke-width="18" fill="none" stroke-linecap="butt" opacity=".9"/>' }).join("");
+    var a = Math.min(show, 12) / 12, nx = 150 + 98 * Math.cos(Math.PI - a * Math.PI), ny = 150 - 98 * Math.sin(Math.PI - a * Math.PI);
+    $("dial").innerHTML = '<svg viewBox="0 0 300 165" aria-hidden="true">' + segs + '<line x1="150" y1="150" x2="' + nx.toFixed(1) + '" y2="' + ny.toFixed(1) + '" stroke="#2e261b" stroke-width="4" stroke-linecap="round"/><circle cx="150" cy="150" r="9" fill="#2e261b"/><text x="22" y="162" font-size="11" fill="#7a6b55">0</text><text x="268" y="162" font-size="11" fill="#7a6b55">12+</text></svg>' +
+      '<div class="val"><b style="color:' + lv[3] + '">' + show.toFixed(show < 10 ? 1 : 0).replace(".", ",") + '</b><span style="color:' + lv[3] + '">' + lv[2].toUpperCase() + "</span></div>";
+    $("now").innerHTML = "<span>" + (cur > 0 ? "Сейчас <b>" + cur.toFixed(1).replace(".", ",") + "</b>" : "Сейчас солнца нет") + "</span><span>Максимум <b>" + max.toFixed(1).replace(".", ",") + "</b> около " + maxH + ":00</span>";
+    document.querySelectorAll("#stat .chip").forEach(function (c) { c.classList.toggle("on", c.dataset.s === status) });
+
+    var hi = max >= 3, ad = $("advice"), t, p, ic, col;
+    if (status === "2w") { t = "Зону сейчас загорать нельзя"; p = "Держите её под одеждой, солярий тоже нельзя, пока не пройдут две недели после процедуры." + (hi ? " Сегодня солнце сильное, это особенно важно." : ""); ic = "shield"; col = "#8a3b3b" }
+    else if (status === "4w") { t = hi ? "SPF 50 на зону перед выходом" : "Солнце слабое, но кожа ещё обновляется"; p = hi ? "Наносите за 15 минут до выхода и обновляйте каждые 2 часа. Так на месте процедуры не появятся пигментные пятна." : "SPF на зону не помешает: обновление в глубине кожи идёт ещё несколько месяцев."; ic = "sun"; col = hi ? "#a8701a" : "#4c6a50" }
+    else { t = hi ? "Солнце сегодня заметное" : "Солнце сегодня слабое"; p = (hi ? "Растяжки не загорают, поэтому на загорелой коже выделяются сильнее. SPF на зону поможет. " : "Хорошее время, чтобы заняться растяжками: загар не мешает процедуре и заживлению. ") + (status === "old" ? "Перед следующей процедурой зона не должна быть загорелой." : ""); ic = hi ? "sun" : "check"; col = hi ? "#a8701a" : "#4c6a50" }
+    ad.style.background = col; ad.innerHTML = '<span class="ic">' + R.icon(ic) + "</span><div><b>" + t + "</b><p>" + p + "</p></div>";
+
+    var hs = []; for (var h = 6; h <= 20; h++) hs.push(h);
+    var top = Math.max(3, max);
+    $("bars").innerHTML = hs.map(function (h) { var v = data.hours[h], lv2 = level(v); return '<div class="' + (h === nowH ? "cur" : "") + '"><i style="height:' + Math.max(3, v / top * 100) + "%;background:" + lv2[3] + '"></i>' + (h === maxH ? '<small style="bottom:calc(' + (v / top * 100) + '% + 3px)">' + v.toFixed(1).replace(".", ",") + "</small>" : "") + "</div>" }).join("");
+    $("hlab").innerHTML = hs.map(function (h) { return "<span>" + (h % 2 === 0 ? h : "") + "</span>" }).join("");
+    $("day").textContent = R.date(R.today(), { weekday: "long", day: "numeric", month: "long" });
+    var lt = level(data.tomorrow);
+    $("tom").innerHTML = "<span>Завтра максимум</span><b style=\"color:" + lt[3] + '">' + data.tomorrow.toFixed(1).replace(".", ",") + " · " + lt[2].toLowerCase() + "</b>";
+    $("src").textContent = data.live ? "Прогноз Open-Meteo с учётом облаков" : "Расчёт для ясного неба по высоте солнца. В облачный день индекс ниже.";
+  }
+  $("stat").addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (b) { status = b.dataset.s; R.set("sun-status", status); render() } });
+  render();
+  liveData().then(function (d) { data = d; render() }).catch(function () {});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Тест «Мои растяжки» · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.banner { position: relative; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); aspect-ratio: 5 / 3; overflow: hidden }
+.banner img { width: 100%; height: 100%; object-fit: cover; object-position: 0 0 }
+.banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(244,238,228,0) 40%, var(--cream) 100%) }
+.banner .logo-text { position: absolute; z-index: 1; right: 22px; bottom: 26px; font-size: 42px }
+.quiz { margin-top: -6px; display: grid }
+.q { display: grid; gap: 14px; align-content: start; animation: in .25s ease }
+@keyframes in { from { opacity: 0; transform: translateX(16px) } }
+.dots { display: flex; gap: 6px; justify-content: center }
+.dots i { width: 22px; height: 4px; border-radius: 2px; background: var(--cream-2) }
+.dots i.on { background: var(--g-btn) }
+.q .eyebrow { text-align: center }
+.q h1, .q h2 { margin: 0; font: 400 32px/1.04 var(--f-display); text-align: center; text-wrap: balance }
+.q p { margin: 0; text-align: center; color: var(--text); font-size: 14px }
+.opts { display: grid; gap: 8px }
+.opts.two { grid-template-columns: 1fr 1fr }
+.opt { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: center; text-align: left; border: 1.5px solid rgba(74,56,16,.16); background: var(--paper); border-radius: 16px; padding: 12px; cursor: pointer; font-size: 14px; font-weight: 700; color: var(--ink) }
+.opt small { display: block; font-weight: 500; font-size: 12px; color: var(--muted); margin-top: 2px }
+.opt .sw { width: 38px; height: 38px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08) }
+.opt .sw.lines { background: repeating-linear-gradient(100deg, transparent 0 7px, var(--c) 7px 9px), #f1dcc8 }
+.opt .num { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--cream-2); font-weight: 800; color: var(--gold-t) }
+.opt[aria-pressed="true"] { border-color: var(--brown); background: #f6ecd7; box-shadow: inset 0 0 0 1px var(--brown) }
+.opts.two .opt { grid-template-columns: 1fr; text-align: center; justify-items: center }
+.chips { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center }
+.nav { display: flex; gap: 10px }
+.nav .btn { flex: 1 }
+.res { display: grid; gap: 14px; animation: in .3s ease }
+.res-card { background: var(--dark); color: #f5ecda; border-radius: 24px; padding: 20px 18px; display: grid; gap: 10px; text-align: center }
+.res-card .k { font-size: 10.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
+.res-card h2 { margin: 0; font: 400 34px/1.02 var(--f-display); color: #f8eedb }
+.res-card p { margin: 0; font-size: 14px; color: #d8cab0 }
+.meter { height: 8px; border-radius: 4px; background: rgba(255,255,255,.1); overflow: hidden }
+.meter i { display: block; height: 100%; background: linear-gradient(90deg, #c5921e, #f0c86a); border-radius: 4px }
+.meter-l { display: flex; justify-content: space-between; font-size: 10.5px; color: #a99b82 }
+.facts { display: grid; gap: 10px }
+.fact { display: grid; grid-template-columns: 30px 1fr; gap: 10px; font-size: 13.5px; color: var(--text); line-height: 1.45 }
+.fact .ci { width: 30px; height: 30px; border-radius: 50%; border: 1.3px solid var(--gold); display: grid; place-items: center; color: var(--gold-t) }
+.fact .ci svg { width: 15px; height: 15px }
+.fact b { color: var(--ink) }
+.disc { font-size: 12px; color: var(--muted); text-align: center; margin: 0 }
+</style>
+</head>
+<body data-variant="04">
+<main class="col">
+  <div class="banner"><img src="../ресурсы/шапка-лицо.jpg" alt="Лайн-арт лица на шёлке"><span class="logo-text">Razden’sya</span></div>
+  <section class="card quiz" id="quiz" aria-live="polite"></section>
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, box = document.getElementById("quiz");
+  var Q = [
+    { id: "color", t: "Какого цвета растяжки?", p: "Посмотрите при дневном свете.", o: [
+      { v: 0, l: "Красные или розовые", s: "#d98a8a", h: "чаще свежие, до года" },
+      { v: .7, l: "Фиолетовые, синюшные", s: "#9a7aa8", h: "переход к зрелым" },
+      { v: 2, l: "Белые, серебристые", s: "#efeae2", h: "зрелые" },
+      { v: 1.5, l: "Почти цвета кожи", s: "#e2c3a6", h: "заметны по рельефу" }] },
+    { id: "age", t: "Как давно они появились?", o: [
+      { v: 0, l: "Меньше полугода" }, { v: 1, l: "От полугода до года" }, { v: 2, l: "1–3 года" }, { v: 2.5, l: "Больше трёх лет" }] },
+    { id: "relief", t: "Какие они на ощупь?", o: [
+      { v: 0, l: "Вровень с кожей", h: "почти не чувствуются пальцами" },
+      { v: 1, l: "Слегка западают", h: "есть небольшая бороздка" },
+      { v: 2, l: "Заметно западают", h: "чувствуется глубина" }] },
+    { id: "width", t: "Какой они ширины?", o: [
+      { v: 0, l: "Тонкие нити", h: "до 2 мм" }, { v: 1, l: "Средние", h: "2–5 мм" }, { v: 2, l: "Широкие", h: "больше 5 мм" }] },
+    { id: "zones", t: "Где растяжки?", p: "Можно выбрать несколько зон.", multi: true }
+  ];
+  var ans = {}, i = -1;
+
+  function dots() { return '<div class="dots" aria-hidden="true">' + Q.map(function (_, k) { return "<i" + (k <= i ? ' class="on"' : "") + "></i>" }).join("") + "</div>" }
+
+  function intro() {
+    box.innerHTML = '<div class="q"><span class="eyebrow">тест · 5 вопросов · 1 минута</span><h1>Какие у меня растяжки?</h1>' +
+      "<p>Ответьте на пять вопросов и получите честный ориентир: сколько процедур обычно нужно и чего ждать от результата.</p>" +
+      '<button type="button" class="btn btn-gold" id="start">Начать тест</button></div>';
+    document.getElementById("start").onclick = function () { i = 0; step() };
+  }
+
+  function step() {
+    var q = Q[i], h = '<div class="q">' + dots() + '<span class="eyebrow">вопрос ' + (i + 1) + " из " + Q.length + "</span><h2>" + q.t + "</h2>" + (q.p ? "<p>" + q.p + "</p>" : "");
+    if (q.multi) {
+      var sel = ans.zones || [];
+      h += '<div class="chips">' + R.zones.map(function (z) { return '<button type="button" class="chip' + (sel.indexOf(z.id) > -1 ? " on" : "") + '" data-z="' + z.id + '">' + z.name + "</button>" }).join("") + "</div>";
+    } else {
+      h += '<div class="opts">' + q.o.map(function (o, k) {
+        var mark = o.s ? '<span class="sw lines" style="--c:' + o.s + '"></span>' : '<span class="num">' + (k + 1) + "</span>";
+        return '<button type="button" class="opt" data-k="' + k + '" aria-pressed="' + (ans[q.id] === k) + '">' + mark + "<span>" + o.l + (o.h ? "<small>" + o.h + "</small>" : "") + "</span></button>";
+      }).join("") + "</div>";
+    }
+    h += '<div class="nav"><button type="button" class="btn btn-soft" id="back">Назад</button>' + (q.multi ? '<button type="button" class="btn btn-gold" id="fin"' + ((ans.zones || []).length ? "" : " disabled") + ">Показать результат</button>" : "") + "</div></div>";
+    box.innerHTML = h;
+    document.getElementById("back").onclick = function () { if (i === 0) intro(); else { i--; step() } };
+    box.querySelectorAll(".opt").forEach(function (b) {
+      b.onclick = function () { ans[q.id] = +b.dataset.k; b.setAttribute("aria-pressed", "true"); setTimeout(function () { i++; step() }, 220) };
+    });
+    box.querySelectorAll("[data-z]").forEach(function (b) {
+      b.onclick = function () {
+        var z = ans.zones = ans.zones || [], k = z.indexOf(b.dataset.z);
+        if (k > -1) z.splice(k, 1); else z.push(b.dataset.z);
+        b.classList.toggle("on", k === -1);
+        document.getElementById("fin").disabled = !z.length;
+      };
+    });
+    var fin = document.getElementById("fin"); if (fin) fin.onclick = result;
+  }
+
+  function result() {
+    var score = ["color", "age", "relief", "width"].reduce(function (s, id) { var q = Q.filter(function (x) { return x.id === id })[0]; return s + q.o[ans[id]].v }, 0);
+    var fresh = Q[0].o[ans.color].v < 1 && ans.age <= 1;
+    var stage = fresh ? "Свежие растяжки" : score <= 4 ? "Переходная стадия" : "Зрелые растяжки";
+    var n = score <= 2.5 ? 2 : score <= 5.5 ? 3 : 3, range = score <= 2.5 ? "чаще всего 2 процедуры" : score <= 5.5 ? "обычно 2–3 процедуры" : "3 и больше процедур";
+    var expect = score <= 2.5 ? "Свежие растяжки обычно откликаются лучше всего: кожа в них ещё активно восстанавливается."
+      : score <= 5.5 ? "Растяжки станут менее заметными: ближе к цвету кожи и ровнее. Изменения идут постепенно, несколько месяцев."
+      : "С такими растяжками работать дольше, а результат скромнее. Реальная цель — сделать их заметно менее видимыми.";
+    var zs = ans.zones.map(R.zone), one = zs.reduce(function (s, z) { return s + z.price }, 0);
+    var pct = Math.round(Math.min(score, 8.5) / 8.5 * 100);
+    box.innerHTML = '<div class="res"><div class="res-card"><span class="k">ваш результат</span><h2>' + stage + "</h2><p>Ориентир: " + range + " на зону, интервал не меньше месяца.</p>" +
+      '<div class="meter" aria-hidden="true"><i style="width:' + Math.max(8, pct) + '%"></i></div><div class="meter-l"><span>свежие</span><span>зрелые</span></div></div>' +
+      '<div class="facts"><div class="fact"><span class="ci">' + R.icon("spark") + "</span><span><b>Чего ждать.</b> " + expect + "</span></div>" +
+      '<div class="fact"><span class="ci">' + R.icon("list") + "</span><span><b>Зоны:</b> " + zs.map(function (z) { return z.name }).join(", ") + ". Ориентир за курс: " + (zs.some(function (z) { return z.from }) ? "от " : "") + R.rub(one * n) + ".</span></div>" +
+      '<div class="fact"><span class="ci">' + R.icon("shield") + "</span><span><b>Перед записью</b> посмотрите противопоказания: Марина пройдёт по ним на консультации.</span></div></div>" +
+      '<button type="button" class="btn btn-gold" id="send">Отправить результат Марине</button><button type="button" class="btn btn-soft" id="again">Пройти заново</button>' +
+      '<p class="disc">Это ориентир по вашим ответам, а не диагноз. Точно скажет Марина, когда посмотрит зону.</p></div>';
+    document.getElementById("again").onclick = function () { ans = {}; i = 0; step() };
+    document.getElementById("send").onclick = function () {
+      R.send("Здравствуйте, Марина! Результат теста с сайта: " + stage.toLowerCase() + ", " + range + ".\n" +
+        "Цвет: " + Q[0].o[ans.color].l.toLowerCase() + "; давность: " + Q[1].o[ans.age].l.toLowerCase() + "; рельеф: " + Q[2].o[ans.relief].l.toLowerCase() + "; ширина: " + Q[3].o[ans.width].l.toLowerCase() + ".\n" +
+        "Зоны: " + zs.map(function (z) { return z.name }).join(", ") + ".\nХочу на консультацию.", { title: "Результат теста" });
+    };
+  }
+  intro();
+})();
+</script>
+</body>
+</html>

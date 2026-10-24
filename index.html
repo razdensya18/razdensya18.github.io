@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Своя страница Razden’sya</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#f4eee4">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="общее/бренд.css">
+<style>
+/* Галерея для выбора: шапка на шёлке с лайн-артом, затем список из 10 карточек-вариантов и блок «Мой выбор» */
+.hero { position: relative; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); aspect-ratio: 16 / 11; max-height: 340px; overflow: hidden }
+.hero img { width: 100%; height: 100%; object-fit: cover; object-position: 0 0 }
+.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(244,238,228,0) 35%, var(--cream) 100%) }
+.hero-txt { position: absolute; z-index: 1; left: 0; right: 0; bottom: 18px; display: grid; justify-items: end; gap: 4px; padding: 0 22px }
+.hero .logo-text { font-size: clamp(44px, 13vw, 58px) }
+.hero .slogan { font: 400 13px/1.3 var(--f-display); color: #6e5520 }
+h1 { margin: 6px 0 8px; font: 400 clamp(36px, 10vw, 46px)/1 var(--f-display); text-wrap: balance }
+.lead { margin: 0 0 14px; font-size: 15px; color: var(--text) }
+.how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px }
+.how div { background: var(--card); border-radius: 16px; padding: 10px; font-size: 12px; line-height: 1.35; color: var(--text) }
+.how b { display: block; font: 400 24px/1 var(--f-display); color: var(--gold-t); margin-bottom: 4px }
+.list { display: grid; gap: 10px }
+.v { display: grid; grid-template-columns: 50px 1fr 28px; gap: 12px; align-items: center; text-decoration: none; color: var(--ink); background: var(--card); border-radius: 20px; padding: 14px 12px 14px 14px; box-shadow: 0 10px 26px -22px rgba(74,56,16,.6); transition: transform .12s }
+.v:active { transform: scale(.985) }
+.v .ic { width: 50px; height: 50px; border-radius: 16px; background: var(--g-btn); display: grid; place-items: center; position: relative }
+.v .ic svg { width: 24px; height: 24px; fill: #fff8ea }
+.v .ic i { position: absolute; top: -6px; left: -6px; min-width: 22px; height: 22px; border-radius: 11px; background: var(--paper); color: var(--gold-t); font: 800 10.5px/22px var(--f-body); font-style: normal; text-align: center; box-shadow: 0 1px 3px rgba(74,56,16,.3) }
+.v h2 { margin: 0; font: 400 24px/1.02 var(--f-display) }
+.v p { margin: 3px 0 6px; font-size: 13px; color: var(--text); line-height: 1.35 }
+.v .tags { display: flex; flex-wrap: wrap; gap: 4px }
+.grp { margin: 10px 0 0; font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-t) }
+.grp:first-child { margin-top: 0 }
+.v .tags .new { background: var(--dark); color: #f0c86a }
+.v .tags span { font-size: 10.5px; font-weight: 700; color: var(--gold-t); background: rgba(197,146,30,.12); padding: 3px 7px; border-radius: 6px }
+.v .fav { width: 28px; height: 28px; display: grid; place-items: center; color: #d6c8b0 }
+.v .fav svg { width: 22px; height: 22px; fill: currentColor }
+.v.liked .fav { color: #c5921e }
+.v.liked { box-shadow: inset 0 0 0 1.5px rgba(197,146,30,.7), 0 10px 26px -22px rgba(74,56,16,.6) }
+.choice { margin-top: 18px; background: var(--dark); color: #f5ecda; border-radius: 24px; padding: 18px; display: grid; gap: 10px }
+.choice .k { font-size: 10.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
+.choice h2 { margin: 0; font: 400 28px/1.05 var(--f-display); color: #f8eedb }
+.choice p { margin: 0; font-size: 13.5px; color: #d4c6ac }
+.choice ul { margin: 0; padding-left: 18px; font-size: 14px; display: grid; gap: 3px }
+.foot { font-size: 12.5px; color: var(--muted); text-align: center; margin: 18px 10px 30px; line-height: 1.5 }
+</style>
+
+</head>
+<body>
+<main class="col">
+  <div class="hero">
+    <img src="ресурсы/шапка-лицо.jpg" alt="Золотой лайн-арт лица на кремовом шёлке">
+    <div class="hero-txt"><span class="logo-text">Razden’sya</span><span class="slogan">Коррекция растяжек и шрамов · Эстетика лица и тела</span></div>
+  </div>
+
+  <span class="eyebrow">для Марины</span>
+  <h1>Выбери свою страницу</h1>
+  <p class="lead">18 вариантов страницы, на которую будет вести ссылка из ВКонтакте, Telegram и Instagram. Каждый рабочий: кнопки нажимаются, расчёты считаются. Понравившиеся функции можно собрать в одну страницу.</p>
+  <div class="how">
+    <div><b>1</b>Открой вариант</div>
+    <div><b>2</b>Потыкай кнопки, как клиентка</div>
+    <div><b>3</b>Нажми ♥ наверху, если нравится</div>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <section class="choice" aria-live="polite">
+    <span class="k">мой выбор</span>
+    <h2 id="chH">Пока ничего не отмечено</h2>
+    <div id="chL"></div>
+    <button type="button" class="btn btn-gold" id="chCopy" hidden>Скопировать мой выбор</button>
+    <p id="chP">Отмечай сердечком на панели сверху внутри каждого варианта. Можно несколько: потом соберём одну страницу из лучшего.</p>
+  </section>
+
+  <p class="foot">Кнопки «Написать Марине» в вариантах настоящие: они откроют чат ВКонтакте или Telegram. Ничего не отправится, пока сама не нажмёшь «Отправить» в чате.<br>Страница будет бесплатной: без Taplink и подписок.</p>
+</main>
+<script src="общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden;
+  var EXTRA = {
+    "01": ["user", ["силуэт", "калькулятор", "расчёт в чат"]],
+    "02": ["cal", ["календарь", "заявка", "напоминание"]],
+    "03": ["clock", ["окна онлайн", "режим Марины", "лист ожидания"]],
+    "04": ["help", ["тест", "ориентир по курсу"]],
+    "05": ["shield", ["самопроверка", "чек-лист подготовки"]],
+    "06": ["chat", ["чат", "быстрые ответы", "заявка"]],
+    "07": ["drop", ["уход по дням", "галочки", "календарь"]],
+    "08": ["camera", ["фото", "сравнение", "только в телефоне"]],
+    "09": ["gift", ["сертификат", "картинка", "заказ"]],
+    "10": ["home", ["приложение", "визиты", "памятки"]],
+    "11": ["flag", ["к морю и свадьбе", "план курса"]],
+    "12": ["sun", ["УФ-индекс", "советы после процедуры"]],
+    "13": ["route", ["маршрут", "такси", "«я на месте»"]],
+    "14": ["star", ["отзыв из плашек", "в один клик"]],
+    "15": ["chart", ["голосование", "итоги сразу"]],
+    "16": ["users", ["приглашение", "бонус обеим"]],
+    "17": ["camera", ["заживление", "Марине в Telegram", "портфолио с согласия"]],
+    "18": ["cal", ["график 2×2", "дни сами"]]
+  };
+  function render() {
+    var fav = R.get("fav", []);
+    document.getElementById("list").innerHTML = R.variants.map(function (v) {
+      var x = EXTRA[v.n], head = v.n === "01" ? '<h3 class="grp">Первые десять</h3>' : v.n === "11" ? '<h3 class="grp">Новые: ещё восемь функций</h3>' : "";
+      return head + '<a class="v' + (fav.indexOf(v.n) > -1 ? " liked" : "") + '" href="варианты/' + v.file + '"><span class="ic">' + R.icon(x[0]) + "<i>" + v.n + "</i></span>" +
+        "<div><h2>" + v.name + "</h2><p>" + v.what + '</p><span class="tags">' + x[1].map(function (t) { return "<span>" + t + "</span>" }).join("") + (+v.n > 10 ? '<span class="new">новое</span>' : "") + "</span></div>" +
+        '<span class="fav" aria-label="' + (fav.indexOf(v.n) > -1 ? "Нравится" : "") + '">' + R.icon("heart") + "</span></a>";
+    }).join("");
+    var picked = R.variants.filter(function (v) { return fav.indexOf(v.n) > -1 });
+    document.getElementById("chH").textContent = picked.length ? "Нравится: " + picked.length + " из " + R.variants.length : "Пока ничего не отмечено";
+    document.getElementById("chL").innerHTML = picked.length ? "<ul>" + picked.map(function (v) { return "<li>" + v.n + " · " + v.name + "</li>" }).join("") + "</ul>" : "";
+    document.getElementById("chCopy").hidden = !picked.length;
+    document.getElementById("chP").hidden = !!picked.length;
+  }
+  document.getElementById("chCopy").addEventListener("click", function () {
+    var fav = R.get("fav", []);
+    var text = "Мне понравились варианты страницы: " + R.variants.filter(function (v) { return fav.indexOf(v.n) > -1 }).map(function (v) { return v.n + " «" + v.name + "»" }).join(", ") + ".";
+    R.copy(text).then(function () { R.toast("Скопировано. Отправь это сообщением") });
+  });
+  window.addEventListener("pageshow", render);
+  render();
+})();
+</script>
+
+</body>
+</html>

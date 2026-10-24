@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Табло окон · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.top { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; padding: 22px 0 14px }
+.top .logo-text { font-size: 38px }
+.top small { display: block; font: 400 12px/1.3 var(--f-display); color: #6e5520; margin-top: 4px }
+.live { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: var(--ok); background: rgba(76,106,80,.1); padding: 6px 9px; border-radius: 999px; white-space: nowrap }
+.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); animation: blink 1.6s infinite }
+@keyframes blink { 50% { opacity: .3 } }
+.board { background: var(--dark); color: #f3ead8; border-radius: 26px; padding: 18px 16px 16px; box-shadow: 0 24px 50px -26px rgba(0,0,0,.7) }
+.board h1 { margin: 0; font: 400 30px/1 var(--f-display); color: #f6edd9 }
+.board .upd { font-size: 11.5px; color: #a99b82; margin: 6px 0 14px }
+.next { display: grid; gap: 8px; padding: 14px; border-radius: 18px; background: rgba(255,255,255,.05); margin-bottom: 14px }
+.next .k { font-size: 10.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
+.flaps { display: flex; gap: 4px; flex-wrap: wrap; align-items: center }
+.flap { min-width: 25px; padding: 6px 4px; border-radius: 6px; background: #2d261d; text-align: center; font-weight: 800; font-size: 18px; line-height: 1; color: #f7d98f; font-variant-numeric: tabular-nums; position: relative; box-shadow: inset 0 -1px 0 rgba(0,0,0,.6) }
+.flap::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,.55) }
+.flaps .sep { color: #7d705c; font-weight: 800; padding: 0 2px }
+.next .btn { min-height: 44px; font-size: 14px }
+.filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px 12px; padding: 0 16px }
+.filters::-webkit-scrollbar { display: none }
+.filters .chip { background: rgba(255,255,255,.06); color: #e9dfcb; border-color: rgba(255,255,255,.14); flex: none; font-size: 12.5px; padding: 7px 11px }
+.filters .chip.on { background: #c5921e; border-color: #c5921e; color: #1f1a14 }
+.day { padding: 10px 0 12px; border-top: 1px solid rgba(255,255,255,.08) }
+.day h2 { margin: 0 0 8px; font-size: 13px; font-weight: 800; color: #f3ead8; display: flex; justify-content: space-between }
+.day h2 span { font-weight: 600; color: #a99b82; text-transform: none }
+.slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px }
+.slot { border: 1px solid rgba(220,179,90,.55); background: rgba(220,179,90,.08); color: #f7d98f; border-radius: 11px; padding: 9px 0; font-weight: 800; font-size: 14px; font-variant-numeric: tabular-nums; cursor: pointer }
+.slot.busy { border-color: transparent; background: rgba(255,255,255,.04); color: #6d6253; text-decoration: line-through; cursor: default }
+.admin .slot.busy { cursor: pointer }
+.empty { color: #a99b82; font-size: 13px; padding: 12px 0 4px; text-align: center }
+.legend { display: flex; gap: 14px; font-size: 11.5px; color: #a99b82; margin-top: 8px }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px }
+.wait { margin-top: 16px; display: grid; gap: 10px }
+.wait h2 { margin: 0; font: 400 24px/1.05 var(--f-display) }
+.wait p { margin: 0; font-size: 13px; color: var(--text) }
+.wait .row { display: flex; flex-wrap: wrap; gap: 6px }
+.wait .chip { font-size: 12.5px; padding: 7px 11px }
+.adm-bar { margin-top: 12px; padding: 12px; border-radius: 16px; background: rgba(197,146,30,.16); color: #f7e3b3; font-size: 12.5px; display: grid; gap: 10px }
+.adm-bar .row { display: flex; gap: 6px; flex-wrap: wrap }
+.adm-bar input { min-height: 40px; border-radius: 10px; border: 0; padding: 0 10px; background: #fffaf0; color: #2e261b; font-weight: 600 }
+.adm-bar .btn { min-height: 40px; font-size: 13px; padding: 8px 12px }
+.foot-link { display: block; margin: 16px auto 0; background: none; border: 0; color: var(--muted); font-size: 12.5px; text-decoration: underline; cursor: pointer }
+.pin { display: flex; gap: 8px; justify-content: center }
+.pin input { width: 160px; text-align: center; letter-spacing: .4em; font-size: 22px; font-weight: 800 }
+</style>
+</head>
+<body data-variant="03">
+<main class="col">
+  <header class="top">
+    <div><span class="logo-text">Razden’sya</span><small>Коррекция растяжек и шрамов</small></div>
+    <span class="live">окна онлайн</span>
+  </header>
+
+  <section class="board" id="board">
+    <h1>Свободные окна</h1>
+    <p class="upd" id="upd"></p>
+    <div class="next" id="next"></div>
+    <div class="filters" id="filters">
+      <button type="button" class="chip on" data-f="all">Все</button>
+      <button type="button" class="chip" data-f="week">Эта неделя</button>
+      <button type="button" class="chip" data-f="wknd">Выходные</button>
+      <button type="button" class="chip" data-f="eve">После 17:00</button>
+    </div>
+    <div id="days"></div>
+    <div class="legend"><span><i style="background:rgba(220,179,90,.5)"></i>свободно</span><span><i style="background:rgba(255,255,255,.12)"></i>занято</span></div>
+    <div class="adm-bar" id="adm" hidden>
+      <b>Режим Марины. Нажмите на окно, чтобы открыть или закрыть его.</b>
+      <div class="row"><input type="date" id="aDate" aria-label="Дата"><input type="time" id="aTime" value="15:00" step="1800" aria-label="Время"><button type="button" class="btn btn-gold" id="aAdd">Добавить окно</button></div>
+      <div class="row"><button type="button" class="btn btn-soft" id="aReset">Вернуть пример</button><button type="button" class="btn btn-line" id="aExit">Выйти</button></div>
+    </div>
+  </section>
+
+  <section class="card wait">
+    <h2>Нет подходящего окна?</h2>
+    <p>Встаньте в лист ожидания: Марина напишет, когда освободится удобное время.</p>
+    <div class="row" id="wDays"></div>
+    <div class="row" id="wTime"></div>
+    <button type="button" class="btn btn-dark" id="wGo">Встать в лист ожидания</button>
+  </section>
+
+  <button type="button" class="foot-link" id="admIn">Вход для Марины</button>
+  <div class="contacts" style="margin-top:14px"></div>
+  <p class="signature"></p>
+</main>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) };
+  var PIN = "1806"; // в рабочей версии — свой код, а окна хранятся в облаке (Firebase, как в «Ритме смен»)
+  var filter = "all", admin = false;
+
+  function demo() {
+    var out = [], t0 = R.today(), times = ["10:00", "12:30", "15:00", "17:30"];
+    for (var i = 1; i <= 14; i++) {
+      var d = R.addDays(t0, i), wd = d.getDay() || 7;
+      if ([2, 4, 6].indexOf(wd) < 0) continue;
+      times.forEach(function (t, j) { out.push({ d: R.ymd(d), t: t, free: (i * 7 + j * 3) % 5 > 1 }) });
+    }
+    return out;
+  }
+  var slots = R.get("slots", null) || demo();
+  var updated = R.get("slots-upd", null) || new Date().toISOString();
+
+  function save() { updated = new Date().toISOString(); R.set("slots", slots); R.set("slots-upd", updated); render() }
+  function upcoming() { var k = R.ymd(R.today()); return slots.filter(function (s) { return s.d > k }).sort(function (a, b) { return (a.d + a.t).localeCompare(b.d + b.t) }) }
+  function pass(s) {
+    var d = R.parse(s.d), wd = d.getDay() || 7;
+    if (filter === "week") return d <= R.addDays(R.today(), 7 - ((R.today().getDay() || 7)));
+    if (filter === "wknd") return wd >= 6;
+    if (filter === "eve") return s.t >= "17:00";
+    return true;
+  }
+  function flaps(str) { return str.split("").map(function (c) { return c === " " ? '<span class="sep">·</span>' : c === ":" ? '<span class="sep">:</span>' : '<span class="flap">' + c + "</span>" }).join("") }
+
+  function render() {
+    var u = new Date(updated);
+    $("upd").textContent = "Обновлено " + R.date(u) + " в " + u.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
+    var list = upcoming(), first = list.filter(function (s) { return s.free })[0];
+    $("next").innerHTML = first
+      ? '<span class="k">Ближайшее свободное</span><div class="flaps">' + flaps(R.parse(first.d).toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit" }).replace(".", " ") + " " + first.t) + '</div><button type="button" class="btn btn-gold" data-take="' + first.d + "|" + first.t + '">Занять это окно</button>'
+      : '<span class="k">Свободных окон пока нет</span><p style="margin:0;font-size:13px;color:#cdbfa5">Встаньте в лист ожидания ниже.</p>';
+    var by = {};
+    list.filter(pass).forEach(function (s) { (by[s.d] = by[s.d] || []).push(s) });
+    var keys = Object.keys(by);
+    $("days").innerHTML = keys.length ? keys.map(function (k) {
+      var free = by[k].filter(function (s) { return s.free }).length;
+      var dn = R.date(R.parse(k), { weekday: "long", day: "numeric", month: "long" });
+      return '<div class="day"><h2>' + dn.charAt(0).toUpperCase() + dn.slice(1) + "<span>" + (free ? "свободно " + free : "всё занято") + '</span></h2><div class="slots">' +
+        by[k].map(function (s) { return '<button type="button" class="slot' + (s.free ? "" : " busy") + '" data-s="' + s.d + "|" + s.t + '"' + (!s.free && !admin ? " disabled" : "") + ">" + s.t + "</button>" }).join("") + "</div></div>";
+    }).join("") : '<p class="empty">По этому фильтру окон нет.</p>';
+    $("board").classList.toggle("admin", admin);
+    $("adm").hidden = !admin;
+    $("admIn").hidden = admin;
+  }
+
+  function take(key) {
+    var p = key.split("|"), d = R.parse(p[0]);
+    R.send("Здравствуйте, Марина! Хочу занять окно: " + R.date(d, { weekday: "long", day: "numeric", month: "long" }) + ", " + p[1] + ".\nЗона: ", { title: "Занять окно" });
+  }
+
+  $("board").addEventListener("click", function (e) {
+    var t = e.target.closest("[data-take]"); if (t) { take(t.dataset.take); return }
+    var b = e.target.closest(".slot"); if (!b) return;
+    var p = b.dataset.s.split("|"), s = slots.filter(function (x) { return x.d === p[0] && x.t === p[1] })[0];
+    if (admin) { s.free = !s.free; save(); R.toast(s.free ? "Окно открыто" : "Окно закрыто"); return }
+    if (s.free) take(b.dataset.s);
+  });
+  $("filters").addEventListener("click", function (e) {
+    var b = e.target.closest(".chip"); if (!b) return;
+    filter = b.dataset.f; this.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("on", c === b) }); render();
+  });
+
+  // лист ожидания
+  var wd = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"], tp = ["Утро", "День", "Вечер"], wSel = [], tSel = [];
+  $("wDays").innerHTML = wd.map(function (d) { return '<button type="button" class="chip" data-w="' + d + '">' + d + "</button>" }).join("");
+  $("wTime").innerHTML = tp.map(function (d) { return '<button type="button" class="chip" data-w="' + d + '">' + d + "</button>" }).join("");
+  function pick(box, arr) {
+    box.addEventListener("click", function (e) {
+      var b = e.target.closest(".chip"); if (!b) return;
+      var k = arr.indexOf(b.dataset.w); if (k > -1) arr.splice(k, 1); else arr.push(b.dataset.w);
+      b.classList.toggle("on", k === -1);
+    });
+  }
+  pick($("wDays"), wSel); pick($("wTime"), tSel);
+  $("wGo").addEventListener("click", function () {
+    R.send("Здравствуйте, Марина! Запишите, пожалуйста, в лист ожидания.\nУдобные дни: " + (wSel.join(", ") || "любые") + "\nВремя: " + (tSel.join(", ").toLowerCase() || "любое") + "\nЗона: ", { title: "Лист ожидания" });
+  });
+
+  // режим Марины
+  $("admIn").addEventListener("click", function () {
+    R.closeSheet();
+    var back = document.createElement("div"); back.className = "sheet-back";
+    back.innerHTML = '<form class="sheet" id="pinF"><h3>Вход для Марины</h3><p class="hint">В рабочей версии будет свой код. Для просмотра: 1806</p><div class="pin"><input class="input" id="pinI" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Код"></div><button class="btn btn-gold">Войти</button><button type="button" class="btn btn-soft" data-close>Отмена</button></form>';
+    document.body.appendChild(back);
+    back.addEventListener("click", function (e) { if (e.target === back || e.target.closest("[data-close]")) R.closeSheet() });
+    back.querySelector("form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      if ($("pinI").value === PIN) { admin = true; R.closeSheet(); render(); R.toast("Режим Марины включён") }
+      else { R.toast("Неверный код"); $("pinI").value = "" }
+    });
+    $("pinI").focus();
+  });
+  $("aDate").value = R.ymd(R.addDays(R.today(), 1));
+  $("aAdd").addEventListener("click", function () {
+    var d = $("aDate").value, t = $("aTime").value;
+    if (!d || !t) return;
+    if (slots.some(function (s) { return s.d === d && s.t === t })) { R.toast("Такое окно уже есть"); return }
+    slots.push({ d: d, t: t, free: true }); save(); R.toast("Окно добавлено");
+  });
+  $("aReset").addEventListener("click", function () { slots = demo(); save() });
+  $("aExit").addEventListener("click", function () { admin = false; render() });
+  render();
+})();
+</script>
+</body>
+</html>

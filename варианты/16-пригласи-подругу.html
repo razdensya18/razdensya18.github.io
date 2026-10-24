@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Пригласи подругу · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.top { text-align: center; padding: 22px 0 2px }
+.top .logo-text { font-size: 30px }
+h1 { margin: 6px 0 4px; font: 400 38px/1 var(--f-display); text-align: center }
+.lead { margin: 0 0 16px; text-align: center; font-size: 14px; color: var(--text) }
+.gift { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px }
+.gift div { background: var(--card); border-radius: 18px; padding: 14px 12px; text-align: center; display: grid; gap: 4px }
+.gift b { font: 400 30px/1 var(--f-display); color: var(--gold-t) }
+.gift span { font-size: 12px; color: var(--text); line-height: 1.3 }
+.mk { display: grid; gap: 12px }
+.linkbox { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; background: var(--cream); border-radius: 14px; padding: 10px 10px 10px 12px }
+.linkbox code { font: 600 12.5px/1.3 var(--f-body); color: var(--text); word-break: break-all }
+.linkbox button { border: 0; background: var(--brown); color: #fff8ea; border-radius: 10px; padding: 9px 12px; font-weight: 800; font-size: 12.5px; cursor: pointer; white-space: nowrap }
+.share { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.share .btn { min-height: 46px; font-size: 14px }
+.peek { margin-top: 4px; border: 0; background: none; color: var(--gold-t); font-weight: 800; font-size: 13.5px; cursor: pointer; text-decoration: underline; justify-self: center }
+/* приглашение, которое видит подруга */
+.invite { position: relative; margin-top: 4px; background: var(--paper); border-radius: 26px; padding: 34px 20px 22px; text-align: center; box-shadow: 0 24px 50px -28px rgba(74,56,16,.8); border: 1.5px solid rgba(197,146,30,.55); outline: 1px solid rgba(197,146,30,.35); outline-offset: -9px }
+.seal { position: absolute; top: -26px; left: 50%; transform: translateX(-50%); width: 56px; height: 56px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #d9a73a, #85600f 70%); display: grid; place-items: center; box-shadow: 0 6px 14px -6px rgba(74,56,16,.8); color: #fff8ea; font: 400 28px/1 var(--f-display) }
+.invite .from { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-t) }
+.invite h2 { margin: 8px 0 8px; font: 400 34px/1.04 var(--f-display); text-wrap: balance }
+.invite p { margin: 0 0 14px; font-size: 14px; color: var(--text) }
+.invite ul { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; text-align: left }
+.invite li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; font-size: 13.5px; color: var(--text) }
+.invite li svg { width: 18px; height: 18px; fill: var(--gold-t); margin-top: 1px }
+.invite .bonus { display: inline-block; background: var(--dark); color: #f0c86a; font-weight: 800; font-size: 13.5px; padding: 9px 14px; border-radius: 12px; margin-bottom: 14px }
+.back { display: block; margin: 14px auto 0; border: 0; background: none; color: var(--muted); font-weight: 700; font-size: 13px; text-decoration: underline; cursor: pointer }
+.fine { font-size: 12px; color: var(--muted); text-align: center; margin: 12px 6px 0 }
+</style>
+</head>
+<body data-variant="16">
+<main class="col">
+  <header class="top"><span class="logo-text">Razden’sya</span></header>
+
+  <div id="maker">
+    <h1>Пригласи подругу</h1>
+    <p class="lead">Отправьте подруге личное приглашение. Когда она придёт, бонус получите обе.</p>
+    <div class="gift" id="gift"></div>
+    <section class="card mk">
+      <div class="field"><label for="me">Ваше имя</label><input class="input" id="me" maxlength="24" placeholder="Например: Аня" autocomplete="given-name"></div>
+      <div class="linkbox"><code id="link"></code><button type="button" id="copy">Копировать</button></div>
+      <div class="share">
+        <a class="btn btn-gold" id="vk" target="_blank" rel="noopener" data-icon="vk">ВКонтакте</a>
+        <a class="btn btn-line" id="tg" target="_blank" rel="noopener" data-icon="tg">Telegram</a>
+      </div>
+      <button type="button" class="peek" id="peek">Посмотреть, что увидит подруга</button>
+    </section>
+    <p class="fine" id="bonusNote"></p>
+  </div>
+
+  <div id="landing" hidden>
+    <div style="height:30px"></div>
+    <section class="invite">
+      <span class="seal">R</span>
+      <span class="from">личное приглашение</span>
+      <h2 id="invH"></h2>
+      <p>Кабинет коррекции растяжек и шрамов в Ижевске. Сначала консультация: Марина посмотрит зону и честно скажет, чего ждать.</p>
+      <span class="bonus" id="invB"></span>
+      <ul id="invL"></ul>
+      <button type="button" class="btn btn-gold" id="book" style="width:100%">Записаться с приглашением</button>
+    </section>
+    <button type="button" class="back" id="toMaker">Создать своё приглашение</button>
+  </div>
+
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) };
+  // Бонус — пример, Марина решит сама
+  var BONUS = { friend: "−500 ₽", friendText: "подруге на первую процедуру", me: "−500 ₽", meText: "вам, когда подруга придёт" };
+  $("gift").innerHTML = "<div><b>" + BONUS.friend + "</b><span>" + BONUS.friendText + "</span></div><div><b>" + BONUS.me + "</b><span>" + BONUS.meText + "</span></div>";
+  $("bonusNote").textContent = "Бонусы в примере условные: размер и правила задаёт Марина.";
+  $("me").value = R.get("invite-me", "");
+
+  // Адрес страницы на сайте. В предпросмотре (не на github.io) ссылка собирается на будущий адрес
+  var SITE = "https://razdensya18.github.io/";
+  function base() { return /github\.io$/.test(location.hostname) ? location.href.split("#")[0].split("?")[0] : SITE }
+  function link() { var n = $("me").value.trim(); return base() + (n ? "?ot=" + encodeURIComponent(n) : "") }
+  function shareText() { var n = $("me").value.trim() || "Подруга"; return n + " приглашает тебя в кабинет Razden’sya: коррекция растяжек и шрамов в Ижевске. По этой ссылке бонус на первую процедуру." }
+  function sync() {
+    var l = link();
+    $("link").textContent = decodeURIComponent(l.replace(/^https?:\/\//, ""));
+    $("vk").href = "https://vk.com/share.php?url=" + encodeURIComponent(l) + "&title=" + encodeURIComponent(shareText());
+    $("tg").href = "https://t.me/share/url?url=" + encodeURIComponent(l) + "&text=" + encodeURIComponent(shareText());
+    R.set("invite-me", $("me").value.trim());
+  }
+  function landing(name) {
+    $("maker").hidden = true; $("landing").hidden = false;
+    $("invH").textContent = name + " приглашает тебя в Razden’sya";
+    $("invB").textContent = BONUS.friend + " " + BONUS.friendText;
+    $("invL").innerHTML = [["shield", "Стерильные одноразовые картриджи"], ["help", "Честно о результате, без обещаний «навсегда»"], ["list", "Памятка по уходу после процедуры"]].map(function (x) { return "<li>" + R.icon(x[0]) + "<span>" + x[1] + "</span></li>" }).join("");
+    $("book").onclick = function () { R.send("Здравствуйте, Марина! Меня пригласила " + name + ". Хочу записаться на консультацию.", { title: "Запись с приглашением" }) };
+    window.scrollTo(0, 0);
+  }
+
+  $("me").addEventListener("input", sync);
+  $("copy").addEventListener("click", function () { R.copy(link() + "\n" + shareText()).then(function () { R.toast("Приглашение скопировано") }) });
+  document.querySelector(".share").addEventListener("click", function (e) { if (!$("me").value.trim() && e.target.closest("a")) { e.preventDefault(); R.toast("Сначала напишите своё имя"); $("me").focus() } });
+  $("peek").addEventListener("click", function () { landing($("me").value.trim() || "Аня") });
+  $("toMaker").addEventListener("click", function () { $("landing").hidden = true; $("maker").hidden = false });
+  var ot = new URLSearchParams(location.search).get("ot");
+  if (ot) landing(ot.slice(0, 24)); else sync();
+})();
+</script>
+</body>
+</html>

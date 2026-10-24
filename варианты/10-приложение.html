@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f1a14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Мини-приложение · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+body { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)) }
+.apphead { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 6px }
+.apphead .logo-text { font-size: 28px }
+.apphead img { width: 40px; height: 40px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(197,146,30,.55) }
+.hello { margin: 8px 0 12px; font: 400 32px/1.02 var(--f-display) }
+.view { display: grid; gap: 12px; animation: in .2s ease }
+@keyframes in { from { opacity: 0; transform: translateY(6px) } }
+.visit { background: var(--dark); color: #f6eddb; border-radius: 22px; padding: 16px; display: grid; gap: 10px; position: relative; overflow: hidden }
+.visit::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; border: 1px solid rgba(197,146,30,.35); box-shadow: 0 0 0 18px rgba(197,146,30,.06) }
+.visit .k { font-size: 10.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
+.visit .d { font-size: 22px; font-weight: 800 }
+.visit .z { font-size: 13px; color: #cdbfa5 }
+.visit .cd { display: flex; gap: 8px }
+.visit .cd div { background: rgba(255,255,255,.07); border-radius: 12px; padding: 8px 10px; min-width: 64px; text-align: center }
+.visit .cd b { display: block; font-size: 20px; font-variant-numeric: tabular-nums }
+.visit .cd span { font-size: 10.5px; color: #b9ab90 }
+.course { display: grid; gap: 8px }
+.course .h { display: flex; justify-content: space-between; font-size: 13px; font-weight: 800 }
+.course .h span { color: var(--muted); font-weight: 700 }
+.dots { display: flex; gap: 6px }
+.dots i { flex: 1; height: 8px; border-radius: 4px; background: var(--cream-2) }
+.dots i.on { background: var(--g-btn) }
+.course p { margin: 0; font-size: 12.5px; color: var(--muted) }
+.qa { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px }
+.qa button { border: 0; background: var(--card); border-radius: 16px; padding: 12px 4px 10px; display: grid; justify-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: var(--ink); cursor: pointer; box-shadow: 0 8px 20px -16px rgba(74,56,16,.6) }
+.qa .ci { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(180deg, #c5921e, #85600f); display: grid; place-items: center }
+.qa .ci svg { width: 20px; height: 20px; fill: #fff }
+.install { display: grid; grid-template-columns: 42px 1fr auto; gap: 12px; align-items: center }
+.install .ci { width: 42px; height: 42px; border-radius: 12px; background: var(--cream-2); display: grid; place-items: center; color: var(--gold-t) }
+.install .ci svg { width: 22px; height: 22px; fill: currentColor }
+.install b { font-size: 14px } .install p { margin: 2px 0 0; font-size: 12px; color: var(--muted) }
+.install button { border: 0; background: var(--brown); color: #fff8ea; border-radius: 10px; padding: 8px 12px; font-weight: 800; font-size: 12.5px; cursor: pointer }
+.sec-t { margin: 4px 0 0; font: 400 26px/1.05 var(--f-display) }
+.plist div { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px }
+.plist div:last-child { border-bottom: 0 }
+.plist b { white-space: nowrap; font-variant-numeric: tabular-nums }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--cream-2); border-radius: 12px; padding: 3px; gap: 3px }
+.tabs button { border: 0; border-radius: 9px; padding: 9px 4px; font-weight: 800; font-size: 12.5px; background: none; color: var(--muted); cursor: pointer }
+.tabs button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 3px rgba(74,56,16,.2) }
+.memo ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; color: var(--text) }
+.memo h4 { margin: 10px 0 6px; font-size: 13px }
+.vlist { display: grid; gap: 8px }
+.v { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; background: var(--card); border-radius: 16px; padding: 10px 12px }
+.v .n { width: 44px; height: 44px; border-radius: 12px; background: var(--cream-2); display: grid; place-content: center; text-align: center; font-weight: 800; line-height: 1 }
+.v .n small { font-size: 10px; color: var(--muted); font-weight: 700 }
+.v b { font-size: 14px } .v p { margin: 2px 0 0; font-size: 12px; color: var(--muted) }
+.v button { border: 0; background: none; color: var(--muted); cursor: pointer; width: 34px; height: 34px; display: grid; place-items: center }
+.v button svg { width: 18px; height: 18px; fill: currentColor }
+.v.plan { background: rgba(255,252,246,.5); border: 1.5px dashed rgba(133,96,15,.45) }
+.addv { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.demo-note { font-size: 12px; color: var(--gold-t); background: rgba(197,146,30,.14); border-radius: 12px; padding: 8px 10px; display: flex; justify-content: space-between; gap: 8px; align-items: center }
+.demo-note button { border: 0; background: none; color: var(--brown); font-weight: 800; text-decoration: underline; cursor: pointer; font-size: 12px }
+.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; background: rgba(31,26,20,.96); padding: 8px max(8px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px)); display: flex; justify-content: center }
+.tabbar nav { display: grid; grid-template-columns: repeat(4, 1fr); width: 100%; max-width: var(--col) }
+.tabbar button { border: 0; background: none; color: #a99b82; display: grid; justify-items: center; gap: 3px; font-size: 10.5px; font-weight: 700; padding: 6px 0; cursor: pointer }
+.tabbar svg { width: 22px; height: 22px; fill: currentColor }
+.tabbar button[aria-current="page"] { color: #f0c86a }
+</style>
+</head>
+<body data-variant="10">
+<main class="col">
+  <header class="apphead"><span class="logo-text">Razden’sya</span><img src="../ресурсы/аватар-лицо.jpg" alt="" width="40" height="40"></header>
+  <div id="view"></div>
+  <p class="signature"></p>
+</main>
+<div class="tabbar"><nav aria-label="Разделы">
+  <button type="button" data-tab="home" aria-current="page"><span data-icon="home"></span>Главная</button>
+  <button type="button" data-tab="book"><span data-icon="cal"></span>Запись</button>
+  <button type="button" data-tab="care"><span data-icon="drop"></span>Памятки</button>
+  <button type="button" data-tab="visits"><span data-icon="list"></span>Визиты</button>
+</nav></div>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, view = document.getElementById("view");
+  var saved = R.get("visits", null), demo = !saved;
+  // пример: первая процедура месяц назад, следующая записана через 5 дней
+  var visits = saved || [
+    { date: R.ymd(R.addDays(R.today(), -33)), zone: "zhivot", done: true },
+    { date: R.ymd(R.addDays(R.today(), 5)), zone: "zhivot", time: "15:00", done: false }
+  ];
+  var tab = "home", memoTab = 0, bookSel = { zones: [], when: "" };
+
+  function save() { if (!demo) R.set("visits", visits) }
+  function sorted() { return visits.slice().sort(function (a, b) { return a.date.localeCompare(b.date) }) }
+  function nextVisit() { var k = R.ymd(R.today()); return sorted().filter(function (v) { return v.date >= k })[0] }
+
+  var V = {
+    home: function () {
+      var h = new Date().getHours(), hi = h < 12 ? "Доброе утро" : h < 18 ? "Добрый день" : "Добрый вечер";
+      var nv = nextVisit(), done = visits.filter(function (v) { return v.date < R.ymd(R.today()) }).length, total = Math.max(3, done + (nv ? 1 : 0));
+      var html = '<h1 class="hello">' + hi + "!</h1>";
+      if (demo) html += '<div class="demo-note">Это пример с выдуманными визитами.<button type="button" data-act="clear">Начать с чистого</button></div>';
+      if (nv) {
+        var d = R.parse(nv.date), n = Math.round((d - R.today()) / 864e5);
+        html += '<section class="visit"><span class="k">ближайший визит</span><span class="d">' + R.date(d, { weekday: "short", day: "numeric", month: "long" }) + (nv.time ? ", " + nv.time : "") + '</span><span class="z">' + R.zone(nv.zone).name + '</span><div class="cd"><div><b>' + n + "</b><span>" + R.plural(n, "день", "дня", "дней") + '</span></div><div><b>' + (n <= 1 ? "!" : "✓") + "</b><span>" + (n <= 1 ? "подготовка" : "по плану") + "</span></div></div></section>";
+      } else html += '<section class="visit"><span class="k">ближайший визит</span><span class="d">Пока не запланирован</span><button type="button" class="btn btn-gold" data-go="book">Записаться</button></section>';
+      html += '<section class="card course"><div class="h">Мой курс<span>' + done + " из " + total + '</span></div><div class="dots">' + Array.from({ length: total }, function (_, k) { return "<i" + (k < done ? ' class="on"' : "") + "></i>" }).join("") + "</div><p>Интервал между процедурами — не меньше месяца.</p></section>";
+      html += '<div class="qa"><button type="button" data-go="book"><span class="ci">' + R.icon("cal") + '</span>Запись</button><button type="button" data-go="prices"><span class="ci">' + R.icon("list") + '</span>Цены</button><button type="button" data-go="care"><span class="ci">' + R.icon("drop") + '</span>Памятки</button><button type="button" data-act="chat"><span class="ci">' + R.icon("chat") + "</span>Марине</button></div>";
+      html += '<section class="card install"><span class="ci">' + R.icon("plus") + '</span><div><b>Добавить на экран</b><p>Откроется как приложение, без браузера</p></div><button type="button" data-act="install">Как</button></section>';
+      html += '<div class="contacts"></div>';
+      return html;
+    },
+    prices: function () {
+      return '<h1 class="hello">Цены</h1><section class="card plist">' + R.zones.map(function (z) { return "<div><span>" + z.name + "</span><b>" + (z.from ? "от " : "") + R.rub(z.price) + "</b></div>" }).join("") + '</section><p class="muted" style="font-size:12.5px;margin:0">За одну процедуру на одну зону. Обычно нужно 2–3 процедуры.</p><button type="button" class="btn btn-gold" data-go="book">Записаться</button>';
+    },
+    book: function () {
+      return '<h1 class="hello">Запись</h1><section class="card" style="display:grid;gap:12px"><div class="field"><label>Зона</label><div class="row" style="display:flex;flex-wrap:wrap;gap:6px">' +
+        R.zones.map(function (z) { return '<button type="button" class="chip' + (bookSel.zones.indexOf(z.id) > -1 ? " on" : "") + '" data-bz="' + z.id + '">' + z.name + "</button>" }).join("") +
+        '</div></div><div class="field"><label>Когда удобно</label><div style="display:flex;flex-wrap:wrap;gap:6px">' + ["Будни днём", "Будни вечером", "Выходные"].map(function (w) { return '<button type="button" class="chip' + (bookSel.when === w ? " on" : "") + '" data-bw="' + w + '">' + w + "</button>" }).join("") +
+        '</div></div><button type="button" class="btn btn-gold" data-act="sendbook">Отправить заявку Марине</button></section>';
+    },
+    care: function () {
+      var M = [
+        ["Подготовка", "<h4>За день</h4><ul><li>Без скрабов, кислот и спиртовых средств в зоне</li><li>Без алкоголя</li></ul><h4>В день процедуры</h4><ul><li>Кожа чистая и сухая</li><li>Без масел, крема, дезодоранта и парфюма</li><li>Свободная одежда, кофе лучше не пить</li></ul>"],
+        ["Нельзя", "<ul><li>Беременность, кормление меньше 6 месяцев после родов</li><li>Сахарный диабет I типа, гемофилия, тромбофлебит</li><li>ВИЧ, гепатиты, почечная и печёночная недостаточность</li><li>Склонность к келоидам, псориаз, эпилепсия, астма</li><li>Лучевая и химиотерапия</li></ul><h4>Перенести запись</h4><ul><li>ОРВИ и температура, герпес, воспаление в зоне</li></ul>"],
+        ["После", "<ul><li>5 дней утром и вечером хлоргексидин</li><li>Увлажнять кремом: метилурацил или бепантен</li><li>Не мочить 2–4 дня, свободная одежда, пить воду</li></ul><h4>Две недели нельзя</h4><ul><li>Трогать и отдирать корочки</li><li>Баня, сауна, бассейн, загар, солярий</li><li>Скрабы, пилинги, спиртовые лосьоны</li></ul>"]
+      ];
+      return '<h1 class="hello">Памятки</h1><div class="tabs">' + M.map(function (m, k) { return '<button type="button" data-mt="' + k + '" aria-pressed="' + (k === memoTab) + '">' + m[0] + "</button>" }).join("") + '</div><section class="card memo">' + M[memoTab][1] + "</section>";
+    },
+    visits: function () {
+      var list = sorted(), last = list.filter(function (v) { return v.date < R.ymd(R.today()) }).pop();
+      var html = '<h1 class="hello">Мои визиты</h1>';
+      if (demo) html += '<div class="demo-note">Визиты в примере выдуманные.<button type="button" data-act="clear">Очистить</button></div>';
+      html += '<div class="vlist">' + (list.length ? list.map(function (v, k) {
+        var d = R.parse(v.date), past = v.date < R.ymd(R.today());
+        return '<div class="v"><span class="n">' + d.getDate() + "<small>" + R.date(d, { month: "short" }).replace(".", "") + "</small></span><div><b>" + R.zone(v.zone).name + "</b><p>" + (past ? "Процедура " + (k + 1) : "Запланировано" + (v.time ? ", " + v.time : "")) + '</p></div><button type="button" data-del="' + v.date + v.zone + '" aria-label="Удалить">' + R.icon("trash") + "</button></div>";
+      }).join("") : '<p class="muted" style="margin:0">Визитов пока нет. Добавьте первый ниже.</p>');
+      if (last) html += '<div class="v plan"><span class="n">' + R.icon("clock") + '</span><div><b>Следующая не раньше</b><p>' + R.date(R.addDays(R.parse(last.date), 30)) + "</p></div></div>";
+      html += '</div><section class="card" style="display:grid;gap:10px"><b>Добавить визит</b><div class="addv"><input class="input" type="date" id="vd" aria-label="Дата"><select class="input" id="vz" aria-label="Зона">' + R.zones.map(function (z) { return '<option value="' + z.id + '">' + z.name + "</option>" }).join("") + '</select></div><button type="button" class="btn btn-dark" data-act="addv">Добавить</button><button type="button" class="btn btn-line" data-act="ics">' + R.icon("bell") + "Визиты в календарь</button></section>";
+      return html;
+    }
+  };
+
+  function render() {
+    view.innerHTML = '<div class="view">' + V[tab]() + "</div>";
+    view.querySelectorAll(".contacts:empty").forEach(function (el) { el.innerHTML = R.contactsHTML() });
+    var vd = document.getElementById("vd"); if (vd) vd.value = R.ymd(R.today());
+    var cur = tab === "prices" ? "home" : tab;
+    document.querySelectorAll("[data-tab]").forEach(function (b) { if (b.dataset.tab === cur) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current") });
+    window.scrollTo(0, 0);
+  }
+
+  document.querySelector(".tabbar").addEventListener("click", function (e) { var b = e.target.closest("[data-tab]"); if (b) { tab = b.dataset.tab; render() } });
+  view.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-go],[data-act],[data-bz],[data-bw],[data-mt],[data-del]"); if (!t) return;
+    if (t.dataset.go) { tab = t.dataset.go; render(); return }
+    if (t.dataset.mt) { memoTab = +t.dataset.mt; render(); return }
+    if (t.dataset.bz) { var k = bookSel.zones.indexOf(t.dataset.bz); if (k > -1) bookSel.zones.splice(k, 1); else bookSel.zones.push(t.dataset.bz); t.classList.toggle("on", k === -1); return }
+    if (t.dataset.bw) { bookSel.when = t.dataset.bw; view.querySelectorAll("[data-bw]").forEach(function (c) { c.classList.toggle("on", c === t) }); return }
+    if (t.dataset.del) { visits = visits.filter(function (v) { return v.date + v.zone !== t.dataset.del }); save(); render(); return }
+    var a = t.dataset.act;
+    if (a === "clear") { demo = false; visits = []; save(); render(); R.toast("Пример очищен") }
+    if (a === "chat") R.send("Здравствуйте, Марина! ");
+    if (a === "sendbook") {
+      if (!bookSel.zones.length) { R.toast("Выберите зону"); return }
+      R.send("Здравствуйте, Марина! Заявка из приложения на сайте.\nЗона: " + bookSel.zones.map(function (id) { return R.zone(id).name }).join(", ") + "\nКогда удобно: " + (bookSel.when || "любое время").toLowerCase(), { title: "Заявка Марине" });
+    }
+    if (a === "addv") {
+      var d = document.getElementById("vd").value; if (!d) return;
+      if (demo) { demo = false; visits = [] }
+      visits.push({ date: d, zone: document.getElementById("vz").value, done: d < R.ymd(R.today()) }); save(); render(); R.toast("Визит добавлен");
+    }
+    if (a === "ics") {
+      var ev = sorted().filter(function (v) { return v.date >= R.ymd(R.today()) }).map(function (v) { var d = R.parse(v.date), p = (v.time || "12:00").split(":"); d.setHours(+p[0], +p[1]); return { title: "Процедура Razden’sya: " + R.zone(v.zone).name.toLowerCase(), start: d, minutes: 60, alarm: 1440 } });
+      if (!ev.length) { R.toast("Нет будущих визитов"); return }
+      R.saveFile("vizity-razdensya.ics", R.ics(ev)); R.toast("Открываю файл для календаря");
+    }
+    if (a === "install") {
+      R.closeSheet();
+      var back = document.createElement("div"); back.className = "sheet-back";
+      back.innerHTML = '<div class="sheet"><h3>Добавить на экран</h3><p class="hint"><b>iPhone, Safari:</b> кнопка «Поделиться» внизу → «На экран „Домой“» → «Добавить».</p><p class="hint"><b>Android, Chrome:</b> меню ⋮ справа сверху → «Добавить на главный экран».</p><p class="hint">Значок Razden’sya появится рядом с другими приложениями.</p><button type="button" class="btn btn-gold" data-close>Понятно</button></div>';
+      back.addEventListener("click", function (e) { if (e.target === back || e.target.closest("[data-close]")) R.closeSheet() });
+      document.body.appendChild(back);
+    }
+  });
+  render();
+})();
+</script>
+</body>
+</html>

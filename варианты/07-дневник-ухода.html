@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Дневник ухода · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0 6px }
+.top .logo-text { font-size: 30px }
+.top .pill { font-size: 9.5px }
+h1 { margin: 6px 0 12px; font: 400 36px/1 var(--f-display) }
+.demo { display: flex; gap: 10px; align-items: center; background: rgba(197,146,30,.14); border-radius: 14px; padding: 10px 12px; font-size: 12.5px; color: var(--gold-t); margin-bottom: 12px }
+.demo button { margin-left: auto; border: 0; background: var(--brown); color: #fff8ea; border-radius: 10px; padding: 7px 10px; font-weight: 700; font-size: 12px; cursor: pointer; white-space: nowrap }
+.hero { display: grid; grid-template-columns: 136px 1fr; gap: 16px; align-items: center }
+.ring { position: relative; width: 136px; height: 136px }
+.ring svg { width: 136px; height: 136px; transform: rotate(-90deg) }
+.ring circle { fill: none; stroke-width: 10 }
+.ring .bg { stroke: var(--cream-2) }
+.ring .fg { stroke: url(#gg); stroke-linecap: round; transition: stroke-dashoffset .4s }
+.ring .c { position: absolute; inset: 0; display: grid; place-content: center; text-align: center }
+.ring .c b { font: 400 44px/1 var(--f-display) }
+.ring .c span { font-size: 11px; color: var(--muted); font-weight: 700 }
+.hero h2 { margin: 0 0 4px; font-size: 18px; font-weight: 800 }
+.hero p { margin: 0; font-size: 13px; color: var(--text) }
+.hero .zone { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 700; background: var(--cream-2); padding: 5px 9px; border-radius: 8px }
+.sec { margin-top: 14px }
+.sec h3 { margin: 0 0 8px; font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-t); display: flex; justify-content: space-between }
+.sec h3 span { letter-spacing: 0; text-transform: none; color: var(--muted); font-weight: 700 }
+.task { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); font-size: 14.5px; cursor: pointer }
+.task:first-of-type { border-top: 0 }
+.task input { appearance: none; width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid rgba(74,56,16,.35); margin: 0; display: grid; place-items: center; cursor: pointer; background: var(--paper) }
+.task input:checked { background: var(--g-btn); border-color: transparent }
+.task input:checked::after { content: "✓"; color: #fff; font-weight: 800; font-size: 14px }
+.task small { display: block; font-size: 12px; color: var(--muted) }
+.no { display: grid; gap: 8px }
+.no div { display: grid; grid-template-columns: 22px 1fr auto; gap: 8px; align-items: center; font-size: 13.5px; color: var(--text) }
+.no svg { width: 18px; height: 18px; fill: var(--stop) }
+.no em { font-style: normal; font-size: 11.5px; font-weight: 700; color: var(--muted); white-space: nowrap }
+.no .ok svg { fill: var(--ok) }
+.no .ok span { color: var(--muted); text-decoration: line-through }
+.tl { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 4px 0 2px }
+.tl::-webkit-scrollbar { display: none }
+.tl div { flex: 0 0 34px; height: 46px; border-radius: 10px; background: var(--cream-2); display: grid; place-content: center; text-align: center; font-size: 13px; font-weight: 800; color: var(--muted); position: relative }
+.tl div small { font-size: 8.5px; font-weight: 700; letter-spacing: .04em }
+.tl .past { background: #e6d6b4; color: var(--gold-t) }
+.tl .now { background: var(--brown); color: #fff8ea }
+.tl .mark::after { content: ""; position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border-radius: 50%; background: var(--gold) }
+.legend { font-size: 11.5px; color: var(--muted); margin-top: 6px }
+.next { background: var(--dark); color: #f5ecda; border-radius: 20px; padding: 16px; display: grid; gap: 8px; margin-top: 14px }
+.next .k { font-size: 10.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
+.next b { font-size: 18px }
+.next p { margin: 0; font-size: 13px; color: #d4c6ac }
+.btns { display: grid; gap: 8px; margin-top: 14px }
+.setup { display: grid; gap: 12px }
+.setup .chips { display: flex; flex-wrap: wrap; gap: 6px }
+</style>
+</head>
+<body data-variant="07">
+<main class="col">
+  <header class="top"><span class="logo-text">Razden’sya</span><span class="pill">после процедуры</span></header>
+  <h1>Дневник ухода</h1>
+
+  <div id="view"></div>
+
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c5921e"/><stop offset="1" stop-color="#4a3810"/></linearGradient></defs></svg>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, view = document.getElementById("view");
+  var data = R.get("care", null), demo = !data;
+  if (demo) data = { date: R.ymd(R.addDays(R.today(), -2)), zone: "zhivot", done: {} };
+
+  var NO = [["Трогать, чесать, отдирать корочки", 14], ["Баня, сауна, бассейн", 14], ["Загар и солярий", 14], ["Скрабы, пилинги, спиртовые лосьоны", 14], ["Мочить зону", 4]];
+  function tasks(day) {
+    var t = [];
+    if (day <= 5) { t.push(["chm", "Хлоргексидин утром", "обработать зону"]); t.push(["che", "Хлоргексидин вечером", "обработать зону"]) }
+    if (day <= 14) t.push(["cr", "Увлажняющий крем", "метилурацил или бепантен"]);
+    t.push(["w", "Пить достаточно воды", ""]);
+    if (day <= 14) t.push(["cl", "Свободная одежда", "чтобы не тереть зону"]);
+    return t;
+  }
+
+  function setup() {
+    view.innerHTML = '<section class="card setup"><div class="field"><label for="sd">Когда была процедура?</label><input class="input" type="date" id="sd" max="' + R.ymd(R.today()) + '" value="' + R.ymd(R.today()) + '"></div>' +
+      '<div class="field"><label>Зона</label><div class="chips" id="sz">' + R.zones.map(function (z, k) { return '<button type="button" class="chip' + (k ? "" : " on") + '" data-z="' + z.id + '">' + z.name + "</button>" }).join("") + "</div></div>" +
+      '<button type="button" class="btn btn-gold" id="start">Начать дневник</button>' + (demo ? "" : '<button type="button" class="btn btn-soft" id="cancel">Отмена</button>') + "</section>";
+    var zone = "zhivot";
+    document.getElementById("sz").onclick = function (e) { var b = e.target.closest(".chip"); if (!b) return; zone = b.dataset.z; this.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("on", c === b) }) };
+    document.getElementById("start").onclick = function () { data = { date: document.getElementById("sd").value, zone: zone, done: {} }; demo = false; R.set("care", data); render() };
+    var c = document.getElementById("cancel"); if (c) c.onclick = render;
+  }
+
+  function render() {
+    var start = R.parse(data.date), day = Math.floor((R.today() - start) / 864e5) + 1, key = R.ymd(R.today());
+    var healed = day > 14, nextDate = R.addDays(start, 30), pct = Math.min(1, Math.max(0, day / 14)), C = 2 * Math.PI * 58;
+    var done = data.done[key] || {}, list = tasks(day);
+    var h = demo ? '<div class="demo">Это пример: процедура была позавчера.<button type="button" id="mine">Указать свою дату</button></div>' : "";
+    h += '<section class="card"><div class="hero"><div class="ring"><svg viewBox="0 0 136 136"><circle class="bg" cx="68" cy="68" r="58"/><circle class="fg" cx="68" cy="68" r="58" stroke-dasharray="' + C + '" stroke-dashoffset="' + C * (1 - pct) + '"/></svg>' +
+      '<div class="c"><b>' + (healed ? "✓" : day) + "</b><span>" + (healed ? "зажило" : "день из 14") + "</span></div></div>" +
+      "<div><h2>" + (healed ? "Заживление позади" : day <= 4 ? "Кожа восстанавливается" : day <= 10 ? "Корочки сходят сами" : "Почти готово") + "</h2><p>" +
+      (healed ? "Можно вернуться к привычному уходу. Обновление в глубине идёт ещё несколько месяцев." : "Процедура была " + R.date(start) + ". До конца заживления " + (15 - day) + " " + R.plural(15 - day, "день", "дня", "дней") + ".") +
+      '</p><span class="zone">' + R.zone(data.zone).name + "</span></div></div>";
+    h += '<div class="sec"><h3>Сегодня<span>' + R.date(R.today(), { weekday: "long", day: "numeric", month: "long" }) + "</span></h3>" +
+      list.map(function (t) { return '<label class="task"><input type="checkbox" data-t="' + t[0] + '"' + (done[t[0]] ? " checked" : "") + "><span>" + t[1] + (t[2] ? "<small>" + t[2] + "</small>" : "") + "</span></label>" }).join("") + "</div>";
+    h += '<div class="sec"><h3>Пока нельзя</h3><div class="no">' + NO.map(function (n) {
+      var left = n[1] - day + 1, ok = left <= 0;
+      return '<div class="' + (ok ? "ok" : "") + '">' + R.icon(ok ? "check" : "x") + "<span>" + n[0] + "</span><em>" + (ok ? "уже можно" : "ещё " + left + " " + R.plural(left, "день", "дня", "дней")) + "</em></div>";
+    }).join("") + "</div></div>";
+    h += '<div class="sec"><h3>Две недели</h3><div class="tl">';
+    for (var d = 1; d <= 14; d++) h += '<div class="' + (d < day ? "past" : d === day ? "now" : "") + (d === 1 || d === 5 || d === 14 ? " mark" : "") + '">' + d + "<small>" + R.addDays(start, d - 1).getDate() + "." + String(R.addDays(start, d - 1).getMonth() + 1).padStart(2, "0") + "</small></div>";
+    h += '</div><p class="legend">Точки: день 1 — процедура, 5 — последний хлоргексидин, 14 — конец заживления.</p></div></section>';
+    h += '<section class="next"><span class="k">следующая процедура</span><b>не раньше ' + R.date(nextDate, { day: "numeric", month: "long" }) + "</b><p>Интервал между процедурами — не меньше месяца: коже нужно время на обновление.</p>" +
+      '<button type="button" class="btn btn-gold" id="book">Записаться на следующую</button></section>';
+    h += '<div class="btns"><button type="button" class="btn btn-line" id="ics" data-icon="bell">Напоминания в календарь</button><button type="button" class="btn btn-soft" id="reset">Другая дата или зона</button></div>';
+    view.innerHTML = h;
+    view.querySelectorAll("[data-icon]").forEach(function (el) { if (!el.querySelector("svg")) el.insertAdjacentHTML("afterbegin", R.icon(el.dataset.icon)) });
+
+    view.querySelectorAll("[data-t]").forEach(function (x) {
+      x.onchange = function () {
+        data.done[key] = data.done[key] || {}; data.done[key][x.dataset.t] = x.checked;
+        if (!demo) R.set("care", data);
+        if (view.querySelectorAll("[data-t]:not(:checked)").length === 0) R.toast("Всё на сегодня сделано");
+      };
+    });
+    var mine = document.getElementById("mine"); if (mine) mine.onclick = setup;
+    document.getElementById("reset").onclick = setup;
+    document.getElementById("book").onclick = function () { R.send("Здравствуйте, Марина! Хочу записаться на следующую процедуру: " + R.zone(data.zone).name.toLowerCase() + ". Прошлая была " + R.date(start) + ", можно с " + R.date(nextDate) + ".") };
+    document.getElementById("ics").onclick = function () {
+      var ev = [];
+      for (var d = 0; d < 5; d++) {
+        var m = R.addDays(start, d); m.setHours(9, 0); ev.push({ title: "Хлоргексидин утром (уход Razden’sya)", start: m, minutes: 10, alarm: 0 });
+        var e = R.addDays(start, d); e.setHours(21, 0); ev.push({ title: "Хлоргексидин вечером (уход Razden’sya)", start: e, minutes: 10, alarm: 0 });
+      }
+      var n = new Date(nextDate); n.setHours(12, 0); ev.push({ title: "Можно записаться на следующую процедуру Razden’sya", start: n, minutes: 15, alarm: 0 });
+      R.saveFile("uhod-razdensya.ics", R.ics(ev)); R.toast("Открываю файл для календаря");
+    };
+  }
+  render();
+})();
+</script>
+</body>
+</html>

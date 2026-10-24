@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Успеть к дате · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.top { display: flex; justify-content: space-between; align-items: baseline; padding: 20px 0 4px }
+.top .logo-text { font-size: 30px }
+.top span { font-size: 12px; color: var(--muted); font-weight: 700 }
+h1 { margin: 8px 0 6px; font: 400 38px/1 var(--f-display); text-wrap: balance }
+.lead { margin: 0 0 14px; font-size: 14px; color: var(--text) }
+.types { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px }
+.type { border: 1.5px solid rgba(74,56,16,.16); background: var(--paper); border-radius: 14px; padding: 9px 2px 8px; display: grid; justify-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--text); cursor: pointer }
+.type svg { width: 22px; height: 22px; fill: var(--gold-t) }
+.type[aria-pressed="true"] { border-color: var(--brown); background: #f6ecd7; color: var(--ink); box-shadow: inset 0 0 0 1px var(--brown) }
+.grid2 { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; margin-top: 12px }
+.seg { display: inline-flex; background: var(--cream-2); border-radius: 12px; padding: 3px; gap: 3px }
+.seg button { border: 0; background: none; border-radius: 9px; min-width: 42px; padding: 9px 10px; font-weight: 800; font-size: 14px; color: var(--muted); cursor: pointer }
+.seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 3px rgba(74,56,16,.2) }
+.lbl { font-size: 12.5px; font-weight: 700; color: var(--text); margin: 14px 0 6px; display: block }
+.zones { display: flex; flex-wrap: wrap; gap: 6px }
+.res { margin-top: 14px; background: var(--dark); color: #f5ecda; border-radius: 24px; padding: 18px 16px; display: grid; gap: 12px }
+.res .k { font-size: 10.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
+.res h2 { margin: 0; font: 400 34px/1 var(--f-display); color: #f8eedb }
+.res .sub { margin: 0; font-size: 13.5px; color: #d4c6ac }
+.res.warn { background: #5a3d14 }
+.cd { display: flex; gap: 8px }
+.cd div { flex: 1; background: rgba(255,255,255,.07); border-radius: 14px; padding: 10px; text-align: center }
+.cd b { display: block; font-size: 24px; font-variant-numeric: tabular-nums }
+.cd span { font-size: 11px; color: #b9ab90 }
+.tl { list-style: none; margin: 4px 0 0; padding: 0; display: grid }
+.tl li { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: start; position: relative; padding-bottom: 14px }
+.tl li::before { content: ""; position: absolute; left: 10px; top: 18px; bottom: 0; width: 2px; background: rgba(220,179,90,.3) }
+.tl li:last-child { padding-bottom: 0 }
+.tl li:last-child::before { display: none }
+.tl i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #dcb35a; background: #1f1a14; display: block; z-index: 1 }
+.tl li.proc i { background: #dcb35a }
+.tl li.ev i { background: #f8eedb; border-color: #f8eedb }
+.tl b { display: block; font-size: 14.5px; color: #f8eedb }
+.tl span { font-size: 12.5px; color: #b9ab90 }
+.tl em { font-style: normal; font-size: 12.5px; font-weight: 800; color: #dcb35a; white-space: nowrap; font-variant-numeric: tabular-nums }
+.res .btn { min-height: 46px }
+.why { margin-top: 14px; display: grid; gap: 8px; font-size: 13px; color: var(--text) }
+.why div { display: grid; grid-template-columns: 26px 1fr; gap: 8px }
+.why svg { width: 18px; height: 18px; fill: var(--gold-t); margin-top: 1px }
+</style>
+</head>
+<body data-variant="11">
+<main class="col">
+  <header class="top"><span class="logo-text">Razden’sya</span><span>планировщик курса</span></header>
+  <h1>Успеть к важной дате</h1>
+  <p class="lead">Выберите событие и дату. Посчитаем, когда начать, чтобы кожа успела зажить и восстановиться.</p>
+
+  <section class="card">
+    <div class="types" id="types"></div>
+    <div class="grid2">
+      <div class="field"><label for="date">Дата события</label><input class="input" type="date" id="date"></div>
+      <div class="field"><label>Процедур</label><div class="seg" id="cnt"><button type="button" data-c="2" aria-pressed="false">2</button><button type="button" data-c="3" aria-pressed="true">3</button></div></div>
+    </div>
+    <span class="lbl">Зоны</span>
+    <div class="zones" id="zones"></div>
+  </section>
+
+  <section class="res" id="res" aria-live="polite"></section>
+
+  <div class="why"></div>
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) };
+  // Запас до события: при солнце — месяц (кожа восстановится, загар не оставит пятен), иначе — две недели заживления
+  var TYPES = [
+    { id: "sea", ic: "drop", l: "Море", sun: true },
+    { id: "summer", ic: "sun", l: "Лето", sun: true },
+    { id: "wed", ic: "spark", l: "Свадьба", sun: false },
+    { id: "photo", ic: "camera", l: "Фото", sun: false },
+    { id: "other", ic: "star", l: "Другое", sun: false }
+  ];
+  var st = { type: "sea", count: 3, zones: ["zhivot"] };
+  function nextSummer() { var t = R.today(), y = t.getMonth() >= 5 ? t.getFullYear() + 1 : t.getFullYear(); return new Date(y, 5, 1) }
+  $("date").value = R.ymd(nextSummer());
+  $("types").innerHTML = TYPES.map(function (t) { return '<button type="button" class="type" data-t="' + t.id + '" aria-pressed="false">' + R.icon(t.ic) + t.l + "</button>" }).join("");
+  $("zones").innerHTML = R.zones.map(function (z) { return '<button type="button" class="chip" data-z="' + z.id + '">' + z.name + "</button>" }).join("");
+  document.querySelector(".why").innerHTML =
+    "<div>" + R.icon("clock") + "<span>Между процедурами — не меньше месяца: коже нужно время на обновление.</span></div>" +
+    "<div>" + R.icon("sun") + "<span>Перед морем и летом последняя процедура — за месяц: две недели заживления и ещё время, чтобы солнце не оставило пятен.</span></div>" +
+    "<div>" + R.icon("spark") + "<span>Результат проявляется постепенно, несколько месяцев. Чем раньше начать, тем больше успеет измениться.</span></div>";
+
+  function plan() {
+    var t = TYPES.filter(function (x) { return x.id === st.type })[0];
+    var ev = $("date").value ? R.parse($("date").value) : null;
+    if (!ev) return null;
+    var buffer = t.sun ? 30 : 14, last = R.addDays(ev, -buffer), earliest = R.addDays(R.today(), 1);
+    var n = st.count, dates = [];
+    for (var k = 0; k < n; k++) dates.push(R.addDays(last, -30 * (n - 1 - k)));
+    var fit = n;
+    if (dates[0] < earliest) {
+      fit = last < earliest ? 0 : Math.floor((last - earliest) / 864e5 / 30) + 1;
+      dates = []; for (k = 0; k < fit; k++) dates.push(R.addDays(earliest, 30 * k));
+    }
+    return { t: t, ev: ev, buffer: buffer, dates: dates, fit: fit, n: n };
+  }
+
+  function render() {
+    document.querySelectorAll(".type").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.t === st.type) });
+    document.querySelectorAll("#cnt button").forEach(function (b) { b.setAttribute("aria-pressed", +b.dataset.c === st.count) });
+    document.querySelectorAll("#zones .chip").forEach(function (c) { c.classList.toggle("on", st.zones.indexOf(c.dataset.z) > -1) });
+    var p = plan(), box = $("res");
+    if (!p) { box.innerHTML = '<span class="k">выберите дату</span>'; return }
+    var days = Math.round((p.ev - R.today()) / 864e5);
+    if (days <= 0) { box.className = "res warn"; box.innerHTML = '<span class="k">дата уже прошла</span><h2>Выберите будущую дату</h2>'; return }
+    var one = st.zones.reduce(function (s, id) { return s + R.zone(id).price }, 0);
+    var h = "", cls = "res";
+    if (p.fit === 0) {
+      cls = "res warn";
+      h = '<span class="k">не успеваем</span><h2>Даже одна процедура не успеет зажить</h2><p class="sub">Для события «' + p.t.l.toLowerCase() + "» нужен запас " + p.buffer + " " + R.plural(p.buffer, "день", "дня", "дней") + ". Выберите дату не раньше " + R.date(R.addDays(R.today(), p.buffer + 1)) + ".</p>";
+    } else {
+      if (p.fit < p.n) cls = "res warn";
+      h = '<span class="k">' + (p.fit < p.n ? "успеем " + p.fit + " из " + p.n : "начать не позже") + "</span><h2>" + (p.fit < p.n ? "Начинать нужно сейчас" : R.date(p.dates[0], { day: "numeric", month: "long" })) + "</h2>" +
+        '<div class="cd"><div><b>' + days + "</b><span>" + R.plural(days, "день", "дня", "дней") + " до события</span></div><div><b>" + p.fit + "</b><span>" + R.plural(p.fit, "процедура", "процедуры", "процедур") + "</span></div>" + (st.zones.length ? "<div><b>" + Math.round(one * p.fit / 1000) + "к</b><span>₽ за курс</span></div>" : "") + "</div>" +
+        '<ol class="tl">' + p.dates.map(function (d, k) { return '<li class="proc"><i></i><div><b>Процедура ' + (k + 1) + "</b><span>" + R.date(d, { weekday: "long" }) + "</span></div><em>" + R.date(d, { day: "numeric", month: "short" }) + "</em></li>" }).join("") +
+        '<li><i></i><div><b>Заживление и восстановление</b><span>без солнца, бани и скрабов</span></div><em>' + p.buffer + " дн.</em></li>" +
+        '<li class="ev"><i></i><div><b>' + p.t.l + "</b><span>кожа готова</span></div><em>" + R.date(p.ev, { day: "numeric", month: "short" }) + "</em></li></ol>" +
+        '<button type="button" class="btn btn-gold" id="book">Записаться на первую процедуру</button><button type="button" class="btn btn-line" id="ics" style="background:transparent;color:#f5ecda;border-color:rgba(220,179,90,.6)">' + R.icon("bell") + "План в календарь</button>";
+    }
+    box.className = cls; box.innerHTML = h;
+    var b = $("book"); if (b) b.onclick = function () {
+      R.send("Здравствуйте, Марина! Хочу успеть к событию «" + p.t.l.toLowerCase() + "» " + R.date(p.ev, { day: "numeric", month: "long" }) + ".\nЗоны: " + (st.zones.map(function (id) { return R.zone(id).name }).join(", ") || "уточню") +
+        "\nПлан с сайта: " + p.dates.map(function (d) { return R.date(d, { day: "numeric", month: "short" }) }).join(", ") + ".\nКогда можно на первую процедуру?", { title: "План для Марины" });
+    };
+    var c = $("ics"); if (c) c.onclick = function () {
+      R.saveFile("plan-kursa-razdensya.ics", R.ics(p.dates.map(function (d, k) { var x = new Date(d); x.setHours(12, 0); return { title: "Процедура " + (k + 1) + " Razden’sya (план, записаться заранее)", start: x, minutes: 60, alarm: 4320 } })));
+      R.toast("Открываю файл для календаря");
+    };
+  }
+
+  $("types").addEventListener("click", function (e) {
+    var b = e.target.closest(".type"); if (!b) return; st.type = b.dataset.t;
+    if (st.type === "summer") $("date").value = R.ymd(nextSummer());
+    render();
+  });
+  $("cnt").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) { st.count = +b.dataset.c; render() } });
+  $("zones").addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (!b) return; var k = st.zones.indexOf(b.dataset.z); if (k > -1) st.zones.splice(k, 1); else st.zones.push(b.dataset.z); render() });
+  $("date").addEventListener("change", render);
+  render();
+})();
+</script>
+</body>
+</html>

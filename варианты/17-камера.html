@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Контроль заживления · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../общее/бренд.css">
+<style>
+.top { display: flex; justify-content: space-between; align-items: center; padding: 20px 0 4px }
+.top .logo-text { font-size: 30px }
+.top .pill { font-size: 9.5px }
+h1 { margin: 8px 0 4px; font: 400 36px/1.02 var(--f-display) }
+.lead { margin: 0 0 12px; font-size: 14px; color: var(--text) }
+.marina { display: grid; grid-template-columns: 46px 1fr; gap: 12px; align-items: center; background: var(--card); border-radius: 18px; padding: 10px 12px; margin-bottom: 12px }
+.marina img { width: 46px; height: 46px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(197,146,30,.5) }
+.marina p { margin: 0; font-size: 13px; color: var(--text); line-height: 1.4 }
+.marina b { color: var(--ink) }
+.demo { display: flex; gap: 10px; align-items: center; background: rgba(197,146,30,.14); border-radius: 14px; padding: 10px 12px; font-size: 12.5px; color: var(--gold-t); margin-bottom: 12px }
+.demo button { margin-left: auto; border: 0; background: var(--brown); color: #fff8ea; border-radius: 10px; padding: 7px 10px; font-weight: 700; font-size: 12px; cursor: pointer; white-space: nowrap }
+
+/* шкала контрольных дней */
+.plan { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 4px 16px 6px }
+.plan::-webkit-scrollbar { display: none }
+.cp { flex: 0 0 78px; border: 0; background: rgba(255,255,255,.55); border-radius: 16px; padding: 8px 6px; display: grid; justify-items: center; gap: 4px; color: var(--muted); cursor: pointer }
+.cp .th { position: relative; width: 54px; height: 54px; border-radius: 12px; background: var(--cream-2) center / cover; display: grid; place-items: center; font-weight: 800; color: var(--gold-t) }
+.cp .th > svg { width: 22px; height: 22px; fill: currentColor }
+.cp b { font-size: 11.5px; color: var(--ink) }
+.cp small { font-size: 10px; font-weight: 700; text-align: center; line-height: 1.2 }
+.cp.due { background: var(--paper); box-shadow: inset 0 0 0 1.5px var(--gold) }
+.cp.due small { color: var(--gold-t) }
+.cp .st { position: absolute; right: -6px; bottom: -6px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 0 0 2px var(--paper) }
+.cp .st svg { width: 14px; height: 14px; fill: #fff }
+.st.ok { background: var(--ok) } .st.new { background: #b9ab90 } .st.call { background: var(--warn) }
+.cp small.ok { color: var(--ok) } .cp small.call { color: var(--warn) }
+
+/* карточка «сейчас» */
+.now { margin-top: 10px; background: var(--dark); color: #f5ecda; border-radius: 24px; padding: 18px 16px; display: grid; gap: 10px }
+.now .k { font-size: 10.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
+.now h2 { margin: 0; font: 400 32px/1.02 var(--f-display); color: #f8eedb }
+.now p { margin: 0; font-size: 13.5px; color: #d4c6ac; line-height: 1.45 }
+.now .btn { min-height: 48px }
+.now .btn-line { background: transparent; color: #f5ecda; border-color: rgba(220,179,90,.6) }
+
+/* ответы Марины */
+.answers { margin-top: 14px; display: grid; gap: 10px }
+.answers h2 { margin: 0; font: 400 26px/1.05 var(--f-display) }
+.ans { display: grid; grid-template-columns: 74px 1fr; gap: 12px; align-items: start; background: var(--card); border-radius: 18px; padding: 10px }
+.ans .ph { position: relative; width: 74px; aspect-ratio: 4 / 5; border-radius: 12px; background: var(--cream-2) center / cover }
+.seal { position: absolute; right: -8px; bottom: -8px; width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #e0b24a, #85600f 72%); color: #fff8ea; display: grid; place-items: center; box-shadow: 0 0 0 2.5px var(--paper), 0 4px 10px -4px rgba(74,56,16,.8) }
+.seal svg { width: 20px; height: 20px; fill: #fff8ea }
+.seal.call { background: radial-gradient(circle at 35% 30%, #e0a04a, #a8701a 72%) }
+.seal.new { background: #cbbfa8 }
+.ans .ttl { font-size: 13.5px; font-weight: 800; display: flex; justify-content: space-between; gap: 8px }
+.ans .ttl span { font-size: 11px; font-weight: 700; color: var(--muted); white-space: nowrap }
+.ans .stamp { display: inline-flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ok); border: 1.5px solid currentColor; border-radius: 8px; padding: 3px 7px; transform: rotate(-2deg) }
+.ans .stamp.call { color: var(--warn) } .ans .stamp.new { color: var(--muted); transform: none }
+.bubble { margin-top: 8px; display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: start }
+.bubble img { width: 26px; height: 26px; border-radius: 50% }
+.bubble p { margin: 0; background: var(--paper); border-radius: 4px 14px 14px 14px; padding: 8px 10px; font-size: 13px; line-height: 1.4; color: var(--ink) }
+.ans .nudge { margin-top: 6px; border: 0; background: none; padding: 0; color: var(--gold-t); font-weight: 800; font-size: 12px; text-decoration: underline; cursor: pointer }
+.code { margin-top: 14px; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center }
+.code b { font: 800 18px/1.1 var(--f-body); letter-spacing: .08em; color: var(--gold-t) }
+.code p { margin: 2px 0 0; font-size: 12.5px; color: var(--text) }
+.code button { border: 0; background: var(--brown); color: #fff8ea; border-radius: 12px; padding: 10px 12px; font-weight: 800; font-size: 12.5px; cursor: pointer }
+
+/* камера */
+.shoot { margin-top: 12px; display: grid; gap: 10px }
+.stage { position: relative; aspect-ratio: 4 / 5; border-radius: 22px; overflow: hidden; background: #1f1a14; touch-action: none; user-select: none }
+.stage video, .stage .shot, .stage .ghost { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+.stage .shot { transform-origin: center }
+.stage .ghost { pointer-events: none; filter: grayscale(.2) contrast(1.1) }
+.stage .grid { position: absolute; inset: 0; pointer-events: none; background:
+  linear-gradient(90deg, transparent calc(33.33% - .5px), rgba(255,255,255,.3) calc(33.33% - .5px) calc(33.33% + .5px), transparent calc(33.33% + .5px) calc(66.66% - .5px), rgba(255,255,255,.3) calc(66.66% - .5px) calc(66.66% + .5px), transparent calc(66.66% + .5px)),
+  linear-gradient(0deg, transparent calc(33.33% - .5px), rgba(255,255,255,.3) calc(33.33% - .5px) calc(33.33% + .5px), transparent calc(33.33% + .5px) calc(66.66% - .5px), rgba(255,255,255,.3) calc(66.66% - .5px) calc(66.66% + .5px), transparent calc(66.66% + .5px)) }
+.stage .tag { position: absolute; left: 10px; top: 10px; background: rgba(31,26,20,.75); color: #fff; font-size: 11.5px; font-weight: 700; padding: 5px 9px; border-radius: 9px; pointer-events: none }
+.stage .hint { position: absolute; left: 10px; right: 10px; bottom: 10px; background: rgba(31,26,20,.7); color: #f3ead8; font-size: 12px; padding: 7px 10px; border-radius: 10px; text-align: center; pointer-events: none }
+.range { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; font-size: 12.5px; font-weight: 700; color: var(--text) }
+.range input { width: 100%; accent-color: var(--brown) }
+.range b { min-width: 38px; text-align: right; font-variant-numeric: tabular-nums }
+.shutter { justify-self: center; width: 74px; height: 74px; border-radius: 50%; border: 4px solid var(--brown); background: #fff; cursor: pointer; box-shadow: 0 0 0 4px var(--cream), 0 10px 20px -10px rgba(74,56,16,.8) }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.tip { font-size: 12.5px; color: var(--muted); text-align: center; margin: 0 }
+
+/* перед отправкой */
+.review { margin-top: 12px; display: grid; gap: 12px }
+.review h3 { margin: 0; font-size: 15px }
+.feel { display: flex; flex-wrap: wrap; gap: 6px }
+.feel .chip { font-size: 12.5px; padding: 8px 11px }
+.feel .chip.alarm.on { background: var(--stop); border-color: var(--stop) }
+.alert { background: rgba(138,59,59,.1); color: var(--stop); border-radius: 14px; padding: 10px 12px; font-size: 13px; font-weight: 700; line-height: 1.4 }
+.consent { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; background: var(--cream); border-radius: 16px; padding: 12px; cursor: pointer }
+.consent input { appearance: none; width: 24px; height: 24px; border-radius: 7px; border: 1.5px solid rgba(74,56,16,.4); background: #fff; margin: 0; display: grid; place-items: center; cursor: pointer }
+.consent input:checked { background: var(--brown); border-color: var(--brown) }
+.consent input:checked::after { content: "✓"; color: #fff; font-weight: 800; font-size: 14px }
+.consent b { display: block; font-size: 14px; margin-bottom: 3px }
+.consent span { font-size: 12px; color: var(--muted); line-height: 1.4 }
+.rv-head { display: grid; grid-template-columns: 92px 1fr; gap: 12px; align-items: center }
+.rv-head img { width: 92px; border-radius: 12px; aspect-ratio: 4 / 5; object-fit: cover }
+.rv-head p { margin: 0; font-size: 13px; color: var(--text) }
+.btns { display: grid; gap: 8px; margin-top: 12px }
+
+.flags { margin-top: 14px; display: grid; gap: 6px }
+.flags h2 { margin: 0; font: 400 24px/1.05 var(--f-display) }
+.flags p { margin: 0; font-size: 13px; color: var(--text) }
+.flags ul { margin: 0; padding-left: 18px; font-size: 13px; color: var(--text); display: grid; gap: 3px }
+.setup { display: grid; gap: 12px }
+.setup .chips { display: flex; flex-wrap: wrap; gap: 6px }
+.door { display: block; margin: 16px auto 0; border: 0; background: none; color: var(--muted); font-size: 12.5px; text-decoration: underline; cursor: pointer }
+
+/* кабинет Марины */
+body.m-mode .client-only { display: none }
+.mhead { display: flex; justify-content: space-between; align-items: center; margin: 6px 0 10px }
+.mhead h2 { margin: 0; font: 400 32px/1 var(--f-display) }
+.mhead button { border: 0; background: var(--cream-2); border-radius: 10px; padding: 8px 12px; font-weight: 800; font-size: 12.5px; cursor: pointer }
+.mtabs { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--cream-2); border-radius: 14px; padding: 4px; gap: 4px; margin-bottom: 12px }
+.mtabs button { border: 0; border-radius: 11px; padding: 9px 4px; font-weight: 800; font-size: 12.5px; background: none; color: var(--muted); cursor: pointer }
+.mtabs button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 3px rgba(74,56,16,.2) }
+.mtabs i { font-style: normal; display: inline-block; min-width: 18px; padding: 0 5px; border-radius: 9px; background: var(--brown); color: #fff8ea; font-size: 11px; margin-left: 4px }
+.q { display: grid; gap: 10px; margin-bottom: 14px }
+.q .big { position: relative; aspect-ratio: 4 / 5; border-radius: 16px; background: var(--cream-2) center / cover; overflow: hidden }
+.q .big .prev { position: absolute; right: 8px; bottom: 8px; width: 64px; aspect-ratio: 4 / 5; border-radius: 10px; background: var(--cream-2) center / cover; box-shadow: 0 0 0 2px #fff; display: grid; align-items: end }
+.q .big .prev span { font-size: 9px; font-weight: 800; color: #fff; background: rgba(0,0,0,.55); text-align: center; padding: 2px 0; border-radius: 0 0 8px 8px }
+.q .badge { position: absolute; left: 8px; top: 8px; display: flex; gap: 6px; flex-wrap: wrap }
+.q .badge span { background: rgba(31,26,20,.78); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 8px }
+.q .badge .yes { background: var(--ok) } .q .badge .ex { background: var(--gold-t) }
+.q .who { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: center }
+.q .who b { font-size: 14px; letter-spacing: .04em }
+.q .who input { min-height: 34px; border-radius: 9px; border: 1px solid var(--line); background: var(--paper); padding: 0 9px; font-size: 13px; width: 100% }
+.q .meta { font-size: 12.5px; color: var(--text) }
+.q .feels { display: flex; flex-wrap: wrap; gap: 4px }
+.q .feels span { font-size: 11.5px; font-weight: 700; padding: 4px 8px; border-radius: 8px; background: var(--cream-2) }
+.q .feels .bad { background: var(--stop); color: #fff }
+.q textarea { width: 100%; min-height: 56px; border-radius: 12px; border: 1px solid rgba(74,56,16,.25); background: var(--paper); padding: 9px 11px; font-size: 13.5px; resize: vertical }
+.q .tpl { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none }
+.q .tpl::-webkit-scrollbar { display: none }
+.q .tpl button { flex: none; border: 1px solid var(--line); background: var(--paper); border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 600; cursor: pointer }
+.q .ok-b { background: var(--ok); color: #fff } .q .call-b { background: var(--warn); color: #fff }
+.port { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px }
+.pt { position: relative; aspect-ratio: 4 / 5; border-radius: 12px; background: var(--cream-2) center / cover; border: 0; padding: 0; cursor: pointer; overflow: hidden }
+.pt .star { position: absolute; top: 5px; right: 5px; width: 26px; height: 26px; border-radius: 50%; background: rgba(0,0,0,.45); display: grid; place-items: center }
+.pt .star svg { width: 15px; height: 15px; fill: #fff }
+.pt.starred .star { background: #c5921e }
+.pt.used::after { content: "в посте"; position: absolute; left: 0; right: 0; bottom: 0; background: rgba(31,26,20,.75); color: #fff; font-size: 10.5px; font-weight: 800; padding: 3px 0; text-align: center }
+.mnote { font-size: 12px; color: var(--muted); text-align: center; margin: 10px 4px 0 }
+.done-row { display: grid; grid-template-columns: 52px 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); font-size: 13px }
+.done-row .ph { width: 52px; aspect-ratio: 4 / 5; border-radius: 9px; background: var(--cream-2) center / cover }
+.done-row span { font-size: 11.5px; font-weight: 800 }
+</style>
+</head>
+<body data-variant="17">
+<main class="col">
+  <header class="top"><span class="logo-text">Razden’sya</span><span class="pill">после процедуры</span></header>
+  <div class="client-only">
+    <h1>Контроль заживления</h1>
+    <p class="lead">Фотографируйте зону в отмеченные дни. Каждое фото приходит Марине: она смотрит, всё ли заживает как надо, и ставит отметку.</p>
+    <div class="marina"><img src="../ресурсы/аватар-лицо.jpg" alt="" width="46" height="46"><p><b>Марина:</b> «Присылайте фото, даже если всё спокойно. Я посмотрю каждое и отвечу, всё ли идёт по плану».</p></div>
+  </div>
+
+  <div id="app"></div>
+
+  <section class="card flags client-only">
+    <h2>Когда не ждать контрольного дня</h2>
+    <p>Сразу напишите Марине и обратитесь к врачу, если:</p>
+    <ul><li>появились гной или выделения;</li><li>поднялась температура;</li><li>покраснение и отёк растут, а не уменьшаются;</li><li>боль усиливается.</li></ul>
+  </section>
+
+  <button type="button" class="door client-only" id="door">Вход для Марины</button>
+  <input type="file" accept="image/*" capture="environment" id="file" hidden>
+  <div class="contacts client-only" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="../общее/бренд.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) }, app = $("app");
+  // Рабочая версия: Firebase Realtime Database. Пока адрес пустой — всё хранится в этом телефоне,
+  // и круг «клиентка → Марина → отметка» можно пройти на одном устройстве
+  var FB_URL = "", PIN = "1806", KEEP_DAYS = 90;
+  var CP = [
+    { d: 0, t: "До процедуры", short: "до", n: "Снимок «до»: с ним потом будет видно разницу." },
+    { d: 3, t: "3-й день", short: "3 день", n: "Покраснение и тонкие корочки — это нормально. Хлоргексидин утром и вечером." },
+    { d: 7, t: "7-й день", short: "7 день", n: "Корочки сходят сами. Не отдирайте их, даже если чешется." },
+    { d: 14, t: "14-й день", short: "14 день", n: "Заживление завершается. Кожа может быть розоватой, это пройдёт." },
+    { d: 30, t: "Через месяц", short: "месяц", n: "Видны первые изменения. Самое время обсудить следующую процедуру." },
+    { d: 60, t: "Через 2 месяца", short: "2 мес.", n: "Обновление в глубине кожи продолжается. Сравним с фото «до»." }
+  ];
+  var FEEL = [["ok", "Всё спокойно"], ["red", "Покраснение"], ["itch", "Зуд"], ["crust", "Корочки"], ["swell", "Отёк"], ["pain", "Боль", 1], ["pus", "Гной, выделения", 1], ["temp", "Температура", 1]];
+  var TPL = { ok: ["Всё заживает как надо", "Корочки — это нормально, не трогайте их", "Отлично, продолжайте уход по памятке", "Видны изменения, можно записываться на следующую"], call: ["Напишите мне, хочу посмотреть ближе", "Похоже на раздражение, давайте обсудим", "Обратитесь к врачу и напишите мне"] };
+  function feelName(f) { var x = FEEL.filter(function (y) { return y[0] === f })[0]; return x ? x[1] : f }
+  function isAlarm(f) { var x = FEEL.filter(function (y) { return y[0] === f })[0]; return !!(x && x[2]) }
+
+  // ---------- хранилище фото на проверку ----------
+  var DAY = 864e5, now = Date.now();
+  function seed() {
+    var dp = R.ymd(R.addDays(R.today(), -7));
+    return {
+      meta: {
+        d0: { id: "d0", code: "RZ-DEMO", zone: "zhivot", proc: dp, day: 0, label: "До процедуры", ts: now - 7 * DAY, feel: ["ok"], consent: true, status: "ok", note: "Отличный снимок «до»: с ним будет хорошо видна разница.", reviewedAt: now - 7 * DAY + 2 * 36e5, demo: true },
+        d1: { id: "d1", code: "RZ-7KQ2", zone: "bedra", proc: R.ymd(R.addDays(R.today(), -3)), day: 3, label: "3-й день", ts: now - 3 * 36e5, feel: ["red", "crust"], consent: false, status: "new", demo: true },
+        d2: { id: "d2", code: "RZ-M4T9", zone: "ruki", proc: R.ymd(R.addDays(R.today(), -7)), day: 7, label: "7-й день", ts: now - 50 * 6e4, feel: ["itch", "crust"], consent: true, status: "new", demo: true },
+        d3: { id: "d3", code: "RZ-P2X8", zone: "zhivot", proc: R.ymd(R.addDays(R.today(), -31)), day: 30, label: "Через месяц", ts: now - 1 * DAY, feel: ["ok"], consent: true, status: "ok", note: "Растяжки стали светлее. Можно записываться на вторую процедуру.", reviewedAt: now - 20 * 36e5, star: true, demo: true }
+      },
+      img: { d0: "../ресурсы/пример-было-1.jpg", d1: "../ресурсы/пример-было-2.jpg", d2: "../ресурсы/пример-было-3.jpg", d3: "../ресурсы/пример-стало-1.jpg" }
+    };
+  }
+  function local() { var s = R.get("heal-db", null); if (!s) { s = seed(); R.set("heal-db", s) } return s }
+  function saveLocal(s) { try { localStorage.setItem("razden:heal-db", JSON.stringify(s)); return true } catch (e) { R.toast("Память браузера заполнена: удалите старые фото примера"); return false } }
+  var Store = {
+    all: function () {
+      if (!FB_URL) return Promise.resolve(Object.values(local().meta));
+      return fetch(FB_URL + "/heal_meta.json").then(function (r) { return r.json() }).then(function (j) { var out = []; Object.values(j || {}).forEach(function (c) { out = out.concat(Object.values(c)) }); return out });
+    },
+    mine: function (code) {
+      if (!FB_URL) return Promise.resolve(Object.values(local().meta).filter(function (m) { return m.code === code }));
+      return fetch(FB_URL + "/heal_meta/" + code + ".json").then(function (r) { return r.json() }).then(function (j) { return Object.values(j || {}) });
+    },
+    img: function (id) {
+      if (!FB_URL) return Promise.resolve(local().img[id] || "");
+      return fetch(FB_URL + "/heal_img/" + id + ".json").then(function (r) { return r.json() });
+    },
+    add: function (meta, dataUrl) {
+      if (!FB_URL) { var s = local(); s.meta[meta.id] = meta; s.img[meta.id] = dataUrl; return saveLocal(s) ? Promise.resolve() : Promise.reject() }
+      return fetch(FB_URL + "/heal_img/" + meta.id + ".json", { method: "PUT", body: JSON.stringify(dataUrl) })
+        .then(function () { return fetch(FB_URL + "/heal_meta/" + meta.code + "/" + meta.id + ".json", { method: "PUT", body: JSON.stringify(meta) }) });
+    },
+    patch: function (meta, fields) {
+      Object.assign(meta, fields);
+      if (!FB_URL) { var s = local(); s.meta[meta.id] = meta; saveLocal(s); return Promise.resolve() }
+      return fetch(FB_URL + "/heal_meta/" + meta.code + "/" + meta.id + ".json", { method: "PATCH", body: JSON.stringify(fields) });
+    },
+    remove: function (meta) {
+      if (!FB_URL) { var s = local(); delete s.meta[meta.id]; delete s.img[meta.id]; saveLocal(s); return Promise.resolve() }
+      return fetch(FB_URL + "/heal_img/" + meta.id + ".json", { method: "DELETE" }).then(function () { return fetch(FB_URL + "/heal_meta/" + meta.code + "/" + meta.id + ".json", { method: "DELETE" }) });
+    },
+    reset: function () { R.set("heal-db", seed()) }
+  };
+  var imgCache = {};
+  function imgOf(id) { return imgCache[id] ? Promise.resolve(imgCache[id]) : Store.img(id).then(function (u) { imgCache[id] = u; return u }) }
+  function fillImgs(root) { root.querySelectorAll("[data-img]").forEach(function (el) { imgOf(el.dataset.img).then(function (u) { if (u) el.style.backgroundImage = "url(" + u + ")" }) }) }
+
+  // ---------- состояние клиентки ----------
+  var course = R.get("heal-course", null), demo = !course;
+  if (demo) course = { proc: R.ymd(R.addDays(R.today(), -7)), zone: "zhivot" };
+  function newCode() { var a = "ABCDEFGHJKMNPQRSTUVWXYZ23456789", s = "RZ-"; for (var i = 0; i < 6; i++) s += a[Math.floor(Math.random() * a.length)]; return s }
+  var code = demo ? "RZ-DEMO" : (R.get("heal-code", null) || (function () { var c = newCode(); R.set("heal-code", c); return c })());
+  var mine = [], view = "plan", cur = null, stream = null, shotUrl = null, tx = 0, ty = 0, sc = 1, lastBlob = null, feel = [], consent = false, marina = false, mtab = "queue", all = [];
+
+  function norm(l) { return l.map(function (m) { m.feel = m.feel || []; return m }) }
+  function loadMine() { return Store.mine(code).then(function (l) { mine = norm(l).filter(function (m) { return demo || (m.proc === course.proc && m.zone === course.zone) }) }).catch(function () {}) }
+  function recFor(d) { return mine.filter(function (m) { return m.day === d }).sort(function (a, b) { return a.ts - b.ts }).pop() }
+  function dayIdx() { return Math.round((R.today() - R.parse(course.proc)) / DAY) }
+  function cpDate(c) { return R.addDays(R.parse(course.proc), c.d) }
+  function when(ts) { var d = new Date(ts); return R.date(d, { day: "numeric", month: "short" }) + ", " + d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" }) }
+  function stIcon(s) { return s === "ok" ? R.icon("check") : s === "call" ? R.icon("chat") : R.icon("clock") }
+  function current() {
+    var t = dayIdx(), due = null, next = null;
+    CP.forEach(function (c, k) { var end = CP[k + 1] ? CP[k + 1].d : 9999; if (!recFor(c.d) && t >= c.d && t < end) due = c; if (!next && c.d > t) next = c });
+    return { t: t, due: due, next: next };
+  }
+
+  // ---------- экран клиентки ----------
+  function render() {
+    document.body.classList.toggle("m-mode", marina);
+    if (marina) return renderMarina();
+    var s = current(), h = "";
+    if (demo) h += '<div class="demo">Пример: процедура была неделю назад.<button type="button" id="mine">Указать свою</button></div>';
+    h += '<div class="plan">' + CP.map(function (c) {
+      var r = recFor(c.d), isDue = s.due === c, lbl;
+      if (r) lbl = r.status === "ok" ? '<small class="ok">Марина: всё хорошо</small>' : r.status === "call" ? '<small class="call">Марина ответила</small>' : "<small>ждёт Марину</small>";
+      else lbl = "<small>" + (isDue ? "пора" : s.t > c.d ? "пропущено" : R.date(cpDate(c), { day: "numeric", month: "short" })) + "</small>";
+      return '<button type="button" class="cp' + (isDue ? " due" : "") + '" data-cp="' + c.d + '"><span class="th"' + (r ? ' data-img="' + r.id + '"' : "") + ">" + (r ? '<span class="st ' + r.status + '">' + stIcon(r.status) + "</span>" : isDue ? R.icon("camera") : c.d) + "</span><b>" + c.short + "</b>" + lbl + "</button>";
+    }).join("") + "</div>";
+    if (view === "plan") {
+      var c = s.due || s.next;
+      if (c) {
+        var isDue = s.due === c, left = Math.round((cpDate(c) - R.today()) / DAY);
+        h += '<section class="now"><span class="k">' + (isDue ? "сегодня" : "следующее фото через " + left + " " + R.plural(left, "день", "дня", "дней")) + "</span><h2>" + c.t + "</h2><p>" + c.n + "</p>" +
+          (isDue ? '<button type="button" class="btn btn-gold" data-shoot="' + c.d + '">' + R.icon("camera") + "Сделать фото для Марины</button>" : '<button type="button" class="btn btn-line" id="ics">' + R.icon("bell") + "Напомнить в контрольные дни</button>") + "</section>";
+      } else h += '<section class="now"><span class="k">все снимки сделаны</span><h2>Курс фото завершён</h2><p>Сравните «до» и последнее фото в «Фото-прогрессе».</p><a class="btn btn-gold" href="08-фото-прогресс.html">Открыть сравнение</a></section>';
+      var list = mine.slice().sort(function (a, b) { return (b.reviewedAt || b.ts) - (a.reviewedAt || a.ts) });
+      if (list.length) {
+        h += '<section class="answers"><h2>Ответы Марины</h2>' + list.map(function (m) {
+          var stamp = m.status === "ok" ? '<span class="stamp">' + R.icon("check").replace('class="ico"', 'class="ico" style="width:13px;height:13px;fill:currentColor"') + "Проверено Мариной</span>" : m.status === "call" ? '<span class="stamp call">Марина просит связаться</span>' : '<span class="stamp new">Отправлено, ждёт Марину</span>';
+          return '<div class="ans"><div class="ph" data-img="' + m.id + '"><span class="seal ' + m.status + '">' + stIcon(m.status) + '</span></div><div><div class="ttl">' + m.label + "<span>" + (m.reviewedAt ? when(m.reviewedAt) : when(m.ts)) + "</span></div>" + stamp +
+            (m.note ? '<div class="bubble"><img src="../ресурсы/аватар-лицо.jpg" alt=""><p>' + R.esc(m.note) + "</p></div>" : "") +
+            (m.status === "new" ? '<button type="button" class="nudge" data-nudge="' + m.id + '">Напомнить Марине в Telegram</button>' : "") +
+            (m.consent ? '<div style="font-size:11.5px;color:var(--muted);margin-top:6px">✅ разрешено для постов</div>' : "") + "</div></div>";
+        }).join("") + "</section>";
+      }
+      if (!demo && !R.get("heal-code-sent", false)) h += '<section class="card code"><div><b>' + code + "</b><p>Ваш код. Отправьте его Марине один раз, чтобы она знала, чьи это фото.</p></div><button type=\"button\" id=\"sendCode\">Отправить</button></section>";
+      h += '<div class="btns"><button type="button" class="btn btn-soft" id="other">' + R.icon("plus") + "Внеплановое фото</button>" + (demo ? "" : '<button type="button" class="btn" id="reset" style="min-height:40px;background:none;color:var(--muted);font-weight:700">Другая процедура</button>') + "</div>";
+    }
+    if (view === "shoot") {
+      var prev = CP.filter(function (x) { return x.d < cur.d && recFor(x.d) }).pop(), gp = prev ? recFor(prev.d) : null;
+      h += '<section class="shoot"><div class="stage" id="stage"><video id="video" playsinline muted hidden></video><img class="shot" id="shot" alt="" hidden><img class="ghost" id="ghost" alt=""><div class="grid"></div><span class="tag">' + cur.t + " · «призрак»: " + (gp ? prev.t.toLowerCase() : "пример") + '</span><span class="hint" id="hint">Только зона, без лица и тату. Дневной свет, тот же ракурс</span></div>' +
+        '<label class="range"><span>Прошлый снимок</span><input type="range" id="op" min="0" max="85" value="40"><b id="opv">40%</b></label>' +
+        '<label class="range" id="scRow" hidden><span>Размер</span><input type="range" id="sc" min="70" max="150" value="100"><b id="scv">100%</b></label><div id="ctl"></div></section>';
+      setTimeout(function () { if (gp) imgOf(gp.id).then(function (u) { $("ghost").src = u }); else $("ghost").src = "../ресурсы/пример-было-1.jpg" });
+    }
+    if (view === "review") {
+      h += '<section class="card review"><div class="rv-head"><img src="' + shotUrl + '" alt="Новый снимок"><p><b>' + cur.t + "</b><br>Отметьте самочувствие и отправьте Марине. Она посмотрит и поставит отметку.</p></div>" +
+        '<h3>Как сейчас?</h3><div class="feel" id="feel">' + FEEL.map(function (f) { return '<button type="button" class="chip' + (f[2] ? " alarm" : "") + (feel.indexOf(f[0]) > -1 ? " on" : "") + '" data-f="' + f[0] + '">' + f[1] + "</button>" }).join("") + "</div>" +
+        (feel.some(isAlarm) ? '<div class="alert">Это повод не ждать: отправьте фото Марине сейчас и обратитесь к врачу.</div>' : "") +
+        '<label class="consent"><input type="checkbox" id="ok"' + (consent ? " checked" : "") + "><div><b>Разрешаю использовать это фото в постах @razdensya18</b><span>По желанию. Только зона, без лица и имени. Без галочки фото тоже уйдёт Марине на проверку. Отозвать разрешение можно в любой момент, написав Марине.</span></div></label>" +
+        '<button type="button" class="btn btn-gold" id="send">' + R.icon("send") + 'Отправить Марине на проверку</button><button type="button" class="btn btn-soft" id="back">Переснять</button></section>';
+    }
+    app.innerHTML = h;
+    fillImgs(app);
+    bindClient();
+  }
+
+  function bindClient() {
+    var b;
+    if ((b = $("mine"))) b.onclick = setup;
+    if ((b = $("reset"))) b.onclick = setup;
+    if ((b = $("ics"))) b.onclick = function () {
+      var ev = CP.filter(function (c) { return cpDate(c) >= R.today() }).map(function (c) { var d = cpDate(c); d.setHours(19, 0); return { title: "Фото зоны для Марины: " + c.t.toLowerCase(), start: d, minutes: 10, desc: c.n, alarm: 0 } });
+      R.saveFile("kontrol-zazhivleniya.ics", R.ics(ev)); R.toast("Открываю файл для календаря");
+    };
+    if ((b = $("sendCode"))) b.onclick = function () { R.set("heal-code-sent", true); R.send("Марина, мой код для контроля заживления: " + code + ". Процедура " + R.date(R.parse(course.proc)) + ", зона: " + R.zone(course.zone).name.toLowerCase() + "."); render() };
+    if ((b = $("other"))) b.onclick = function () { var t = dayIdx(); cur = { d: t, t: t + "-й день (внеплановое)", n: "" }; startShoot() };
+    app.querySelectorAll("[data-shoot]").forEach(function (x) { x.onclick = function () { cur = CP.filter(function (c) { return c.d === +x.dataset.shoot })[0]; startShoot() } });
+    app.querySelectorAll("[data-cp]").forEach(function (x) {
+      x.onclick = function () {
+        var c = CP.filter(function (k) { return k.d === +x.dataset.cp })[0], r = recFor(c.d);
+        if (r) { R.toast(c.t + ": " + (r.status === "ok" ? "Марина проверила, всё хорошо" : r.status === "call" ? "Марина просит связаться" : "фото ждёт Марину")); return }
+        if (dayIdx() < c.d) { R.toast(c.t + " — " + R.date(cpDate(c))); return }
+        cur = c; startShoot();
+      };
+    });
+    app.querySelectorAll("[data-nudge]").forEach(function (x) {
+      x.onclick = function () { var m = mine.filter(function (y) { return y.id === x.dataset.nudge })[0]; R.send("Марина, отправила фото на проверку заживления: " + m.label.toLowerCase() + ". Мой код: " + code + ".") };
+    });
+    if (view === "shoot") {
+      var op = $("op"); op.oninput = function () { $("ghost").style.opacity = op.value / 100; $("opv").textContent = op.value + "%" }; op.oninput();
+      $("sc").oninput = function () { sc = this.value / 100; setT() };
+      var st = $("stage"), drag = null;
+      st.onpointerdown = function (e) { if ($("shot").hidden) return; drag = { x: e.clientX - tx, y: e.clientY - ty }; st.setPointerCapture(e.pointerId) };
+      st.onpointermove = function (e) { if (!drag) return; tx = e.clientX - drag.x; ty = e.clientY - drag.y; setT() };
+      st.onpointerup = function () { drag = null };
+      ctl("start");
+    }
+    if (view === "review") {
+      $("feel").onclick = function (e) { var x = e.target.closest(".chip"); if (!x) return; var f = x.dataset.f, k = feel.indexOf(f); if (k > -1) feel.splice(k, 1); else { feel = f === "ok" ? [] : feel.filter(function (y) { return y !== "ok" }); feel.push(f) } render() };
+      $("ok").onchange = function () { consent = this.checked };
+      $("send").onclick = send;
+      $("back").onclick = function () { startShoot() };
+    }
+  }
+
+  function setT() { var s = $("shot"); if (s) s.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + sc + ")"; var v = $("scv"); if (v) v.textContent = Math.round(sc * 100) + "%" }
+  function ctl(mode) {
+    var c = $("ctl"); if (!c) return;
+    $("video").hidden = mode !== "live"; $("shot").hidden = mode !== "align"; $("scRow").hidden = mode !== "align";
+    if (mode === "start") c.innerHTML = '<div class="btns" style="margin:0"><button type="button" class="btn btn-gold" id="cam">' + R.icon("camera") + 'Включить камеру</button><button type="button" class="btn btn-line" id="pick">Сфотографировать телефоном</button><button type="button" class="btn" id="cancel" style="min-height:40px;background:none;color:var(--muted);font-weight:700">Отмена</button></div>';
+    if (mode === "live") c.innerHTML = '<button type="button" class="shutter" id="snap" aria-label="Снять"></button><p class="tip">Совместите контуры с прошлым снимком и снимайте</p>';
+    if (mode === "align") { $("hint").textContent = "Сдвиньте пальцем и подгоните размер, чтобы контуры совпали"; c.innerHTML = '<div class="two"><button type="button" class="btn btn-soft" id="redo">Переснять</button><button type="button" class="btn btn-gold" id="done">Готово</button></div>' }
+    var b;
+    if ((b = $("cam"))) b.onclick = function () {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { R.toast("Камера здесь недоступна. Сфотографируйте телефоном"); $("file").click(); return }
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false }).then(function (s) { stream = s; $("video").srcObject = s; $("video").play(); ctl("live") })
+        .catch(function () { R.toast("Камеру не включить в этом окне. Сфотографируйте телефоном"); $("file").click() });
+    };
+    if ((b = $("pick"))) b.onclick = function () { $("file").click() };
+    if ((b = $("cancel"))) b.onclick = function () { stopCam(); view = "plan"; render() };
+    if ((b = $("snap"))) b.onclick = snap;
+    if ((b = $("redo"))) b.onclick = function () { ctl("start") };
+    if ((b = $("done"))) b.onclick = finish;
+  }
+  function startShoot() { view = "shoot"; tx = ty = 0; sc = 1; feel = []; consent = false; lastBlob = null; render(); var st = $("stage"); if (st) window.scrollTo(0, st.getBoundingClientRect().top + window.scrollY - 70) }
+  function stopCam() { if (stream) stream.getTracks().forEach(function (t) { t.stop() }); stream = null }
+  function snap() {
+    var v = $("video"), c = document.createElement("canvas"), W = 800, H = 1000; c.width = W; c.height = H;
+    var x = c.getContext("2d"), k = Math.max(W / v.videoWidth, H / v.videoHeight); x.drawImage(v, (W - v.videoWidth * k) / 2, (H - v.videoHeight * k) / 2, v.videoWidth * k, v.videoHeight * k);
+    c.toBlob(function (b) { stopCam(); useShot(b) }, "image/jpeg", .9);
+  }
+  function useShot(blob) { if (shotUrl) URL.revokeObjectURL(shotUrl); shotUrl = URL.createObjectURL(blob); $("shot").src = shotUrl; tx = ty = 0; sc = 1; $("sc").value = 100; setT(); ctl("align") }
+  var lastData = "";
+  function finish() {
+    var img = $("shot"), st = $("stage").getBoundingClientRect(), W = 640, H = 800, k = W / st.width, c = document.createElement("canvas"); c.width = W; c.height = H;
+    var x = c.getContext("2d"); x.fillStyle = "#1f1a14"; x.fillRect(0, 0, W, H); x.translate(W / 2 + tx * k, H / 2 + ty * k); x.scale(sc, sc);
+    var s0 = Math.max(W / img.naturalWidth, H / img.naturalHeight); x.drawImage(img, -img.naturalWidth * s0 / 2, -img.naturalHeight * s0 / 2, img.naturalWidth * s0, img.naturalHeight * s0);
+    try { lastData = c.toDataURL("image/jpeg", .72) } catch (e) { lastData = "" }
+    c.toBlob(function (b) { lastBlob = b; if (shotUrl) URL.revokeObjectURL(shotUrl); shotUrl = URL.createObjectURL(b); view = "review"; render() }, "image/jpeg", .85);
+  }
+  function send() {
+    if (!lastData) { R.toast("Не получилось подготовить фото. Попробуйте ещё раз"); return }
+    var meta = { id: String(Date.now()), code: code, zone: course.zone, proc: course.proc, day: cur.d, label: cur.t, ts: Date.now(), feel: feel.slice(), consent: consent, status: "new" };
+    Store.add(meta, lastData).then(function () {
+      imgCache[meta.id] = lastData;
+      // копия в личный фотодневник («Фото-прогресс»), только на этом телефоне
+      if (!demo) try { var rq = indexedDB.open("razden-photos", 1); rq.onupgradeneeded = function () { rq.result.createObjectStore("p", { keyPath: "id" }) }; rq.onsuccess = function () { rq.result.transaction("p", "readwrite").objectStore("p").put({ id: meta.id, zone: meta.zone, date: R.ymd(R.today()), blob: lastBlob }) } } catch (e) {}
+      view = "plan"; return loadMine().then(function () { render(); R.toast(consent ? "Отправлено Марине. Фото с разрешением для постов" : "Отправлено Марине на проверку") });
+    }, function () { R.toast("Не отправилось. Проверьте интернет и попробуйте ещё раз") });
+  }
+  function setup() {
+    app.innerHTML = '<section class="card setup"><div class="field"><label for="pd">Дата процедуры</label><input class="input" type="date" id="pd" value="' + R.ymd(R.today()) + '"></div><div class="field"><label>Зона</label><div class="chips" id="pz">' + R.zones.map(function (z) { return '<button type="button" class="chip' + (z.id === course.zone ? " on" : "") + '" data-z="' + z.id + '">' + z.name + "</button>" }).join("") + '</div></div><button type="button" class="btn btn-gold" id="go">Начать контроль заживления</button><button type="button" class="btn btn-soft" id="back">Отмена</button></section>';
+    var zone = course.zone;
+    $("pz").onclick = function (e) { var x = e.target.closest(".chip"); if (!x) return; zone = x.dataset.z; this.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("on", c === x) }) };
+    $("go").onclick = function () {
+      course = { proc: $("pd").value || R.ymd(R.today()), zone: zone }; demo = false; R.set("heal-course", course);
+      code = R.get("heal-code", null) || newCode(); R.set("heal-code", code);
+      view = "plan"; loadMine().then(render);
+    };
+    $("back").onclick = render;
+  }
+
+  // ---------- кабинет Марины ----------
+  var names = R.get("heal-names", {});
+  function renderMarina() {
+    var queue = all.filter(function (m) { return m.status === "new" }).sort(function (a, b) { return (b.feel.some(isAlarm) - a.feel.some(isAlarm)) || a.ts - b.ts });
+    var port = all.filter(function (m) { return m.consent }).sort(function (a, b) { return b.ts - a.ts });
+    var done = all.filter(function (m) { return m.status !== "new" }).sort(function (a, b) { return (b.reviewedAt || 0) - (a.reviewedAt || 0) });
+    var h = '<div class="mhead"><h2>Кабинет Марины</h2><button type="button" id="mexit">Выйти</button></div>' +
+      '<div class="mtabs"><button type="button" data-mt="queue" aria-pressed="' + (mtab === "queue") + '">Проверить' + (queue.length ? "<i>" + queue.length + "</i>" : "") + '</button><button type="button" data-mt="port" aria-pressed="' + (mtab === "port") + '">Портфолио<i>' + port.length + '</i></button><button type="button" data-mt="done" aria-pressed="' + (mtab === "done") + '">Проверено</button></div>';
+    if (mtab === "queue") {
+      h += queue.length ? queue.map(function (m) {
+        var prev = all.filter(function (p) { return p.code === m.code && p.zone === m.zone && p.ts < m.ts }).sort(function (a, b) { return b.ts - a.ts })[0];
+        return '<section class="card q" data-id="' + m.id + '"><div class="big" data-img="' + m.id + '"><div class="badge">' + (m.consent ? '<span class="yes">✅ можно в посты</span>' : "<span>только проверка</span>") + (m.demo ? '<span class="ex">пример</span>' : "") + "</div>" +
+          (prev ? '<div class="prev" data-img="' + prev.id + '"><span>' + R.esc(prev.label) + "</span></div>" : "") + "</div>" +
+          '<div class="who"><b>' + m.code + '</b><input data-name="' + m.code + '" placeholder="Подписать: кто это" value="' + R.esc(names[m.code] || "") + '" aria-label="Имя клиентки"></div>' +
+          '<div class="meta">' + R.esc(m.label) + " · " + R.zone(m.zone).name + " · процедура " + R.date(R.parse(m.proc)) + " · прислано " + when(m.ts) + "</div>" +
+          '<div class="feels">' + (m.feel.length ? m.feel.map(function (f) { return '<span class="' + (isAlarm(f) ? "bad" : "") + '">' + feelName(f) + "</span>" }).join("") : "<span>самочувствие не отмечено</span>") + "</div>" +
+          '<div class="tpl">' + TPL.ok.concat(TPL.call).map(function (t) { return '<button type="button" data-tpl="' + R.esc(t) + '">' + t + "</button>" }).join("") + "</div>" +
+          '<textarea data-note placeholder="Комментарий клиентке (увидит под фото)"></textarea>' +
+          '<div class="two"><button type="button" class="btn call-b" data-st="call">Нужно связаться</button><button type="button" class="btn ok-b" data-st="ok">' + R.icon("check") + "Всё по плану</button></div></section>";
+      }).join("") : '<section class="card" style="text-align:center"><b>Всё проверено</b><p style="margin:6px 0 0;font-size:13px;color:var(--muted)">Новые фото появятся здесь сами.</p></section>';
+    }
+    if (mtab === "port") {
+      h += port.length ? '<div class="port">' + port.map(function (m) { return '<button type="button" class="pt' + (m.star ? " starred" : "") + (m.used ? " used" : "") + '" data-img="' + m.id + '" data-pid="' + m.id + '"><span class="star">' + R.icon("star") + "</span></button>" }).join("") + "</div>" : '<section class="card"><p style="margin:0;font-size:13px">Здесь появятся фото, которые клиентки разрешили использовать в постах.</p></section>';
+      h += '<p class="mnote">Нажмите на фото: отметить звёздочкой для контента, «в посте» или сохранить. Сюда попадают только фото с разрешением клиентки.</p>';
+    }
+    if (mtab === "done") {
+      h += '<section class="card">' + (done.length ? done.map(function (m) { return '<div class="done-row"><div class="ph" data-img="' + m.id + '"></div><div><b>' + (names[m.code] || m.code) + "</b> · " + R.esc(m.label) + '<div style="font-size:12px;color:var(--muted)">' + R.esc(m.note || "без комментария") + '</div></div><span style="color:' + (m.status === "ok" ? "var(--ok)" : "var(--warn)") + '">' + (m.status === "ok" ? "всё хорошо" : "связаться") + "</span></div>" }).join("") : "<p style=\"margin:0;font-size:13px\">Пока ничего не проверено.</p>") + "</section>";
+    }
+    h += '<p class="mnote">Имена клиенток хранятся только в этом телефоне. Фото без разрешения на посты удаляются через ' + KEEP_DAYS + " дней после проверки." + (FB_URL ? "" : " Сейчас пример: фото лежат только в этом телефоне.") + '</p>' + (FB_URL ? "" : '<button type="button" class="door" id="mreset">Вернуть пример</button>');
+    app.innerHTML = h;
+    fillImgs(app);
+    bindMarina();
+  }
+  function bindMarina() {
+    $("mexit").onclick = function () { marina = false; loadMine().then(render); window.scrollTo(0, 0) };
+    var rs = $("mreset"); if (rs) rs.onclick = function () { if (FB_URL) return; Store.reset(); imgCache = {}; openMarina() };
+    app.querySelectorAll("[data-mt]").forEach(function (b) { b.onclick = function () { mtab = b.dataset.mt; render() } });
+    app.querySelectorAll("[data-name]").forEach(function (inp) { inp.onchange = function () { names[inp.dataset.name] = inp.value.trim(); R.set("heal-names", names) } });
+    app.querySelectorAll(".q").forEach(function (card) {
+      var m = all.filter(function (x) { return x.id === card.dataset.id })[0], ta = card.querySelector("[data-note]");
+      card.querySelectorAll("[data-tpl]").forEach(function (b) { b.onclick = function () { ta.value = b.dataset.tpl } });
+      card.querySelectorAll("[data-st]").forEach(function (b) {
+        b.onclick = function () {
+          var st = b.dataset.st;
+          Store.patch(m, { status: st, note: ta.value.trim() || (st === "ok" ? "Всё заживает как надо" : "Напишите мне, пожалуйста"), reviewedAt: Date.now() }).then(function () {
+            R.toast(st === "ok" ? "Отмечено: всё по плану. Клиентка увидит отметку" : "Отмечено: нужно связаться. Напишите клиентке");
+            render();
+          });
+        };
+      });
+    });
+    app.querySelectorAll("[data-pid]").forEach(function (b) {
+      b.onclick = function () {
+        var m = all.filter(function (x) { return x.id === b.dataset.pid })[0];
+        R.closeSheet();
+        var back = document.createElement("div"); back.className = "sheet-back";
+        back.innerHTML = '<div class="sheet"><h3>' + R.esc(names[m.code] || m.code) + " · " + R.esc(m.label) + '</h3><div style="aspect-ratio:4/5;border-radius:16px;background:var(--cream-2) center/cover" data-img="' + m.id + '"></div><p class="hint">' + R.zone(m.zone).name + ", прислано " + when(m.ts) + ". Разрешение на посты дано в момент отправки.</p>" +
+          '<button type="button" class="btn btn-gold" data-a="star">' + R.icon("star") + (m.star ? "Убрать из отобранных" : "Отобрать для контента") + '</button><button type="button" class="btn btn-line" data-a="used">' + (m.used ? "Снять отметку «в посте»" : "Отметить «уже в посте»") + '</button><button type="button" class="btn btn-soft" data-a="save">' + R.icon("image") + 'Сохранить фото</button><button type="button" class="btn" data-close style="min-height:40px;background:none;color:var(--muted);font-weight:700">Закрыть</button></div>';
+        document.body.appendChild(back); fillImgs(back);
+        back.addEventListener("click", function (e) {
+          if (e.target === back || e.target.closest("[data-close]")) { R.closeSheet(); return }
+          var a = e.target.closest("[data-a]"); if (!a) return;
+          if (a.dataset.a === "star") Store.patch(m, { star: !m.star }).then(function () { R.closeSheet(); render() });
+          if (a.dataset.a === "used") Store.patch(m, { used: !m.used }).then(function () { R.closeSheet(); render() });
+          if (a.dataset.a === "save") imgOf(m.id).then(function (u) { var l = document.createElement("a"); l.href = u; l.download = "portfolio-" + m.code + "-" + m.day + ".jpg"; document.body.appendChild(l); l.click(); l.remove(); R.toast("Сохраняю фото") });
+        });
+      };
+    });
+  }
+  function cleanup() {
+    var limit = Date.now() - KEEP_DAYS * DAY;
+    return Promise.all(all.filter(function (m) { return !m.demo && !m.consent && m.status !== "new" && m.reviewedAt && m.reviewedAt < limit }).map(Store.remove));
+  }
+  function openMarina() { return Store.all().then(function (l) { all = norm(l); return cleanup() }).then(function () { return Store.all() }).then(function (l) { all = norm(l); marina = true; render(); window.scrollTo(0, 0) }).catch(function () { R.toast("Не удалось загрузить фото") }) }
+
+  $("door").addEventListener("click", function () {
+    R.closeSheet();
+    var back = document.createElement("div"); back.className = "sheet-back";
+    back.innerHTML = '<form class="sheet"><h3>Вход для Марины</h3><p class="hint">В рабочей версии — вход Марины по почте и паролю. Для просмотра код: 1806</p><input class="input" id="pin" inputmode="numeric" maxlength="4" autocomplete="off" aria-label="Код" style="text-align:center;letter-spacing:.4em;font-size:22px;font-weight:800"><button class="btn btn-gold">Войти</button><button type="button" class="btn btn-soft" data-close>Отмена</button></form>';
+    document.body.appendChild(back);
+    back.addEventListener("click", function (e) { if (e.target === back || e.target.closest("[data-close]")) R.closeSheet() });
+    back.querySelector("form").addEventListener("submit", function (e) { e.preventDefault(); if ($("pin").value === PIN) { R.closeSheet(); openMarina() } else { R.toast("Неверный код"); $("pin").value = "" } });
+    $("pin").focus();
+  });
+  $("file").addEventListener("change", function () { var f = this.files[0]; if (f && view === "shoot") useShot(f); this.value = "" });
+  document.addEventListener("visibilitychange", function () { if (!document.hidden && !marina && view === "plan") loadMine().then(render) });
+  if (FB_URL) setInterval(function () { if (!document.hidden && !marina && view === "plan") loadMine().then(render) }, 30000);
+  if (!FB_URL) local();
+  loadMine().then(render);
+})();
+</script>
+</body>
+</html>
