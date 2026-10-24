@@ -53,14 +53,14 @@
   R.designs = [
     { n: "01", file: "01-шёлк.html", name: "Шёлк", what: "Классика бренда: шёлк, лайн-арт и тонкое золото" },
     { n: "02", file: "02-ночь.html", name: "Ночь", what: "Шоколад и золото, лицо рисуется линией при открытии" },
-    { n: "03", file: "03-журнал.html", name: "Журнал", what: "Обложка глянца: рубрики вместо кнопок" },
+    { n: "03", file: "03-журнал.html", name: "Журнал", what: "Обложка глянца: буквы падают, рубрики «печатаются»" },
     { n: "04", file: "04-линия.html", name: "Одна линия", what: "Золотая линия ведёт от лица через все разделы" },
-    { n: "05", file: "05-арка.html", name: "Арка", what: "Арочные окна, нюд и розовое золото" },
-    { n: "06", file: "06-бенто.html", name: "Бенто", what: "Плитки-виджеты, как экран телефона" },
-    { n: "07", file: "07-аура.html", name: "Аура", what: "Мягкие светящиеся пятна и матовое стекло" },
-    { n: "08", file: "08-сторис.html", name: "Сторис", what: "Каждый раздел на весь экран, листается вниз" },
+    { n: "05", file: "05-арка.html", name: "Арка", what: "Арочное окно открывается, встаёт солнце, арки растут" },
+    { n: "06", file: "06-бенто.html", name: "Бенто", what: "Живые виджеты: цена набегает, «до/после» само двигается" },
+    { n: "07", file: "07-аура.html", name: "Аура", what: "Дышащее свечение, блоки проявляются из размытия" },
+    { n: "08", file: "08-сторис.html", name: "Сторис", what: "Каждый раздел на весь экран, содержимое въезжает" },
     { n: "09", file: "09-приглашение.html", name: "Приглашение", what: "Конверт с сургучной печатью открывается при входе" },
-    { n: "10", file: "10-тиснение.html", name: "Тиснение", what: "Плотная бумага, монограмма и выпуклые кнопки" }
+    { n: "10", file: "10-тиснение.html", name: "Тиснение", what: "Пресс выдавливает монограмму, плитки поднимаются из бумаги" }
   ];
 
   // ---------- иконки ----------
@@ -206,9 +206,20 @@
     }
   }
 
+  // Появление блоков при прокрутке: элементам с data-reveal="N" добавляется класс in (N — задержка в шагах)
+  R.reveal = function () {
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) { els.forEach(function (e) { e.classList.add("in") }); return }
+    document.documentElement.classList.add("rv");
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target) } }) }, { threshold: .12, rootMargin: "0px 0px -6% 0px" });
+    els.forEach(function (e) { e.style.setProperty("--i", e.dataset.reveal || 0); io.observe(e) });
+  };
+
   // ---------- при загрузке ----------
   function boot() {
     keepScroll();
+    R.reveal();
     document.querySelectorAll(".contacts:empty").forEach(function (el) { el.innerHTML = R.contactsHTML() });
     document.querySelectorAll(".signature:empty").forEach(function (el) { el.textContent = "Специалист: " + R.contacts.master + " · " + R.contacts.handle });
     document.querySelectorAll("[data-icon]").forEach(function (el) { if (!el.querySelector("svg")) el.insertAdjacentHTML("afterbegin", R.icon(el.dataset.icon)) });

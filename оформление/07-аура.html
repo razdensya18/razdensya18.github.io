@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="../общее/бренд.css">
 <style>
-/* Аура: тёплое свечение кожи. За матовым стеклом медленно дышат пятна персика, шампани и золота */
+/* Аура: тёплое свечение кожи. Пятна персика и шампани дышат за матовым стеклом, блоки проявляются из размытия, по стеклу пробегает блик */
 :root { --base: #f8efe6; --ink: #3a2c20; --soft: #6f5d4c; --glass: rgba(255,255,255,.42); --edge: rgba(255,255,255,.75) }
 html, body { background: var(--base) }
 body { color: var(--ink) }
@@ -20,12 +20,19 @@ body { color: var(--ink) }
 .aura i:nth-child(4) { width: 35vmax; height: 35vmax; right: 0; bottom: 5vh; background: #e2b45a; opacity: .45; animation-duration: 31s }
 @keyframes drift { 50% { transform: translate(6vmax, 4vmax) scale(1.08) } 100% { transform: translate(-4vmax, 7vmax) scale(.95) } }
 .wrap { position: relative; z-index: 1; max-width: 440px; margin: 0 auto; padding: 30px max(20px, env(safe-area-inset-left, 0px)) 36px; text-align: center }
-.halo { width: 132px; height: 132px; margin: 0 auto; border-radius: 50%; background: var(--glass) url("../ресурсы/лайн-арт-лицо.png") 46% 30% / 118% auto no-repeat; border: 1px solid var(--edge); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 20px 50px -24px rgba(160,110,60,.55), inset 0 1px 0 rgba(255,255,255,.8) }
-.logo-text { display: block; margin-top: 18px; font-size: clamp(44px, 13vw, 60px) }
-.slogan { margin: 8px auto 0; font: 400 14px/1.35 var(--f-display); color: #6e5520; max-width: 26ch }
-.intro { margin: 14px auto 0; font-size: 14px; line-height: 1.6; color: var(--soft); max-width: 31ch }
+.halo { width: 132px; height: 132px; margin: 0 auto; border-radius: 50%; background: var(--glass) url("../ресурсы/лайн-арт-лицо.png") 46% 30% / 118% auto no-repeat; border: 1px solid var(--edge); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 20px 50px -24px rgba(160,110,60,.55), inset 0 1px 0 rgba(255,255,255,.8); animation: breathe 5s ease-in-out infinite }
+@keyframes breathe { 50% { box-shadow: 0 20px 60px -14px rgba(226,180,90,.7), inset 0 1px 0 rgba(255,255,255,.8); transform: scale(1.03) } }
+.logo-text { display: block; margin-top: 18px; font-size: clamp(44px, 13vw, 60px); animation: unblur 1.4s ease .2s both }
+@keyframes unblur { from { opacity: 0; filter: blur(10px) } }
+.slogan { margin: 8px auto 0; font: 400 14px/1.35 var(--f-display); color: #6e5520; max-width: 26ch; animation: unblur 1.4s ease .45s both }
+.intro { margin: 14px auto 0; font-size: 14px; line-height: 1.6; color: var(--soft); max-width: 31ch; animation: unblur 1.4s ease .6s both }
+.rv [data-reveal] { transform: translateY(14px) scale(.98); filter: blur(8px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1), filter .9s ease; transition-delay: calc(var(--i, 0) * 90ms) }
+.rv [data-reveal].in { filter: none; transform: none }
 .stack { margin: 24px 0 0; display: grid; gap: 10px; text-align: left }
-.g { display: grid; grid-template-columns: 42px 1fr 20px; gap: 12px; align-items: center; padding: 13px 14px; border-radius: 20px; text-decoration: none; color: var(--ink); background: var(--glass); border: 1px solid var(--edge); -webkit-backdrop-filter: blur(18px) saturate(1.2); backdrop-filter: blur(18px) saturate(1.2); box-shadow: 0 12px 30px -22px rgba(120,80,40,.6), inset 0 1px 0 rgba(255,255,255,.8); transition: transform .15s, background .2s }
+.glass { background: var(--glass); border: 1px solid var(--edge); -webkit-backdrop-filter: blur(18px) saturate(1.2); backdrop-filter: blur(18px) saturate(1.2); box-shadow: 0 12px 30px -22px rgba(120,80,40,.6), inset 0 1px 0 rgba(255,255,255,.8); position: relative; overflow: hidden }
+.glass::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); animation: sweep 7s ease-in-out infinite; animation-delay: calc(var(--i, 0) * .6s + 2s); pointer-events: none }
+@keyframes sweep { 0%, 80% { left: -60% } 100% { left: 130% } }
+.g { display: grid; grid-template-columns: 42px 1fr 20px; gap: 12px; align-items: center; padding: 13px 14px; border-radius: 20px; text-decoration: none; color: var(--ink) }
 .g:active { transform: scale(.985) }
 .g .ic { width: 42px; height: 42px; border-radius: 14px; background: rgba(255,255,255,.65); display: grid; place-items: center; color: var(--gold-t) }
 .g .ic svg { width: 20px; height: 20px; fill: currentColor }
@@ -35,11 +42,30 @@ body { color: var(--ink) }
 .g.main { background: linear-gradient(180deg, rgba(143,108,34,.92), rgba(74,56,16,.92)); color: #fff8ea; border-color: rgba(255,230,180,.6) }
 .g.main .ic { background: rgba(255,248,234,.2); color: #fff3d4 }
 .g.main .d { color: #f1e2bf } .g.main > svg { fill: #f1e2bf }
-.links { display: flex; justify-content: center; gap: 12px; margin-top: 24px }
-.links a { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: var(--glass); border: 1px solid var(--edge); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px) }
+.h2 { margin: 38px 0 12px; font: 400 28px/1.05 var(--f-display) }
+.panel { border-radius: 24px; padding: 16px; text-align: left }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: s }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; font-size: 13px; color: var(--soft); line-height: 1.45 }
+.steps li::before { content: counter(s); width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.7); display: grid; place-items: center; font: 400 18px/1 var(--f-display); color: var(--gold-t) }
+.steps b { display: block; font-size: 14.5px; color: var(--ink) }
+.price div { display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,.7); align-items: baseline; font-size: 13.5px }
+.price div:last-child { border-bottom: 0 }
+.price b { font-size: 16px; white-space: nowrap; font-variant-numeric: tabular-nums; color: #6e5520 }
+.note { margin: 10px 0 0; font-size: 12.5px; color: var(--soft) }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center }
+.pills a { padding: 11px 16px; border-radius: 999px; text-decoration: none; color: var(--ink); font-size: 13.5px; font-weight: 700 }
+.faq details { border-bottom: 1px solid rgba(255,255,255,.7) }
+.faq details:last-child { border-bottom: 0 }
+.faq summary { list-style: none; cursor: pointer; padding: 13px 0; display: flex; justify-content: space-between; gap: 10px; font-weight: 700; font-size: 14.5px }
+.faq summary::-webkit-details-marker { display: none }
+.faq summary::after { content: "+"; color: var(--gold-t); font-size: 18px; line-height: 1; transition: transform .3s }
+.faq details[open] summary::after { transform: rotate(45deg) }
+.faq p { margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: var(--soft) }
+.links { display: flex; justify-content: center; gap: 12px; margin-top: 28px }
+.links a { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: var(--ink) }
 .links svg { width: 22px; height: 22px; fill: currentColor }
 .sign { margin: 20px 0 0; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--soft) }
-@media (prefers-reduced-motion: reduce) { .aura i { animation: none } }
+@media (prefers-reduced-motion: reduce) { .aura i, .halo, .logo-text, .slogan, .intro, .glass::after { animation: none } }
 </style>
 </head>
 <body data-design="07">
@@ -50,16 +76,44 @@ body { color: var(--ink) }
   <p class="slogan">Коррекция растяжек и шрамов · Эстетика лица и тела</p>
   <p class="intro">Ижевск, по записи. Аппарат и сыворотка StriaLess, консультация перед каждой процедурой.</p>
   <div class="stack">
-    <a class="g main" href="../варианты/02-запись.html"><span class="ic" data-icon="cal"></span><span><b>Записаться на консультацию</b><span class="d">Зона, день и время за минуту</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
-    <a class="g" href="../варианты/01-калькулятор.html"><span class="ic" data-icon="list"></span><span><b>Сколько стоит курс</b><span class="d">Отметьте зоны — посчитаем</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
-    <a class="g" href="../варианты/04-тест.html"><span class="ic" data-icon="help"></span><span><b>Какие у меня растяжки</b><span class="d">Тест из пяти вопросов</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
-    <a class="g" href="../варианты/17-камера.html"><span class="ic" data-icon="camera"></span><span><b>До и после</b><span class="d">Сравните свои фото ползунком</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
-    <a class="g" href="../варианты/07-дневник-ухода.html"><span class="ic" data-icon="drop"></span><span><b>Уход после процедуры</b><span class="d">Что делать день за днём</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="g glass main" data-reveal="0" href="../варианты/02-запись.html"><span class="ic" data-icon="cal"></span><span><b>Записаться на консультацию</b><span class="d">Зона, день и время за минуту</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="g glass" data-reveal="1" href="../варианты/01-калькулятор.html"><span class="ic" data-icon="list"></span><span><b>Сколько стоит курс</b><span class="d">Отметьте зоны — посчитаем</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="g glass" data-reveal="2" href="../варианты/04-тест.html"><span class="ic" data-icon="help"></span><span><b>Какие у меня растяжки</b><span class="d">Тест из пяти вопросов</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="g glass" data-reveal="3" href="../варианты/17-камера.html"><span class="ic" data-icon="camera"></span><span><b>До и после</b><span class="d">Сравните свои фото ползунком</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
+    <a class="g glass" data-reveal="4" href="../варианты/07-дневник-ухода.html"><span class="ic" data-icon="drop"></span><span><b>Уход после процедуры</b><span class="d">Что делать день за днём</span></span><svg viewBox="0 0 24 24"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg></a>
   </div>
+
+  <h2 class="h2" data-reveal>Как проходит процедура</h2>
+  <div class="panel glass" data-reveal><ol class="steps">
+    <li><span><b>Консультация</b>Смотрим зону и противопоказания, честно говорим, чего ждать</span></li>
+    <li><span><b>Стерильность</b>Одноразовые картриджи вскрывают при вас</span></li>
+    <li><span><b>Процедура</b>Аппарат прорабатывает растяжки, StriaLess успокаивает кожу</span></li>
+    <li><span><b>Уход дома</b>Памятка и дневник ухода по дням</span></li>
+  </ol></div>
+
+  <h2 class="h2" data-reveal>Цены</h2>
+  <div class="panel glass price" data-reveal><div><span>Живот, бока, бёдра</span><b>5 000 ₽</b></div><div><span>Поясница, руки, внутр. поверхность бёдер, икры</span><b>4 000 ₽</b></div><div><span>Шрам, шов, рубец</span><b>от 2 000 ₽</b></div></div>
+  <p class="note" data-reveal>За одну процедуру на одну зону. Обычно нужно 2–3 процедуры.</p>
+
+  <h2 class="h2" data-reveal>Ещё полезное</h2>
+  <div class="pills">
+    <a class="glass" data-reveal="0" href="../варианты/05-можно-ли-мне.html">Можно ли мне?</a>
+    <a class="glass" data-reveal="1" href="../варианты/09-сертификат.html">Сертификат</a>
+    <a class="glass" data-reveal="2" href="../варианты/16-пригласи-подругу.html">Пригласи подругу</a>
+    <a class="glass" data-reveal="3" href="../варианты/13-как-дойти.html">Как дойти</a>
+  </div>
+
+  <h2 class="h2" data-reveal>Частые вопросы</h2>
+  <div class="panel glass faq" data-reveal>
+    <details><summary>Сколько процедур нужно?</summary><p>Чаще всего 2–3 на одну зону, с интервалом не меньше месяца.</p></details>
+    <details><summary>Это больно?</summary><p>Ощущения индивидуальны и зависят от зоны. Можно делать паузы.</p></details>
+    <details><summary>Когда заметен результат?</summary><p>Постепенно, несколько месяцев. Растяжка становится менее заметной; стереть её полностью не может ни одна методика.</p></details>
+  </div>
+
   <nav class="links" aria-label="Контакты">
-    <a href="https://vk.me/razdensya18" target="_blank" rel="noopener" aria-label="ВКонтакте" data-icon="vk"></a>
-    <a href="https://t.me/razdensya18" target="_blank" rel="noopener" aria-label="Telegram" data-icon="tg"></a>
-    <a href="https://instagram.com/razdensya18" target="_blank" rel="noopener" aria-label="Instagram" data-icon="ig"></a>
+    <a class="glass" href="https://vk.me/razdensya18" target="_blank" rel="noopener" aria-label="ВКонтакте" data-icon="vk"></a>
+    <a class="glass" href="https://t.me/razdensya18" target="_blank" rel="noopener" aria-label="Telegram" data-icon="tg"></a>
+    <a class="glass" href="https://instagram.com/razdensya18" target="_blank" rel="noopener" aria-label="Instagram" data-icon="ig"></a>
   </nav>
   <p class="sign">Марина Гайнуллина · @razdensya18</p>
 </main>

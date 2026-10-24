@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&display=swap">
 <link rel="stylesheet" href="../общее/бренд.css">
 <style>
-/* Бенто: экран как набор виджетов. Каждая плитка уже показывает кусочек своей функции: цену, палитру растяжек, «до/после», шкалу ухода */
+/* Бенто: экран как набор живых виджетов. Плитки выпрыгивают по очереди, цена набегает, «до/после» само двигается, дни ухода заполняются */
 :root { --bg: #f1eadf; --choc: #2a2119; --ivory: #fbf7f0; --nude: #e8d6c6; --ink: #2e261b; --soft: #776a58; --r: 24px }
 body { background: var(--bg); color: var(--ink) }
 .wrap { max-width: 460px; margin: 0 auto; padding: 16px max(14px, env(safe-area-inset-left, 0px)) 30px }
@@ -16,61 +16,117 @@ body { background: var(--bg); color: var(--ink) }
 .hd .logo-text { font-size: 36px }
 .hd small { display: block; font: 400 12px/1.3 var(--f-display); color: #6e5520; margin-top: 4px }
 .hd .pl { font-size: 11px; font-weight: 800; color: var(--soft); text-align: right; line-height: 1.4 }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
-.t { position: relative; overflow: hidden; border-radius: var(--r); padding: 16px; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; justify-content: space-between; min-height: 150px; transition: transform .15s }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px }
+.rv .t[data-reveal] { transform: scale(.9) translateY(14px); transition: opacity .6s ease, transform .7s cubic-bezier(.3,1.4,.5,1); transition-delay: calc(var(--i, 0) * 70ms) }
+.rv .t[data-reveal].in { transform: none }
+.t { position: relative; overflow: hidden; border-radius: var(--r); padding: 16px; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; justify-content: space-between; min-height: 150px }
 .t:active { transform: scale(.98) }
 .t .k { font-size: 10px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; opacity: .7 }
 .t b { display: block; font: 400 24px/1.02 var(--f-display); margin-top: 6px; position: relative }
 .t .d { font-size: 12px; opacity: .75; margin-top: 4px; display: block }
 .go { position: absolute; right: 12px; top: 12px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center }
 .go svg { width: 18px; height: 18px; fill: currentColor }
-.a { grid-column: 1 / 3; background: var(--choc); color: #f5ecda; min-height: 190px }
+.span2 { grid-column: 1 / 3 }
+.a { background: var(--choc); color: #f5ecda; min-height: 190px }
 .a b { font-size: 34px; max-width: 70% }
-.a .go { background: linear-gradient(180deg, #e9c56f, #b8862a); color: #1a140d }
-.a img { position: absolute; right: -30px; bottom: -40px; height: 230px; opacity: .55; pointer-events: none }
+.a .go { background: linear-gradient(180deg, #e9c56f, #b8862a); color: #1a140d; animation: nudge 2.4s ease-in-out infinite }
+@keyframes nudge { 50% { transform: translateX(4px) } }
+.a img { position: absolute; right: -30px; bottom: -40px; height: 230px; opacity: .55; pointer-events: none; animation: float 8s ease-in-out infinite alternate }
+@keyframes float { to { transform: translateY(-10px) rotate(-2deg) } }
 .b { grid-row: span 2; background: linear-gradient(170deg, #d6a94a, #8f6c22); color: #fffaf0 }
-.b .price { font: 800 34px/1 var(--f-body); letter-spacing: -.02em; margin: 14px 0 2px }
+.b .price { font: 800 34px/1 var(--f-body); letter-spacing: -.02em; margin: 14px 0 2px; font-variant-numeric: tabular-nums }
 .b .price small { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0; opacity: .85; margin-bottom: 4px }
 .b ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 4px; font-size: 12px; font-weight: 700 }
 .b li { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.25); padding-bottom: 4px }
 .b .btn-in { margin-top: 12px; align-self: flex-start; background: #fffaf0; color: #6e5520; font-size: 12.5px; font-weight: 800; padding: 8px 12px; border-radius: 999px }
 .c { background: var(--ivory) }
 .sw { display: flex; margin-top: 12px }
-.sw i { width: 28px; height: 28px; border-radius: 50%; margin-right: -8px; box-shadow: 0 0 0 2.5px var(--ivory) }
+.sw i { width: 28px; height: 28px; border-radius: 50%; margin-right: -8px; box-shadow: 0 0 0 2.5px var(--ivory); animation: hop 3s ease-in-out infinite; animation-delay: calc(var(--k) * 180ms) }
+@keyframes hop { 0%, 30%, 100% { transform: none } 15% { transform: translateY(-7px) } }
 .d1 { background: var(--nude); padding: 0 }
-.d1 .split { position: relative; height: 100px; display: grid; grid-template-columns: 1fr 1fr }
-.d1 .split span { background-size: cover; background-position: center }
-.d1 .split::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: #fff }
-.d1 .split::before { content: "‹ ›"; position: absolute; z-index: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 26px; height: 26px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 900; color: var(--choc) }
+.split { position: relative; height: 100px; overflow: hidden }
+.split span { position: absolute; inset: 0; background-size: cover; background-position: center }
+.split .after { clip-path: inset(0 0 0 var(--x, 50%)) }
+.split .bar { position: absolute; top: 0; bottom: 0; left: var(--x, 50%); width: 2px; margin-left: -1px; background: #fff }
+.split .bar::after { content: "‹ ›"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 26px; height: 26px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 900; color: var(--choc) }
 .d1 .txt { padding: 10px 14px 14px }
-.e { grid-column: 1 / 3; background: var(--ivory); min-height: 0 }
-.e .days { display: flex; gap: 4px; margin-top: 12px }
-.e .days i { flex: 1; height: 26px; border-radius: 6px; background: linear-gradient(180deg, rgba(197,146,30,var(--o)), rgba(143,108,34,var(--o))) }
-.e .days-l { display: flex; justify-content: space-between; font-size: 10.5px; font-weight: 800; color: var(--soft); margin-top: 5px }
+.e { background: var(--ivory); min-height: 0 }
+.days { display: flex; gap: 4px; margin-top: 12px }
+.days i { flex: 1; height: 26px; border-radius: 6px; background: var(--nude); position: relative; overflow: hidden }
+.days i::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(197,146,30,var(--o)), rgba(143,108,34,var(--o))); transform: scaleY(0); transform-origin: bottom; transition: transform .5s cubic-bezier(.3,1.3,.5,1); transition-delay: calc(var(--k) * 70ms + .3s) }
+.e.in .days i::after, .noreveal .days i::after { transform: none }
+.days-l { display: flex; justify-content: space-between; font-size: 10.5px; font-weight: 800; color: var(--soft); margin-top: 5px }
 .e .go { color: var(--gold-t); border: 1px solid rgba(197,146,30,.5) }
-.f { grid-column: 1 / 3; background: transparent; padding: 0; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px }
+.steps { background: var(--choc); color: #f5ecda; min-height: 0 }
+.steps .row4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 12px }
+.steps .row4 div { display: grid; justify-items: center; gap: 6px; text-align: center; font-size: 10.5px; font-weight: 700; color: #d8cab0; line-height: 1.25 }
+.steps .row4 span { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,.08); display: grid; place-items: center; color: #e9c56f }
+.steps .row4 svg { width: 19px; height: 19px; fill: currentColor }
+.steps.in .row4 span { animation: blink .5s ease both; animation-delay: calc(var(--k) * 220ms + .2s) }
+@keyframes blink { 0% { background: rgba(255,255,255,.08) } 50% { background: rgba(233,197,111,.35) } 100% { background: rgba(255,255,255,.08) } }
+.mini { min-height: 128px; background: var(--ivory) }
+.mini .ic { width: 36px; height: 36px; border-radius: 12px; background: var(--nude); display: grid; place-items: center; color: var(--gold-t) }
+.mini .ic svg { width: 18px; height: 18px; fill: currentColor }
+.mini b { font-size: 20px }
+.gift { background: linear-gradient(115deg, #b8862a 0%, #f0d08a 35%, #c5921e 55%, #f3dc9c 75%, #a8791c 100%); background-size: 220% 100%; color: #4a3810; animation: sheen 5s linear infinite }
+@keyframes sheen { to { background-position: -220% 0 } }
+.gift .ic { background: rgba(255,255,255,.4); color: #4a3810 }
+.map { background-color: #e9e1d1; background-image: linear-gradient(118deg, transparent 46%, #fbf8f1 46%, #fbf8f1 50%, transparent 50%), linear-gradient(28deg, transparent 58%, #fbf8f1 58%, #fbf8f1 61%, transparent 61%), linear-gradient(90deg, rgba(122,150,112,.22) 0 26%, transparent 26%) }
+.map .pin { position: absolute; right: 22px; top: 18px; width: 26px; height: 26px; color: var(--brown); animation: bounce 1.8s ease-in-out infinite }
+@keyframes bounce { 50% { transform: translateY(-6px) } }
+.map .pin svg { width: 26px; height: 26px; fill: currentColor }
+.faq { background: var(--ivory); min-height: 0 }
+.faq details { border-top: 1px solid rgba(46,38,27,.1) }
+.faq details:first-of-type { border-top: 0; margin-top: 6px }
+.faq summary { list-style: none; cursor: pointer; padding: 12px 0; display: flex; justify-content: space-between; gap: 10px; font-weight: 800; font-size: 14px }
+.faq summary::-webkit-details-marker { display: none }
+.faq summary::after { content: "+"; color: var(--gold-t); font-size: 18px; line-height: 1; transition: transform .3s }
+.faq details[open] summary::after { transform: rotate(45deg) }
+.faq p { margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: var(--soft) }
+.f { background: transparent; padding: 0; min-height: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px }
 .f a { background: var(--ivory); border-radius: 18px; padding: 14px 8px; display: grid; justify-items: center; gap: 6px; text-decoration: none; color: var(--ink); font-size: 12px; font-weight: 800 }
 .f svg { width: 22px; height: 22px; fill: var(--gold-t) }
 .sign { text-align: center; margin: 18px 0 0; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--soft) }
+@media (prefers-reduced-motion: reduce) { .a .go, .a img, .sw i, .gift, .map .pin, .steps.in .row4 span { animation: none } .days i::after { transform: none; transition: none } }
 </style>
 </head>
 <body data-design="06">
 <main class="wrap">
   <header class="hd"><div><span class="logo-text">Razden’sya</span><small>Коррекция растяжек и шрамов</small></div><div class="pl">Ижевск<br>по записи</div></header>
   <div class="grid">
-    <a class="t a" href="../варианты/02-запись.html"><img src="../ресурсы/лайн-арт-лицо.png" alt=""><span class="go" data-icon="right"></span><span><span class="k">онлайн-запись</span><b>Записаться на консультацию</b></span><span class="d">Зона, день и время за минуту</span></a>
-    <a class="t b" href="../варианты/01-калькулятор.html"><span><span class="k">калькулятор</span><b>Сколько стоит курс</b></span><span><span class="price"><small>за одну зону</small>от 2 000 ₽</span><ul><li><span>Живот</span><span>5 000</span></li><li><span>Руки</span><span>4 000</span></li><li><span>Шрам</span><span>от 2 000</span></li></ul><span class="btn-in">Посчитать мой курс</span></span></a>
-    <a class="t c" href="../варианты/04-тест.html"><span><span class="k">тест</span><b>Какие у меня растяжки</b></span><span class="sw" aria-hidden="true"><i style="background:#d98a8a"></i><i style="background:#9a7aa8"></i><i style="background:#efeae2"></i><i style="background:#e2c3a6"></i></span></a>
-    <a class="t d1" href="../варианты/17-камера.html"><span class="split" aria-hidden="true"><span style="background-image:url(../ресурсы/пример-было-1.jpg)"></span><span style="background-image:url(../ресурсы/пример-стало-1.jpg)"></span></span><span class="txt"><span class="k">результат</span><b>До и после</b></span></a>
-    <a class="t e" href="../варианты/07-дневник-ухода.html"><span class="go" data-icon="right"></span><span><span class="k">после процедуры</span><b>Уход день за днём</b></span><span><span class="days" aria-hidden="true"></span><span class="days-l"><span>день 1</span><span>день 14</span></span></span></a>
-    <div class="t f"><a href="https://vk.me/razdensya18" target="_blank" rel="noopener" data-icon="vk">ВКонтакте</a><a href="https://t.me/razdensya18" target="_blank" rel="noopener" data-icon="tg">Telegram</a><a href="https://instagram.com/razdensya18" target="_blank" rel="noopener" data-icon="ig">Instagram</a></div>
+    <a class="t a span2" data-reveal="0" href="../варианты/02-запись.html"><img src="../ресурсы/лайн-арт-лицо.png" alt=""><span class="go" data-icon="right"></span><span><span class="k">онлайн-запись</span><b>Записаться на консультацию</b></span><span class="d">Зона, день и время за минуту</span></a>
+    <a class="t b" data-reveal="1" href="../варианты/01-калькулятор.html"><span><span class="k">калькулятор</span><b>Сколько стоит курс</b></span><span><span class="price"><small>за одну зону</small>от <span id="num">2 000</span> ₽</span><ul><li><span>Живот</span><span>5 000</span></li><li><span>Руки</span><span>4 000</span></li><li><span>Шрам</span><span>от 2 000</span></li></ul><span class="btn-in">Посчитать мой курс</span></span></a>
+    <a class="t c" data-reveal="2" href="../варианты/04-тест.html"><span><span class="k">тест</span><b>Какие у меня растяжки</b></span><span class="sw" aria-hidden="true"><i style="background:#d98a8a;--k:0"></i><i style="background:#9a7aa8;--k:1"></i><i style="background:#efeae2;--k:2"></i><i style="background:#e2c3a6;--k:3"></i></span></a>
+    <a class="t d1" data-reveal="3" href="../варианты/17-камера.html"><span class="split" id="split" aria-hidden="true"><span style="background-image:url(../ресурсы/пример-было-1.jpg)"></span><span class="after" style="background-image:url(../ресурсы/пример-стало-1.jpg)"></span><span class="bar"></span></span><span class="txt"><span class="k">результат</span><b>До и после</b></span></a>
+    <a class="t e span2" data-reveal="0" href="../варианты/07-дневник-ухода.html"><span class="go" data-icon="right"></span><span><span class="k">после процедуры</span><b>Уход день за днём</b></span><span><span class="days" id="days" aria-hidden="true"></span><span class="days-l"><span>день 1</span><span>день 14</span></span></span></a>
+    <div class="t steps span2" data-reveal="0"><span><span class="k">как проходит</span><b>Четыре шага</b></span><div class="row4"><div><span style="--k:0" data-icon="user"></span>Консуль&shy;тация</div><div><span style="--k:1" data-icon="shield"></span>Стериль&shy;ность</div><div><span style="--k:2" data-icon="drop"></span>Процедура и StriaLess</div><div><span style="--k:3" data-icon="list"></span>Уход дома</div></div></div>
+    <a class="t mini" data-reveal="0" href="../варианты/05-можно-ли-мне.html"><span class="ic" data-icon="shield"></span><span><span class="k">проверка</span><b>Можно ли мне?</b></span></a>
+    <a class="t mini gift" data-reveal="1" href="../варианты/09-сертификат.html"><span class="ic" data-icon="gift"></span><span><span class="k">подарок</span><b>Сертификат</b></span></a>
+    <a class="t mini" data-reveal="0" href="../варианты/16-пригласи-подругу.html"><span class="ic" data-icon="users"></span><span><span class="k">вместе</span><b>Пригласи подругу</b></span></a>
+    <a class="t mini map" data-reveal="1" href="../варианты/13-как-дойти.html"><span class="pin" data-icon="pin"></span><span class="ic" data-icon="route"></span><span><span class="k">маршрут</span><b>Как дойти</b></span></a>
+    <div class="t faq span2" data-reveal="0"><span class="k">частые вопросы</span>
+      <details><summary>Сколько процедур нужно?</summary><p>Чаще всего 2–3 на зону, с интервалом не меньше месяца.</p></details>
+      <details><summary>Это больно?</summary><p>Ощущения индивидуальны и зависят от зоны. Можно делать паузы.</p></details>
+      <details><summary>Когда заметен результат?</summary><p>Постепенно, несколько месяцев. Растяжка становится менее заметной; стереть её полностью не может ни одна методика.</p></details>
+    </div>
+    <div class="t f span2" data-reveal="0"><a href="https://vk.me/razdensya18" target="_blank" rel="noopener" data-icon="vk">ВКонтакте</a><a href="https://t.me/razdensya18" target="_blank" rel="noopener" data-icon="tg">Telegram</a><a href="https://instagram.com/razdensya18" target="_blank" rel="noopener" data-icon="ig">Instagram</a></div>
   </div>
   <p class="sign">Марина Гайнуллина · @razdensya18</p>
 </main>
 <script src="../общее/бренд.js"></script>
 <script>
+(function () {
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   // шкала ухода: 14 дней, золото тает к концу заживления
-  document.querySelector(".days").innerHTML = Array.from({ length: 14 }, function (_, i) { return '<i style="--o:' + (1 - i * .06).toFixed(2) + '"></i>' }).join("");
+  document.getElementById("days").innerHTML = Array.from({ length: 14 }, function (_, i) { return '<i style="--o:' + (1 - i * .06).toFixed(2) + ";--k:" + i + '"></i>' }).join("");
+  if (reduce || !("IntersectionObserver" in window)) document.body.classList.add("noreveal");
+  // цена набегает от 0 до 2 000
+  var num = document.getElementById("num");
+  if (!reduce) { var t0 = performance.now() + 500; (function step(t) { var p = Math.min(1, Math.max(0, (t - t0) / 1200)), v = Math.round(2000 * (1 - Math.pow(1 - p, 3)) / 100) * 100; num.textContent = v.toLocaleString("ru-RU").replace(/\s/g, " "); if (p < 1) requestAnimationFrame(step) })(performance.now()) }
+  // «до/после» само покачивается
+  var split = document.getElementById("split");
+  if (!reduce) (function sway(t) { split.style.setProperty("--x", (50 + 32 * Math.sin(t / 1100)).toFixed(1) + "%"); requestAnimationFrame(sway) })(0);
+})();
 </script>
 </body>
 </html>
