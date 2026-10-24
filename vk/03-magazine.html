@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4eee4">
+<meta name="robots" content="noindex">
+<title>03 Журнал — группа VK Razden’sya</title>
+<style>
+@font-face { font-family: "AngelicaC"; src: url(fonts/AngelicaC.otf) format("opentype"); font-display: swap }
+@font-face { font-family: "Mulish"; src: url(fonts/Mulish.ttf) format("truetype"); font-weight: 200 1000; font-display: swap }
+:root { --cream: #f4eee4; --cream-2: #ece3d3; --paper: #fffcf6; --ink: #2e261b; --text: #4d4232; --muted: #7a6b55; --gold: #c5921e; --gold-t: #85600f; --brown: #4a3810; --dark: #1f1a14;
+  --g-logo: linear-gradient(180deg, #4a3810 0%, #5d4715 14%, #8f6c22 34%, #c5921e 55%, #c8962c 100%); --g-btn: linear-gradient(180deg, #8f6c22, #4a3810);
+  --f-display: "AngelicaC", Georgia, serif; --f-body: "Mulish", -apple-system, system-ui, sans-serif; color-scheme: light }
+* { box-sizing: border-box }
+html { -webkit-text-size-adjust: 100%; background: var(--cream) }
+body { margin: 0; background: var(--cream) url(img/silk.jpg) center top / 720px auto repeat; color: var(--ink); font: 400 15px/1.5 var(--f-body);
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px) }
+img { max-width: 100%; display: block }
+a { color: inherit }
+.col { max-width: 1120px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.narrow { max-width: 520px }
+.logo-text { font-family: var(--f-display); background: var(--g-logo); -webkit-background-clip: text; background-clip: text; color: transparent; line-height: 1.1 }
+.eyebrow { font-size: 11px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-t) }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 18px 0 6px }
+.top .logo-text { font-size: 30px }
+.chip { font-size: 12.5px; font-weight: 800; color: var(--gold-t); text-decoration: none; background: rgba(255,252,246,.84); padding: 8px 12px; border-radius: 999px; white-space: nowrap; border: 0; cursor: pointer; font-family: inherit }
+h1 { margin: 10px 0 8px; font: 400 clamp(36px, 10vw, 52px)/1.02 var(--f-display); text-wrap: balance }
+h2 { margin: 34px 0 6px; font: 400 clamp(28px, 7vw, 36px)/1.05 var(--f-display) }
+.lead { margin: 0 0 18px; font-size: 15px; color: var(--text); max-width: 640px }
+.note { font-size: 12.5px; color: var(--muted); line-height: 1.5 }
+.card { background: rgba(255,252,246,.86); border-radius: 20px; padding: 16px; box-shadow: 0 10px 30px -22px rgba(74,56,16,.45) }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 10px 18px; border-radius: 16px; border: 0; font: 800 15px var(--f-body); text-decoration: none; cursor: pointer }
+.btn-gold { background: var(--g-btn); color: #fff8ea; box-shadow: 0 10px 22px -12px rgba(74,56,16,.8) }
+.btn-line { background: rgba(255,255,255,.6); color: var(--ink); border: 1.5px solid rgba(181,138,44,.7) }
+.btn svg { width: 20px; height: 20px }
+/* витрина */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px }
+@media (min-width: 760px) { .grid { grid-template-columns: repeat(5, minmax(0, 1fr)) } }
+.d { display: grid; gap: 8px; text-decoration: none; color: var(--ink); align-content: start }
+.d .ph { position: relative; aspect-ratio: 5 / 9; border-radius: 22px; overflow: hidden; background: var(--cream-2) center top / cover; box-shadow: 0 0 0 5px #1f1a14, 0 18px 30px -16px rgba(40,28,10,.7); margin: 5px }
+.d .num { position: absolute; left: 8px; bottom: 8px; min-width: 26px; height: 26px; border-radius: 13px; background: rgba(31,26,20,.8); color: #f5ecda; font-size: 11.5px; font-weight: 800; display: grid; place-items: center; padding: 0 7px }
+.d .heart { position: absolute; right: 8px; bottom: 8px; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.88); display: grid; place-items: center; color: #d6c8b0 }
+.d .heart svg { width: 17px; height: 17px; fill: currentColor }
+.d.liked .heart { background: #c5921e; color: #fff }
+.d b { font: 400 23px/1 var(--f-display); padding: 0 4px }
+.d span.w { font-size: 12px; color: var(--muted); line-height: 1.35; padding: 0 4px }
+.choice { margin-top: 26px; background: var(--dark); color: #f5ecda; border-radius: 24px; padding: 18px; display: grid; gap: 10px; max-width: 640px }
+.choice .k { font-size: 10.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
+.choice h2 { margin: 0; font-size: 28px; color: #f8eedb }
+.choice p { margin: 0; font-size: 13.5px; color: #d4c6ac }
+.choice ul { margin: 0; padding-left: 18px; font-size: 14px }
+.facts { display: grid; gap: 10px; margin-top: 26px }
+.facts .card { font-size: 13.5px; color: var(--text) }
+.facts b { color: var(--ink) }
+/* страница варианта */
+.screens { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; justify-content: center }
+.screen { display: grid; gap: 10px; justify-items: center; width: 100%; max-width: 395px; min-width: 0 }
+.screen .cap { font-size: 13px; color: var(--muted); text-align: center; max-width: 360px }
+.screen .cap b { color: var(--ink); display: block; font-size: 14px }
+.frame { border-radius: 34px; padding: 10px; background: #1f1a14; box-shadow: 0 24px 50px -24px rgba(40,28,10,.7); width: 100%; max-width: 395px; min-width: 0 }
+.frame > .fit { border-radius: 26px; overflow: hidden }
+.dframe { border-radius: 16px; overflow: hidden; box-shadow: 0 24px 50px -28px rgba(40,28,10,.7); margin-inline: auto; max-width: 100% }
+.fit { overflow: hidden }
+.fit > div { transform-origin: 0 0 }
+.files { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px }
+.file { background: rgba(255,252,246,.88); border-radius: 16px; padding: 8px; display: grid; gap: 6px; text-decoration: none; color: var(--ink); align-content: start }
+.file .t { aspect-ratio: 1; border-radius: 10px; background: var(--cream-2) center / contain no-repeat }
+.file b { font-size: 13px; line-height: 1.25 }
+.file span { font-size: 11.5px; color: var(--muted) }
+.file em { font-style: normal; font-size: 12px; font-weight: 800; color: var(--gold-t); display: flex; align-items: center; gap: 4px }
+.file em svg { width: 15px; height: 15px }
+.pager { display: flex; justify-content: space-between; gap: 10px; margin: 30px 0 }
+.foot { font-size: 12.5px; color: var(--muted); text-align: center; margin: 22px 10px 34px; line-height: 1.5 }
+.likebtn[aria-pressed="true"] { background: #c5921e; color: #fff }
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--dark); color: #fbf5ea; font-size: 13.5px; font-weight: 600; padding: 11px 16px; border-radius: 14px; z-index: 9 }
+
+.vk { font-family: -apple-system, system-ui, "Helvetica Neue", Roboto, "Segoe UI", sans-serif; color: #000; -webkit-font-smoothing: antialiased; text-align: left }
+.vk * { box-sizing: border-box }
+.vkm { width: 375px; background: #EBEDF0; padding-bottom: 12px }
+.vkm .hdr { background: #fff; border-radius: 0 0 12px 12px; position: relative; padding-bottom: 20px }
+.vkm .cov { height: 166px; position: relative; background-size: cover; background-position: center; }
+.vkm .cov .im { position: absolute; left: 0; top: 0; width: 375px; height: 142px; background-size: cover; background-position: center }
+.vkm .cov .bt { position: absolute; top: 8px; width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,.36); display: grid; place-items: center }
+.vkm .card { position: relative; margin-top: -24px; background: #fff; border-radius: 12px 12px 0 0; padding: 68px 16px 0 }
+.vkm .ava { position: absolute; left: 16px; top: -44px; width: 96px; height: 96px; border-radius: 50%; outline: 4px solid #fff; background-size: cover; background-position: center }
+.vkm .nm { font: 600 21px/26px "VK Sans Display", -apple-system, system-ui, sans-serif; letter-spacing: -.01em }
+.vkm .subs { margin-top: 4px; height: 32px; display: flex; align-items: center; font-size: 15px; color: #000 }
+.vkm .subs b { font-weight: 500; margin-right: 4px }
+.vkm .desc { font-size: 15px; line-height: 20px; margin: 6px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; position: relative }
+.vkm .desc .more { position: absolute; right: 0; bottom: 0; background: linear-gradient(90deg, rgba(255,255,255,0), #fff 30%); padding-left: 24px; color: #2688EB }
+.vkm .btns { display: flex; gap: 8px; margin-top: 8px }
+.vkm .btn { flex: 1; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 500; white-space: nowrap }
+.vkm .btn.p { background: #2688EB; color: #fff }
+.vkm .btn.s { background: rgba(0,0,0,.04); color: #2688EB }
+.vkm .blk { background: #fff; border-radius: 12px; margin-top: 8px; padding: 12px 0 }
+.vkm .menu { display: flex; gap: 8px; overflow: hidden; padding: 0 16px }
+.vkm .mi { flex: none; width: 136px; text-align: center }
+.vkm .mi i { display: block; width: 136px; height: 93px; border-radius: 10px; background-size: cover; background-position: center; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.08) }
+.vkm .mi span { display: block; margin-top: 6px; font-size: 13px; line-height: 16px; color: #000 }
+.vkm .tabs { display: flex; align-items: center; gap: 4px; padding: 0 12px 0 16px; overflow: hidden }
+.vkm .tab { flex: none; height: 32px; padding: 0 12px; border-radius: 8px; display: flex; align-items: center; font-size: 15px; font-weight: 500; color: #818C99; white-space: nowrap }
+.vkm .tab.on { background: rgba(0,0,0,.05); color: #000 }
+.vkm .tabs .sp { flex: 1 }
+.vkm .post { padding-top: 12px }
+.vkm .ph { display: flex; align-items: center; gap: 12px; padding: 0 16px }
+.vkm .ph .a { width: 36px; height: 36px; border-radius: 50%; background-size: cover; flex: none }
+.vkm .ph .n { flex: 1; min-width: 0; font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px }
+.vkm .ph small { display: block; font-size: 13px; color: #818C99; font-weight: 400 }
+.vkm .pt { padding: 10px 16px; font-size: 15px; line-height: 20px }
+.vkm .pt a { color: #2688EB; text-decoration: none }
+.vkm .pi { width: 375px; height: 375px; background-size: cover; background-position: center }
+.vkm .pf { display: flex; gap: 16px; padding: 10px 16px 0; color: #818C99; font-size: 13px; align-items: center }
+.vkm .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 8px; padding: 4px 16px 4px }
+.vkm .sc i { display: block; aspect-ratio: 163 / 195; border-radius: 10px; background-size: cover; background-position: center; box-shadow: inset 0 0 0 .5px rgba(0,0,0,.08) }
+.vkm .sc b { display: block; margin-top: 8px; font-size: 15px; font-weight: 600 }
+.vkm .sc span { display: block; margin-top: 2px; font-size: 13px; line-height: 17px; color: #000 }
+.vkm .h3 { padding: 0 16px 10px; font-size: 17px; font-weight: 600; display: flex; justify-content: space-between }
+.vkm .h3 span { color: #818C99; font-weight: 400; font-size: 15px }
+.vkm .live { width: 375px; height: 667px; background-size: cover; background-position: center; position: relative }
+
+/* компьютер */
+.vkd { width: 960px; background: #EBEDF0; padding: 16px 24px 24px }
+.vkd .hdr { width: 912px; background: #fff; border-radius: 12px; overflow: hidden; position: relative }
+.vkd .cov { height: 303px; background-size: cover; background-position: center }
+.vkd .bar { height: 96px; position: relative }
+.vkd .ava { position: absolute; left: 20px; top: -20px; width: 96px; height: 96px; border-radius: 50%; outline: 4px solid #fff; background-size: cover }
+.vkd .nm { position: absolute; left: 132px; top: 20px; font: 600 20px/24px "VK Sans Display", -apple-system, system-ui, sans-serif }
+.vkd .subs { position: absolute; left: 132px; top: 50px; font-size: 13px; color: #818C99 }
+.vkd .btns { position: absolute; right: 20px; top: 20px; display: flex; gap: 8px }
+.vkd .btn { height: 32px; padding: 0 16px; border-radius: 8px; display: flex; align-items: center; font-size: 14px; font-weight: 500 }
+.vkd .btn.p { background: #2688EB; color: #fff }
+.vkd .btn.s { background: rgba(0,0,0,.05); color: #2688EB }
+.vkd .cols { display: flex; gap: 16px; margin-top: 16px; align-items: flex-start }
+.vkd .l { width: 551px; display: grid; gap: 16px }
+.vkd .r { width: 345px; display: grid; gap: 16px }
+.vkd .blk { background: #fff; border-radius: 12px; padding: 16px 0 }
+.vkd .menu { display: flex; gap: 10px; padding: 0 16px; overflow: hidden }
+.vkd .mi { flex: none; width: 122px; text-align: center }
+.vkd .mi i { display: block; width: 122px; height: 83px; border-radius: 10px; background-size: cover; background-position: center }
+.vkd .mi span { display: block; margin-top: 6px; font-size: 12.5px; line-height: 15px }
+.vkd .tabs { display: flex; gap: 4px; padding: 0 16px 12px; border-bottom: 1px solid rgba(0,0,0,.06) }
+.vkd .tab { height: 30px; padding: 0 12px; border-radius: 8px; display: flex; align-items: center; font-size: 14px; font-weight: 500; color: #818C99 }
+.vkd .tab.on { background: rgba(0,0,0,.05); color: #000 }
+.vkd .ph { display: flex; align-items: center; gap: 12px; padding: 14px 20px 0 }
+.vkd .ph .a { width: 40px; height: 40px; border-radius: 50%; background-size: cover }
+.vkd .ph .n { font-size: 14px; font-weight: 500 }
+.vkd .ph small { display: block; font-size: 12.5px; color: #818C99; font-weight: 400 }
+.vkd .pt { padding: 10px 20px; font-size: 14px; line-height: 19px }
+.vkd .pi { width: 551px; height: 551px; background-size: cover }
+.vkd .row { display: flex; gap: 12px; padding: 6px 20px; font-size: 13.5px; line-height: 18px; align-items: flex-start }
+.vkd .row svg { flex: none; width: 20px; height: 20px }
+.vkd .h3 { padding: 0 20px 12px; font-size: 15px; font-weight: 600 }
+.vkd .h3 span { color: #818C99; font-weight: 400; margin-left: 4px }
+.vkd .sv { display: flex; gap: 12px; padding: 6px 20px; align-items: center }
+.vkd .sv i { width: 56px; height: 67px; border-radius: 8px; background-size: cover; background-position: center; flex: none }
+.vkd .sv b { display: block; font-size: 14px }
+.vkd .sv span { font-size: 13px; color: #000; line-height: 17px }
+</style>
+</head>
+<body>
+<main class="col">
+  <header class="top"><a class="chip" href="index.html">← все 5 вариантов</a><span class="eyebrow">03 / 05</span><button type="button" class="chip likebtn" id="like" aria-pressed="false">♥ Нравится</button></header>
+  <h1>03 · Журнал</h1>
+  <p class="lead">Обложка глянца: крупный логотип, рубрики и штрихкод. Пара к странице: оформление страницы 03 «Журнал».</p>
+
+  <h2>В телефоне</h2>
+  <p class="lead note">Мобильная раскладка VK: полоса обложки сверху, круглый аватар, название, кнопки, меню-карусель и закреплённый пост.</p>
+  <div class="screens">
+    <div class="screen"><div class="frame"><div class="fit" data-w="375" data-pad="20"><div><div class="vk vkm">
+<div class="hdr">
+  <div class="cov"><div class="im" style="background-image:url('img/03-magazine/cover-1920x768.jpg')"></div>
+    <span class="bt" style="left:12px"><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M15 5l-7 7 7 7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="bt" style="right:16px"><svg width="22" height="22" viewBox="0 0 24 24" ><circle cx="12" cy="5.5" r="1.8" fill="#fff"/><circle cx="12" cy="12" r="1.8" fill="#fff"/><circle cx="12" cy="18.5" r="1.8" fill="#fff"/></svg></span></div>
+  <div class="card">
+    <div class="ava" style="background-image:url('img/03-magazine/avatar-400x400.png')"></div>
+    <div class="nm">Razden’sya | коррекция растяжек, Ижевск</div>
+    <div class="subs"><b>1</b> подписчик</div>
+    <div class="desc">Коррекция растяжек. Эстетика лица и тела. Ижевск, приём по записи. Записаться — в сообщениях сообщества.<span class="more">Ещё</span></div>
+    <div class="btns"><span class="btn p">Подписаться</span><span class="btn s">Написать сообщение</span></div>
+  </div>
+</div>
+<div class="blk"><div class="menu"><div class="mi"><i style="background-image:url('img/03-magazine/menu-1-zapis-752x512.jpg')"></i><span>Записаться</span></div><div class="mi"><i style="background-image:url('img/03-magazine/menu-2-prais-752x512.jpg')"></i><span>Прайс</span></div><div class="mi"><i style="background-image:url('img/03-magazine/menu-3-voprosy-752x512.jpg')"></i><span>Частые вопросы</span></div><div class="mi"><i style="background-image:url('img/03-magazine/menu-4-otzyvy-752x512.jpg')"></i><span>Отзывы</span></div><div class="mi"><i style="background-image:url('img/03-magazine/menu-5-o-marine-752x512.jpg')"></i><span>О Марине</span></div><div class="mi"><i style="background-image:url('img/03-magazine/menu-6-podgotovka-752x512.jpg')"></i><span>Подготовка</span></div></div></div>
+<div class="blk" style="padding-bottom:14px">
+  <div class="tabs"><span class="tab on">Посты</span><span class="tab">Услуги</span><span class="tab">Фото</span><span class="tab">Клипы</span><span class="sp"></span><svg width="24" height="24" viewBox="0 0 24 24" ><circle cx="11" cy="11" r="6.5" stroke="#99A2AD" stroke-width="1.8" fill="none"/><path d="M16 16l4 4" stroke="#99A2AD" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+  <div class="post">
+    <div class="ph"><span class="a" style="background-image:url('img/03-magazine/avatar-400x400.png')"></span><span class="n"><span style="overflow:hidden;text-overflow:ellipsis">Razden’sya | коррекция растяжек, Ижевск<small>запись закреплена</small></span></span><svg width="18" height="18" viewBox="0 0 24 24" ><path d="M9 4h6l-1 5 3 3H7l3-3zM12 12v7" stroke="#99A2AD" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg><svg width="22" height="22" viewBox="0 0 24 24" ><circle cx="5" cy="12" r="1.7" fill="#99A2AD"/><circle cx="12" cy="12" r="1.7" fill="#99A2AD"/><circle cx="19" cy="12" r="1.7" fill="#99A2AD"/></svg></div>
+    <div class="pt">Здравствуйте! Я Марина, кабинет Razden’sya в Ижевске. Работаю с растяжками: живот, бока, бёдра, руки, икры, поясница. Перед каждой процедурой — консультация. <a>Показать ещё</a></div>
+    <div class="pi" style="background-image:url('img/03-magazine/pinned-post-1080x1080.jpg')"></div>
+    <div class="pf"><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.3a4.2 4.2 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z" stroke="#99A2AD" stroke-width="1.7" fill="none"/></svg> <span>Нравится</span></div>
+  </div>
+</div></div></div></div></div>
+      <div class="cap"><b>Главная группы</b>Меню листается вбок. Картинки меню — с подписью под ними, подпись VK пишет сам.</div></div>
+    <div class="screen"><div class="frame"><div class="fit" data-w="375" data-pad="20"><div><div class="vk vkm">
+<div class="hdr">
+  <div class="cov"><div class="im" style="background-image:url('img/03-magazine/cover-1920x768.jpg')"></div>
+    <span class="bt" style="left:12px"><svg width="22" height="22" viewBox="0 0 24 24" ><path d="M15 5l-7 7 7 7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="bt" style="right:16px"><svg width="22" height="22" viewBox="0 0 24 24" ><circle cx="12" cy="5.5" r="1.8" fill="#fff"/><circle cx="12" cy="12" r="1.8" fill="#fff"/><circle cx="12" cy="18.5" r="1.8" fill="#fff"/></svg></span></div>
+  <div class="card">
+    <div class="ava" style="background-image:url('img/03-magazine/avatar-400x400.png')"></div>
+    <div class="nm">Razden’sya | коррекция растяжек, Ижевск</div>
+    <div class="subs"><b>1</b> подписчик</div>
+    <div class="desc">Коррекция растяжек. Эстетика лица и тела. Ижевск, приём по записи. Записаться — в сообщениях сообщества.<span class="more">Ещё</span></div>
+    <div class="btns"><span class="btn p">Подписаться</span><span class="btn s">Написать сообщение</span></div>
+  </div>
+</div>
+<div class="blk" style="padding-bottom:16px">
+  <div class="tabs" style="margin-bottom:14px"><span class="tab">Посты</span><span class="tab on">Услуги</span><span class="tab">Фото</span><span class="tab">Клипы</span><span class="sp"></span><svg width="24" height="24" viewBox="0 0 24 24" ><circle cx="11" cy="11" r="6.5" stroke="#99A2AD" stroke-width="1.8" fill="none"/><path d="M16 16l4 4" stroke="#99A2AD" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+  <div class="h3">Услуги <span>2</span></div>
+  <div class="grid"><div class="sc"><i style="background-image:url('img/03-magazine/service-1-zona-5000-1000x1000.jpg')"></i><b>5 000 ₽</b><span>Коррекция растяжек: живот, бока, бёдра</span></div><div class="sc"><i style="background-image:url('img/03-magazine/service-2-zona-4000-1000x1000.jpg')"></i><b>4 000 ₽</b><span>Коррекция растяжек: руки, икры, поясница, внутренняя поверхность бёдер</span></div></div>
+</div></div></div></div></div>
+      <div class="cap"><b>Раздел «Услуги»</b>Цена берётся из карточки услуги в VK. На компьютере VK показывает карточку уже квадрата, края по бокам срезаются — текст стоит по центру.</div></div>
+    <div class="screen"><div class="frame"><div class="fit" data-w="375" data-pad="20"><div><div class="vk vkm" style="padding:0"><div class="live" style="background-image:url('img/03-magazine/live-cover-1080x1920.jpg')"></div></div></div></div></div>
+      <div class="cap"><b>Живая обложка (по желанию)</b>Видна только в приложении VK вместо обычной обложки. Внизу VK кладёт логотип и кнопки, поэтому низ картинки спокойный.</div></div>
+  </div>
+
+  <h2>На компьютере</h2>
+  <p class="lead note">Колонка VK шириной 912: обложка 912×303 сверху, полоса с аватаром и кнопками, слева меню и посты, справа описание и услуги.</p>
+  <div class="dframe-wrap"><div class="dframe fit" data-w="960"><div><div class="vk vkd">
+<div class="hdr"><div class="cov" style="background-image:url('img/03-magazine/cover-1920x768.jpg')"></div>
+  <div class="bar"><div class="ava" style="background-image:url('img/03-magazine/avatar-400x400.png')"></div><div class="nm">Razden’sya | коррекция растяжек, Ижевск</div><div class="subs">1 подписчик</div>
+  <div class="btns"><span class="btn p">Подписаться</span><span class="btn s">Написать сообщение</span></div></div></div>
+<div class="cols">
+  <div class="l">
+    <div class="blk"><div class="menu"><div class="mi"><i style="background-image:url('img/03-magazine/menu-1-zapis-752x512.jpg')"></i><span>Записаться</span></div><div class="mi"><i style="background-image:url('img/03-magazine/menu-2-prais-752x512.jpg')"></i><span>Прайс</span></div><div class="mi"><i style="background-image:url('img/03-magazine/menu-3-voprosy-752x512.jpg')"></i><span>Частые вопросы</span></div><div class="mi"><i style="background-image:url('img/03-magazine/menu-4-otzyvy-752x512.jpg')"></i><span>Отзывы</span></div><div class="mi"><i style="background-image:url('img/03-magazine/menu-5-o-marine-752x512.jpg')"></i><span>О Марине</span></div><div class="mi"><i style="background-image:url('img/03-magazine/menu-6-podgotovka-752x512.jpg')"></i><span>Подготовка</span></div></div></div>
+    <div class="blk" style="padding-bottom:0">
+      <div class="tabs"><span class="tab on">Посты</span><span class="tab">Услуги</span><span class="tab">Фото</span><span class="tab">Клипы</span></div>
+      <div class="ph"><span class="a" style="background-image:url('img/03-magazine/avatar-400x400.png')"></span><span class="n">Razden’sya | коррекция растяжек, Ижевск<small>запись закреплена</small></span></div>
+      <div class="pt">Здравствуйте! Я Марина, кабинет Razden’sya в Ижевске. Работаю с растяжками: живот, бока, бёдра, руки, икры, поясница. Перед каждой процедурой — консультация.</div>
+      <div class="pi" style="background-image:url('img/03-magazine/pinned-post-1080x1080.jpg');border-radius:0 0 12px 12px"></div>
+    </div>
+  </div>
+  <div class="r">
+    <div class="blk">
+      <div class="row"><svg width="20" height="20" viewBox="0 0 24 24" ><circle cx="12" cy="12" r="8.5" stroke="#99A2AD" stroke-width="1.6" fill="none"/><path d="M12 11v5M12 8v.2" stroke="#99A2AD" stroke-width="1.8" stroke-linecap="round"/></svg><span>Коррекция растяжек. Эстетика лица и тела. Ижевск, приём по записи. Записаться — в сообщениях сообщества.</span></div>
+      <div class="row"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z" stroke="#99A2AD" stroke-width="1.6" fill="none"/><circle cx="12" cy="10" r="2.2" stroke="#99A2AD" stroke-width="1.6" fill="none"/></svg><span>Ижевск</span></div>
+      <div class="row" style="color:#2688EB"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M4 5.5h16v10.5H10l-4.5 3.5V16H4z" stroke="#2688EB" stroke-width="1.8" fill="none" stroke-linejoin="round"/></svg><span>Написать сообщение</span></div>
+    </div>
+    <div class="blk"><div class="h3">Услуги<span>2</span></div><div class="sv"><i style="background-image:url('img/03-magazine/service-1-zona-5000-1000x1000.jpg')"></i><div><b>5 000 ₽</b><span>Коррекция растяжек: живот, бока, бёдра</span></div></div><div class="sv"><i style="background-image:url('img/03-magazine/service-2-zona-4000-1000x1000.jpg')"></i><div><b>4 000 ₽</b><span>Коррекция растяжек: руки, икры, поясница, внутренняя поверхность бёдер</span></div></div></div>
+  </div>
+</div></div></div></div></div>
+
+  <h2>Файлы для загрузки</h2>
+  <p class="lead note">Готовы к загрузке в VK как есть. На телефоне — нажми и удерживай картинку, чтобы сохранить. Карточка «Шрам, шов, рубец» — по решению: тема шрамов в постах пока на паузе.</p>
+  <p><a class="btn btn-gold" href="zip/03-magazine.zip" download="razdensya-vk-03-magazine.zip"><svg width="20" height="20" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg> Скачать все файлы одним архивом</a></p>
+  <div class="files"><a class="file" href="img/03-magazine/cover-1920x768.jpg" download="обложка-1920x768.jpg"><span class="t" style="background-image:url(img/03-magazine/cover-1920x768.jpg)"></span><b>Обложка</b><span>1920×768 · главная обложка</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/avatar-400x400.png" download="аватар-400x400.png"><span class="t" style="background-image:url(img/03-magazine/avatar-400x400.png)"></span><b>Аватар</b><span>400×400 · VK вырежет круг</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/live-cover-1080x1920.jpg" download="живая-обложка-1080x1920.jpg"><span class="t" style="background-image:url(img/03-magazine/live-cover-1080x1920.jpg)"></span><b>Живая обложка</b><span>1080×1920 · только в приложении</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/pinned-post-1080x1080.jpg" download="закреплённый-пост-1080x1080.jpg"><span class="t" style="background-image:url(img/03-magazine/pinned-post-1080x1080.jpg)"></span><b>Закреплённый пост</b><span>1080×1080 · картинка к посту</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/menu-1-zapis-752x512.jpg" download="меню-1-записаться-752x512.jpg"><span class="t" style="background-image:url(img/03-magazine/menu-1-zapis-752x512.jpg)"></span><b>Меню: Записаться</b><span>752×512 · обложка пункта</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/menu-2-prais-752x512.jpg" download="меню-2-прайс-752x512.jpg"><span class="t" style="background-image:url(img/03-magazine/menu-2-prais-752x512.jpg)"></span><b>Меню: Прайс</b><span>752×512 · обложка пункта</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/menu-3-voprosy-752x512.jpg" download="меню-3-частые-вопросы-752x512.jpg"><span class="t" style="background-image:url(img/03-magazine/menu-3-voprosy-752x512.jpg)"></span><b>Меню: Частые вопросы</b><span>752×512 · обложка пункта</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/menu-4-otzyvy-752x512.jpg" download="меню-4-отзывы-752x512.jpg"><span class="t" style="background-image:url(img/03-magazine/menu-4-otzyvy-752x512.jpg)"></span><b>Меню: Отзывы</b><span>752×512 · обложка пункта</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/menu-5-o-marine-752x512.jpg" download="меню-5-о-марине-752x512.jpg"><span class="t" style="background-image:url(img/03-magazine/menu-5-o-marine-752x512.jpg)"></span><b>Меню: О Марине</b><span>752×512 · обложка пункта</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/menu-6-podgotovka-752x512.jpg" download="меню-6-подготовка-752x512.jpg"><span class="t" style="background-image:url(img/03-magazine/menu-6-podgotovka-752x512.jpg)"></span><b>Меню: Подготовка</b><span>752×512 · обложка пункта</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/service-1-zona-5000-1000x1000.jpg" download="услуга-1-живот-бока-бёдра-1000x1000.jpg"><span class="t" style="background-image:url(img/03-magazine/service-1-zona-5000-1000x1000.jpg)"></span><b>Услуга: живот, бока, бёдра</b><span>1000×1000 · карточка</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/service-2-zona-4000-1000x1000.jpg" download="услуга-2-руки-икры-поясница-1000x1000.jpg"><span class="t" style="background-image:url(img/03-magazine/service-2-zona-4000-1000x1000.jpg)"></span><b>Услуга: руки, икры, поясница</b><span>1000×1000 · карточка</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a><a class="file" href="img/03-magazine/service-3-shram-1000x1000.jpg" download="услуга-3-шрам-шов-рубец-1000x1000.jpg"><span class="t" style="background-image:url(img/03-magazine/service-3-shram-1000x1000.jpg)"></span><b>Услуга: шрам, шов, рубец</b><span>1000×1000 · карточка · по решению</span><em><svg width="15" height="15" viewBox="0 0 24 24" ><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Скачать</em></a></div>
+
+  <nav class="pager"><a class="chip" href="02-night.html">← 02 Ночь</a><a class="chip" href="04-arch.html">04 Арка →</a></nav>
+  <p class="foot">Кабинет Razden’sya · Ижевск · @razdensya18</p>
+</main>
+<script>
+
+function fitAll() {
+  document.querySelectorAll('[data-w]').forEach(function (box) {
+    var inner = box.firstElementChild, w = +box.dataset.w;
+    var avail = box.parentElement.clientWidth - (box.dataset.pad ? +box.dataset.pad : 0);
+    var s = Math.min(1, avail / w);
+    inner.style.width = w + 'px';
+    inner.style.transform = 'scale(' + s + ')';
+    box.style.width = (w * s) + 'px';
+    box.style.height = (inner.offsetHeight * s) + 'px';
+  });
+}
+window.addEventListener('resize', fitAll);
+window.addEventListener('load', fitAll);
+fitAll();
+
+
+var KEY = 'razden-vk-fav';
+function getFav() { try { return JSON.parse(localStorage.getItem(KEY) || '[]') } catch (e) { return [] } }
+function setFav(a) { try { localStorage.setItem(KEY, JSON.stringify(a)) } catch (e) {} }
+function toast(t) { var d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(function () { d.remove() }, 2200) }
+
+var N = '03', btn = document.getElementById('like');
+function paint() { var on = getFav().indexOf(N) > -1; btn.setAttribute('aria-pressed', on); btn.textContent = on ? '♥ В выборе' : '♥ Нравится' }
+btn.addEventListener('click', function () { var f = getFav(), i = f.indexOf(N); if (i > -1) f.splice(i, 1); else f.push(N); setFav(f); paint(); toast(i > -1 ? 'Убрано из выбора' : 'Добавлено в выбор') });
+paint();
+</script>
+</body>
+</html>
